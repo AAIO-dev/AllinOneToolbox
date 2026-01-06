@@ -102,23 +102,25 @@ async function callPerplexity(prompt) { return await sendToServer('ask-perplexit
 
 // 1. الدالة المساعدة للاتصال بالسيرفر (سنحتاجها غداً بقوة)
 async function sendToServer(endpoint, prompt, name) {
-    // تم تصحيح الرابط بإضافة حرف (n) الناقص يا بو فلاح
     const SERVER_BASE_URL = "https://allinonetoolbox.onrender.com"; 
 
     try {
         const response = await fetch(`${SERVER_BASE_URL}/${endpoint}`, {
             method: 'POST',
-            headers: { 
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ prompt })
         });
         
+        if (!response.ok) {
+            const errorData = await response.json();
+            return `${name}: عذراً، السيرفر رد بخطأ (${response.status}).`;
+        }
+
         const data = await response.json();
-        return data.reply;
+        return data.reply || `${name}: استلمت رداً فارغاً من السيرفر.`;
     } catch (e) {
-        console.error("خطأ اتصال:", e);
-        return `${name}: عذراً يا بو فلاح، هناك مشكلة في الربط!`;
+        console.error("Connection Error:", e);
+        return `${name}: عذراً يا بو فلاح، لا أستطيع الوصول للسيرفر حالياً.`;
     }
 }
 

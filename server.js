@@ -1,24 +1,36 @@
-const { MongoClient } = require('mongodb');
-require('dotenv').config();
-const uri = process.env.MONGODB_URI;
-const client = new MongoClient(uri);
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const axios = require('axios');
-
-const UNIFIED_PROMPT = "Provide your best response to the user's query. You are participating in a multi-AI knowledge exchange and discussion. If other models' responses are provided, feel free to evaluate them: support, oppose, correct, supplement their views, or add further insights based on your own knowledge, core training, and data.";
+const { MongoClient } = require('mongodb');
 
 dotenv.config();
 
 const app = express();
-app.use(express.static(__dirname));
-const cors = require('cors');
-app.use(cors({
-    origin: ['https://ai-allin-one.com', 'https://allinonetoolbox.onrender.com']
-}));
+
+// 1. إعداد الـ CORS بشكل صحيح وشامل (يجب أن يكون أول شيء)
+const corsOptions = {
+    origin: ['https://ai-allin-one.com', 'https://allinonetoolbox.onrender.com'],
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // للسماح بطلبات الاستئذان Preflight
+
+// 2. إعداد استقبال البيانات JSON
 app.use(express.json());
 
+// 3. الملفات الثابتة
+app.use(express.static(__dirname));
+
+// --- إعدادات قاعدة البيانات ---
+const uri = process.env.MONGODB_URI;
+const client = new MongoClient(uri);
+const UNIFIED_PROMPT = "Provide your best response to the user's query. You are participating in a multi-AI knowledge exchange and discussion. If other models' responses are provided, feel free to evaluate them: support, oppose, correct, supplement their views, or add further insights based on your own knowledge, core training, and data.";
+
+// ... (تكملة باقي الدوال والـ Routes كما هي لديك)
 // --- وظيفة جلب الـ 286 أداة من قاعدة البيانات الجديدة ---
 app.get('/api/tools', async (req, res) => {
     try {
