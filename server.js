@@ -13,7 +13,10 @@ dotenv.config();
 
 const app = express();
 app.use(express.static(__dirname));
-app.use(cors());
+const cors = require('cors');
+app.use(cors({
+    origin: ['https://ai-allin-one.com', 'https://allinonetoolbox.onrender.com']
+}));
 app.use(express.json());
 
 // --- وظيفة جلب الـ 286 أداة من قاعدة البيانات الجديدة ---
