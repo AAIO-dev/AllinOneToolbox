@@ -102,8 +102,8 @@ async function callPerplexity(prompt) { return await sendToServer('ask-perplexit
 
 // 1. الدالة المساعدة للاتصال بالسيرفر (سنحتاجها غداً بقوة)
 async function sendToServer(endpoint, prompt, name) {
-    // هذا هو الرابط الذي استخرجناه من الصورة يا عبدالرحمن
-    const SERVER_BASE_URL = "https://ai-all-in-one.com"; 
+    // هذا هو الرابط الصحيح لسيرفر Render الخاص بك
+    const SERVER_BASE_URL = "https://allinonetoolbox.onrender.com"; 
 
     try {
         const response = await fetch(`${SERVER_BASE_URL}/${endpoint}`, {
@@ -112,14 +112,10 @@ async function sendToServer(endpoint, prompt, name) {
             body: JSON.stringify({ prompt })
         });
         
-        if (!response.ok) {
-            throw new Error(`Server status: ${response.status}`);
-        }
-
         const data = await response.json();
         return data.reply || `${name}: Received an empty response.`;
     } catch (e) {
-        console.error("Error connecting to server:", e);
+        console.error("Connection Error:", e);
         return `${name}: Connection error to AAIO Server.`;
     }
 }
