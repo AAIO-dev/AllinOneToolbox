@@ -15,6 +15,19 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// --- وظيفة جلب الـ 286 أداة من قاعدة البيانات الجديدة ---
+app.get('/api/tools', async (req, res) => {
+    try {
+        const database = client.db("AAIO-Data");
+        const toolsCollection = database.collection("tools");
+        const tools = await toolsCollection.find({}).toArray();
+        res.json(tools);
+    } catch (error) {
+        console.error("❌ فشل في جلب الأدوات:", error);
+        res.status(500).json({ error: "فشل في تحميل الأدوات" });
+    }
+});
+
 // دالة لجلب آخر 5 محادثات من قاعدة البيانات بالبحرين
 async function getRecentHistory() {
     try {
