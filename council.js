@@ -103,7 +103,7 @@ async function callPerplexity(prompt) { return await sendToServer('ask-perplexit
 // 1. الدالة المساعدة للاتصال بالسيرفر (سنحتاجها غداً بقوة)
 async function sendToServer(endpoint, prompt, name) {
     try {
-        const response = await fetch(`http://localhost:3000/${endpoint}`, {
+        const response = await fetch(`${window.location.origin}/${endpoint}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ prompt })

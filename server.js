@@ -260,5 +260,5 @@ async function connectDB() {
 connectDB();
 
 app.listen(PORT, () => {
-    console.log(`✅ AAIO Server active on http://localhost:${PORT}`);
+    console.log(`✅ AAIO Server is live and running on port ${PORT}`);
 });
