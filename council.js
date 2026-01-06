@@ -102,10 +102,10 @@ async function callPerplexity(prompt) { return await sendToServer('ask-perplexit
 
 // 1. الدالة المساعدة للاتصال بالسيرفر (سنحتاجها غداً بقوة)
 async function sendToServer(endpoint, prompt, name) {
-    const SERVER_BASE_URL = "https://allinonetoolbox.onrender.com"; 
+    const SERVER_BASE_URL = "https://ai-allin-one.com"; 
 
     try {
-        const response = await fetch(`${SERVER_BASE_URL}/${endpoint}`, {
+        const response = await fetch(`${SERVER_BASE_URL}/api/${endpoint}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ prompt })
