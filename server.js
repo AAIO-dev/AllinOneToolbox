@@ -12,6 +12,7 @@ const UNIFIED_PROMPT = "Provide your best response to the user's query. You are 
 dotenv.config();
 
 const app = express();
+app.use(express.static(__dirname));
 app.use(cors());
 app.use(express.json());
 
