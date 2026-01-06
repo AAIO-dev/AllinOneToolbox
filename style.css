@@ -874,6 +874,48 @@ input:checked + .slider.round:before {
 
     /* حاوية الإدخال الكبرى - جعلناها أنحف وأقرب للأسفل */
     
+/* إعادة الحيوية لصناديق المستشارين في الجوال */
+body .council-message {
+    display: flex !important;
+    flex-direction: row !important; /* لجعل الصورة بجانب النص وليس فوقه */
+    align-items: center !important;
+    height: auto !important; 
+    min-height: 0px !important;
+    padding: 8px 12px !important; /* نحافة النصف */
+    gap: 10px !important;
+    width: 94% !important;
+    margin: 0 auto 8px auto !important;
+    border-radius: 15px 15px 15px 0 !important;
+}
+
+/* ضبط الأيقونة لتكون "روح" الصندوق دون تمديده */
+body .council-message .council-logo {
+    width: 28px !important; 
+    height: 28px !important;
+    min-width: 28px !important;
+    position: static !important;
+    margin: 0 !important;
+}
+
+/* ترتيب الاسم والنص تحت بعض بجانب الأيقونة */
+.council-message-content {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2px !important;
+}
+
+body .council-message .bot-name {
+    font-size: 0.75rem !important;
+    font-weight: bold !important;
+    margin: 0 !important;
+}
+
+body .council-message p {
+    font-size: 0.85rem !important;
+    line-height: 1.3 !important;
+    margin: 0 !important;
+}
+
 body .input-area {
     padding: 5px 10px !important;
     gap: 8px !important;
@@ -885,14 +927,17 @@ body .input-area {
 }
 
 /* صندوق النص - مقاس واتساب ولون ذهبي */
+/* تعديل التوسيط فقط داخل كود شريط الكتابة */
 body #user-input {
-    min-height: 40px !important; /* الارتفاع النحيف المطلوب */
+    text-align: center !important; /* بدلاً من right اجعلها center */
+    
+    /* بقية قيمك كما هي لا تلمسها */
+    min-height: 40px !important;
     max-height: 100px !important;
-    font-size: 16px !important; /* مريح للعين والجوال */
+    font-size: 16px !important;
     padding: 8px 15px !important;
-    border-radius: 20px !important; /* حواف دائرية مثل واتساب */
+    border-radius: 20px !important;
     border: 1px solid rgba(106, 90, 205, 0.5) !important;
-    text-align: right !important; /* لسهولة الكتابة بالعربي */
 }
 
 /* زر الإرسال - متناسق مع النحافة الجديدة */
