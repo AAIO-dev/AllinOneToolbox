@@ -68,7 +68,7 @@ async function getRecentHistory() {
 }
 
 // --- 1. GEMINI (النسخة المحدثة مع الذاكرة السحابية) ---
-app.post('/ask-gemini', async (req, res) => {
+app.post('/api/ask-gemini', async (req, res) => {
     const { prompt } = req.body;
     console.log("🚀 Gemini is checking the Council History...");
 
@@ -112,7 +112,7 @@ ${prompt}`;
     }
 });
 
-app.post('/ask-perplexity', async (req, res) => {
+app.post('/api/ask-perplexity', async (req, res) => {
     const { prompt } = req.body;
     console.log("🚀 Perplexity is researching and checking History...");
     try {
@@ -159,7 +159,7 @@ ${prompt}`;
     }
 });
 
-app.post('/ask-chatgpt', async (req, res) => {
+app.post('/api/ask-chatgpt', async (req, res) => {
     const { prompt } = req.body;
     try {
         const historyText = await getRecentHistory(); // جلب الذاكرة
@@ -193,7 +193,7 @@ app.post('/ask-chatgpt', async (req, res) => {
     }
 });
 
-app.post('/ask-deepseek', async (req, res) => {
+app.post('/api/ask-deepseek', async (req, res) => {
     const { prompt } = req.body;
     try {
         const historyText = await getRecentHistory();
@@ -226,7 +226,7 @@ app.post('/ask-deepseek', async (req, res) => {
     }
 });
 
-app.post('/ask-claude', async (req, res) => {
+app.post('/api/ask-claude', async (req, res) => {
     const { prompt } = req.body;
     try {
         const historyText = await getRecentHistory();
