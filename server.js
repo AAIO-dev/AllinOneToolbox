@@ -17,7 +17,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // للسماح بطلبات الاستئذان Preflight
+
 
 // 2. إعداد استقبال البيانات JSON
 app.use(express.json());
