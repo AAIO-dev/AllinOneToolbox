@@ -870,33 +870,40 @@ input:checked + .slider.round:before {
         background: linear-gradient(90deg, transparent, #6f42c1, transparent);
         border-radius: 2px;
     }
-    body .input-area .council-message {
-        min-width: 150px !important; /* جربنا تصغيره أكثر للتأكد من الملاحظة */
-        height: auto !important;
-        padding: 8px 12px !important;
-    }
+   
 
-    body .input-area #send-btn {
-        min-width: 70px !important; /* تصغير واضح للزر */
-        width: 90px !important;
-        height: 45px !important;
-        font-size: 12px !important;
-    }
-    .council-message {
-        min-width: 150px !important; 
-        max-width: 85% !important;
-        height: auto !important; /* ليتناسب مع عدد الأسطر في الجوال */
-        min-height: 15px !important; /* إلغاء الـ 90px السابقة */
-        padding: 8px 15px !important;
-        font-size: 0.9rem !important;
-        margin-bottom: 10px !important;
-    }
+    /* حاوية الإدخال الكبرى - جعلناها أنحف وأقرب للأسفل */
+    
+body .input-area {
+    padding: 5px 10px !important;
+    gap: 8px !important;
+    background: rgba(10, 10, 10, 0.95) !important;
+    bottom: 5px !important;
+    border-radius: 20px 20px 0 0 !important; /* انحناء علوي فقط للفخامة */
+    height: auto !important;
+    min-height: 0px !important;
+}
 
-    /* لضمان تصغير الأيقونات داخل الصناديق أيضاً لكي لا تزحم النص */
-    .council-message img {
-        width: 25px !important;
-        height: 25px !important;
-    }
+/* صندوق النص - مقاس واتساب ولون ذهبي */
+body #user-input {
+    min-height: 40px !important; /* الارتفاع النحيف المطلوب */
+    max-height: 100px !important;
+    font-size: 16px !important; /* مريح للعين والجوال */
+    padding: 8px 15px !important;
+    border-radius: 20px !important; /* حواف دائرية مثل واتساب */
+    border: 1px solid rgba(106, 90, 205, 0.5) !important;
+    text-align: right !important; /* لسهولة الكتابة بالعربي */
+}
+
+/* زر الإرسال - متناسق مع النحافة الجديدة */
+body #send-btn {
+    min-width: 60px !important;
+    height: 40px !important;
+    font-size: 11px !important;
+    padding: 0 10px !important;
+    border-radius: 15px !important;
+    background: linear-gradient(45deg, #6a5acd, #8a2be2) !important;
+}
 }
 
 /* =============================================
@@ -932,7 +939,7 @@ input:checked + .slider.round:before {
     gap: 15px !important;
     width: fit-content !important; 
     max-width: 85% !important;
-    min-width: 250px;
+    min-width: auto;
     margin-left: auto !important; 
     margin-bottom: 15px !important;
     padding: 15px 20px !important;
@@ -946,7 +953,7 @@ input:checked + .slider.round:before {
     
     word-wrap: break-word !important; 
     overflow-wrap: break-word !important;
-    height: 90px !important; /* زدناه قليلاً ليرتاح الخط */
+    min-height: 90px;
     overflow-y: auto !important;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
     cursor: pointer;
@@ -1109,13 +1116,13 @@ input:checked + .slider.round:before {
     flex-grow: 1 !important; 
     width: 100% !important;
     /* رفعنا الحد الأدنى ليتناسب مع الزر الجديد (60px) */
-    min-height: 60px !important; 
+    min-height: 40px !important; 
     max-height: 150px !important;
     background: #000000 !important;
     
     /* التحول للذهبي وتكبير الخط */
     color: #FFD700 !important; 
-    font-size: 22px !important; 
+    font-size: 18px !important; 
     font-weight: 500 !important;
     text-align: center !important;
     /* الإطار البنفسجي العيناوي بدلاً من الرمادي #444 */
