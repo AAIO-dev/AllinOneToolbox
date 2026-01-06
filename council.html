@@ -1,0 +1,53 @@
+<!DOCTYPE html>:
+<html lang="en" dir="ltr">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Council - AAIO</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+.thought-flash {
+    position: fixed;
+    pointer-events: none;
+    /* اللون الذي اخترته #a29bfe مع شفافية 0.8 للوضوح */
+    color: rgba(162, 155, 254, 0.8); 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1.2rem;
+    /* توهج خفيف بنفس درجة اللون ليعطي لمسة جمالية */
+    text-shadow: 0 0 12px rgba(162, 155, 254, 0.6);
+    z-index: 100;
+    transition: opacity 1.5s ease-in-out;
+    opacity: 0;
+}
+</style>
+</head>
+<body class="council-body">
+
+    <header style="text-align: center; padding: 20px;">
+        <a href="index.html">
+            <img src="logo1.png" alt="AAIO Logo" class="main-council-logo">
+        </a>
+        <h1 class="council-title">AI Advisory Council</h1>
+        <p class="council-tagline">
+    Ask your question and watch the council (Gemini, ChatGPT, Claude, DeepSeek, Perplexity) share insights and collaborate.
+</p>
+    </header>
+
+    <main id="council-interface">
+    <div class="main-container">
+        
+        <div id="chat-window">
+           
+        </div>
+
+        <div class="input-area">
+            <textarea id="user-input" placeholder="Type your question or idea for discussion..." rows="2"></textarea>
+            <button id="send-btn" onclick="startCouncilDiscussion()">Start Discussion</button>
+        </div>
+
+    </div>
+</main>
+<script src="council.js"></script>
+</body>
+</html>

@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>All in one Toolbox</title>
+    <link rel="icon" type="image/png" href="logo1.png">
+    <link rel="stylesheet" href="style.css?v=1.1">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#6f42c1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icon-512.png">
+
+</head>
+<body ontouchstart="">
+    <div class="theme-switch-wrapper">
+        <div class="language-picker-container">
+            <select id="language-picker">
+    <option value="en">English</option>
+    <option value="es">Español</option>
+    <option value="pt">Português</option>
+    <option value="fr">Français</option>
+    <option value="de">Deutsch</option>
+    <option value="it">Italiano</option>
+    <option value="ru">Русский</option>
+    <option value="zh">中文</option>
+    <option value="ja">日本語</option>
+    <option value="ko">한국어</option>
+</select>
+        </div>
+
+        <label class="theme-switch" for="checkbox">
+            <input type="checkbox" id="checkbox" />
+            <div class="slider round">
+                <span class="icon sun">☀️</span>
+                <span class="icon moon">🌙</span>
+            </div>
+        </label>
+        <span class="mode-text">Light Mode</span>
+    </div>
+    <div class="header">
+        <img src="logo1.png" alt="Logo" style="height: 80px; margin-bottom: 15px;">
+        <h1>Welcome to AI All in One Toolbox</h1>
+       <p class="subtitle">
+    Your <span class="ai-highlight">AI</span> services,<br>
+    All in one place
+        </p>
+    <div class="header-pulse"></div>
+    </div>
+
+</div>
+    <div class="main-container">
+        <div class="column">
+            <h2 id="title-creative" class="column-title" data-key="creative" style="color: #6f42c1; border-color: #6f42c1;">Creative & Tech Tools</h2>
+            
+            <div class="tool-card" tabindex="0">
+    <h3 class="card-title" data-key="img-enhancer">Image Enhancer</h3>
+    <div class="button-group">
+        <div class="item-wrapper"><a href="https://www.upscale.media/" target="_blank" class="btn btn-purple">Upscale</a> <span class="status-badge free">FREE</span></div>
+        <div class="item-wrapper"><a href="https://topazlabs.com/gigapixel-ai/" target="_blank" rel="nofollow" class="btn btn-purple">Gigapixel</a> <span class="status-badge premium">PREM</span></div>
+    </div>
+    <div class="see-more-links">
+        <a onclick="toggleBox('free', this)" class="see-more-link" data-key="see-free" style="color: #00aaff; cursor: pointer;">+ See More Free Tools</a>
+        <div id="free-img" class="dropdown-content">
+            <a href="https://imglarger.com/" target="_blank">AI Image Enlarger</a>
+            <a href="https://waifu2x.udp.jp/" target="_blank">Waifu2x</a>
+            <a href="https://bigjpg.com/" target="_blank">BigJPG</a>
+            <a href="https://replicate.com/nightmareai/real-esrgan" target="_blank">Real-ESRGAN</a>
+            <a href="https://www.zyro.com/ai/image-upscaler" target="_blank">Zyro Upscaler</a>
+            <a href="https://picwish.com/" target="_blank">PicWish</a>
+            <a href="https://icons8.com/upscaler" target="_blank">Icons8 Upscaler</a>
+            <a href="https://www.pixelcut.ai/upscaler" target="_blank">Pixelcut Upscaler</a>
+            <a href="https://www.fotor.com/features/image-upscaler/" target="_blank">Fotor Enlarger</a>
+            <a href="https://clipdrop.co/image-upscaler" target="_blank">ClipDrop Upscaler</a>
+        </div>
+        <a onclick="toggleBox('prem', this)" class="see-more-link" data-key="see-premium" style="color: #ffaa00; cursor: pointer;">+ See More Premium Tools</a>
+        <div id="prem-img" class="dropdown-content">
+            <a href="https://letsenhance.io/" target="_blank" rel="nofollow">Let's Enhance</a>
+            <a href="https://vanceai.com/" target="_blank" rel="nofollow">VanceAI</a>
+            <a href="https://www.hitpaw.com/photo-enhancer.html" target="_blank" rel="nofollow">HitPaw Photo</a>
+            <a href="https://www.cutout.pro/ai-image-upscaler" target="_blank" rel="nofollow">Cutout.pro</a>
+            <a href="https://deep-image.ai/" target="_blank" rel="nofollow">Deep Image AI</a>
+            <a href="https://pixelied.com/features/image-upscaler" target="_blank" rel="nofollow">Pixelied Pro</a>
+            <a href="https://cre8tiveai.com/photo-refiner" target="_blank" rel="nofollow">Photo Refiner</a>
+            <a href="https://img2go.com/" target="_blank" rel="nofollow">Img2Go Pro</a>
+            <a href="https://magnific.ai/" target="_blank" rel="nofollow">Magnific AI</a>
+            <a href="https://www.remixai.app/" target="_blank" rel="nofollow">Remix AI</a>
+        </div>
+    </div>
+</div>
+
+            <div class="tool-card" tabindex="0">
+                <h3 class="card-title" data-key="ai-background-remover">AI Background Remover</h3>
+                <div class="button-group">
+                    <div class="item-wrapper"><a href="https://www.adobe.com/express/feature/image/remove-background" target="_blank" class="btn btn-purple">Adobe</a> <span class="status-badge free">FREE</span></div>
+                    <div class="item-wrapper"><a href="https://www.remove.bg/" target="_blank" rel="nofollow" class="btn btn-purple">Remove.bg</a> <span class="status-badge premium">PREM</span></div>
+                </div>
+                <div class="see-more-links">
+                    <a onclick="toggleBox('free', this)" class="see-more-link" data-key="see-free" style="color: #00aaff; cursor: pointer;">+ See More Free Tools</a>
+                    <div id="free-bg" class="dropdown-content">
+                        <a href="https://www.photoroom.com/" target="_blank">PhotoRoom</a>
+                        <a href="https://www.erase.bg/" target="_blank">Erase.bg</a>
+                        <a href="https://pixlr.com/remove-background/" target="_blank">Pixlr BG</a>
+                        <a href="https://www.slazzer.com/" target="_blank">Slazzer</a>
+                        <a href="https://pixelcut.ai/" target="_blank">Pixelcut Free</a>
+                        <a href="https://www.fotor.com/" target="_blank">Fotor BG</a>
+                        <a href="https://www.stickermule.com/trace" target="_blank">Trace</a>
+                        <a href="https://www.befunky.com/features/background-remover/" target="_blank">BeFunky</a>
+                        <a href="https://backgroundcut.co/" target="_blank">BackgroundCut</a>
+                        <a href="https://www.experte.com/background-remover" target="_blank">Experte</a>
+                    </div>
+                    <a onclick="toggleBox('prem-cv')" class="see-more-link" data-key="see-premium" style="color: #ffaa00; cursor: pointer;">+ See More Premium Tools</a>
+                    <div id="prem-bg" class="dropdown-content">
+                        <a href="https://clippingmagic.com/" target="_blank" rel="nofollow">Clipping Magic</a>
+                        <a href="https://unscreen.com/" target="_blank" rel="nofollow">Unscreen (Video)</a>
+                        <a href="https://depositphotos.com/bgremover.html" target="_blank" rel="nofollow">Depositphotos</a>
+                        <a href="https://www.auto-clipper.com/" target="_blank" rel="nofollow">Auto-Clipper</a>
+                        <a href="https://www.removal.ai/" target="_blank" rel="nofollow">Removal.ai</a>
+                        <a href="https://icons8.com/bgremover" target="_blank" rel="nofollow">Icons8 BG</a>
+                        <a href="https://burneronline.com/" target="_blank" rel="nofollow">Burner Online</a>
+                        <a href="https://bgeraser.com/" target="_blank" rel="nofollow">BGEraser</a>
+                        <a href="https://topmediai.com/" target="_blank" rel="nofollow">TopMediai</a>
+                        <a href="https://inpixio.com/" target="_blank" rel="nofollow">InPixio Pro</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tool-card" tabindex="0">
+                <h3 class="card-title" data-key="ai-video-creator">AI Video Creator</h3>
+                <div class="button-group">
+                    <div class="item-wrapper"><a href="https://pika.art/" target="_blank" class="btn btn-purple">Pika</a> <span class="status-badge free">FREE</span></div>
+                    <div class="item-wrapper"><a href="https://runwayml.com/" target="_blank" rel="nofollow" class="btn btn-purple">Runway</a> <span class="status-badge premium">PREM</span></div>
+                </div>
+                <div class="see-more-links">
+                    <a onclick="toggleBox('free', this)" class="see-more-link" data-key="see-free" style="color: #00aaff; cursor: pointer;">+ See More Free Tools</a>
+                    <div id="free-vid" class="dropdown-content">
+                        <a href="https://vimeo.com/create" target="_blank">Vimeo AI</a>
+                        <a href="https://clipchamp.com/" target="_blank">Clipchamp</a>
+                        <a href="https://www.kapwing.com/" target="_blank">Kapwing</a>
+                        <a href="https://lumen5.com/" target="_blank">Lumen5</a>
+                        <a href="https://www.flexclip.com/" target="_blank">FlexClip</a>
+                        <a href="https://www.canva.com/video-editor/" target="_blank">Canva Video</a>
+                        <a href="https://moovly.com/" target="_blank">Moovly</a>
+                        <a href="https://animoto.com/" target="_blank">Animoto</a>
+                        <a href="https://shotstack.io/" target="_blank">Shotstack</a>
+                        <a href="https://leonardo.ai/" target="_blank">Leonardo Video</a>
+                    </div>
+                    <a onclick="toggleBox('prem', this)" class="see-more-link" data-key="see-premium" style="color: #ffaa00; cursor: pointer;">+ See More Premium Tools</a>
+                    <div id="prem-vid" class="dropdown-content">
+                        <a href="https://www.heygen.com/" target="_blank" rel="nofollow">HeyGen</a>
+                        <a href="https://www.synthesia.io/" target="_blank" rel="nofollow">Synthesia</a>
+                        <a href="https://invideo.io/" target="_blank" rel="nofollow">InVideo Pro</a>
+                        <a href="https://www.d-id.com/" target="_blank" rel="nofollow">D-ID</a>
+                        <a href="https://pictory.ai/" target="_blank" rel="nofollow">Pictory</a>
+                        <a href="https://kaiber.ai/" target="_blank" rel="nofollow">Kaiber</a>
+                        <a href="https://www.descript.com/" target="_blank" rel="nofollow">Descript</a>
+                        <a href="https://fliki.ai/" target="_blank" rel="nofollow">Fliki</a>
+                        <a href="https://elai.io/" target="_blank" rel="nofollow">Elai.io</a>
+                        <a href="https://colossyan.com/" target="_blank" rel="nofollow">Colossyan</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tool-card" tabindex="0">
+                <h3 class="card-title" data-key="ai-video-generator">AI Voice Generator</h3>
+                <div class="button-group">
+                    <div class="item-wrapper"><a href="https://ttsfree.com/" target="_blank" class="btn btn-purple">TTSFree</a> <span class="status-badge free">FREE</span></div>
+                    <div class="item-wrapper"><a href="https://elevenlabs.io/" target="_blank" rel="nofollow" class="btn btn-purple">ElevenLabs</a> <span class="status-badge premium">PREM</span></div>
+                </div>
+                <div class="see-more-links">
+                    <a onclick="toggleBox('free', this)" class="see-more-link" data-key="see-free" style="color: #00aaff; cursor: pointer;">+ See More Free Tools</a>
+                    <div id="free-voice" class="dropdown-content">
+                        <a href="https://fakeyou.com/" target="_blank">FakeYou</a>
+                        <a href="https://uberduck.ai/" target="_blank">Uberduck</a>
+                        <a href="https://naturalreaders.com/" target="_blank">NaturalReader</a>
+                        <a href="https://voicemaker.in/" target="_blank">Voicemaker</a>
+                        <a href="https://balabolka.en.softonic.com/" target="_blank">Balabolka</a>
+                        <a href="https://www.turing.com/" target="_blank">Turing TTS</a>
+                        <a href="https://freetts.com/" target="_blank">FreeTTS</a>
+                        <a href="https://www.narakeet.com/" target="_blank">Narakeet Free</a>
+                        <a href="https://wideo.co/text-to-speech/" target="_blank">Wideo TTS</a>
+                        <a href="https://speechify.com/" target="_blank">Speechify Free</a>
+                    </div>
+                    <a onclick="toggleBox('prem', this)" class="see-more-link" data-key="see-premium" style="color: #ffaa00; cursor: pointer;">+ See More Premium Tools</a>
+                    <div id="prem-voice" class="dropdown-content">
+                        <a href="https://murf.ai/" target="_blank" rel="nofollow">Murf AI</a>
+                        <a href="https://play.ht/" target="_blank" rel="nofollow">Play.ht</a>
+                        <a href="https://lovo.ai/" target="_blank" rel="nofollow">Lovo AI</a>
+                        <a href="https://wellsaidlabs.com/" target="_blank" rel="nofollow">WellSaid Labs</a>
+                        <a href="https://resemble.ai/" target="_blank" rel="nofollow">Resemble</a>
+                        <a href="https://www.revoiceit.com/" target="_blank" rel="nofollow">RevoiceIt</a>
+                        <a href="https://listnr.tech/" target="_blank" rel="nofollow">Listnr</a>
+                        <a href="https://speechmax.ai/" target="_blank" rel="nofollow">Speechmax</a>
+                        <a href="https://krisp.ai/" target="_blank" rel="nofollow">Krisp AI</a>
+                        <a href="https://synthesys.io/" target="_blank" rel="nofollow">Synthesys</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tool-card" tabindex="0">
+                <h3 class="card-title" data-key="ai-code-assistant">AI Code Assistant</h3>
+                <div class="button-group">
+                    <div class="item-wrapper"><a href="https://www.cursor.com/" target="_blank" class="btn btn-purple">Cursor</a> <span class="status-badge free">FREE</span></div>
+                    <div class="item-wrapper"><a href="https://github.com/features/copilot" target="_blank" rel="nofollow" class="btn btn-purple">Copilot</a> <span class="status-badge premium">PREM</span></div>
+                </div>
+                <div class="see-more-links">
+                    <a onclick="toggleBox('free', this)" class="see-more-link" data-key="see-free" style="color: #00aaff; cursor: pointer;">+ See More Free Tools</a>
+                    <div id="free-code" class="dropdown-content">
+                        <a href="https://tabnine.com/" target="_blank">Tabnine Free</a>
+                        <a href="https://aws.amazon.com/codewhisperer/" target="_blank">CodeWhisperer</a>
+                        <a href="https://codeium.com/" target="_blank">Codeium</a>
+                        <a href="https://www.codium.ai/" target="_blank">CodiumAI</a>
+                        <a href="https://askcodi.com/" target="_blank">AskCodi</a>
+                        <a href="https://kite.com/" target="_blank">Kite Free</a>
+                        <a href="https://sourcegraph.com/cody" target="_blank">Cody Free</a>
+                        <a href="https://blackbox.ai/" target="_blank">Blackbox AI</a>
+                        <a href="https://polyaxon.com/" target="_blank">Polyaxon</a>
+                        <a href="https://fig.io/" target="_blank">Fig</a>
+                    </div>
+                    <a onclick="toggleBox('prem-, this')" class="see-more-link" data-key="see-premium" style="color: #ffaa00; cursor: pointer;">+ See More Premium Tools</a>
+                    <div id="prem-code" class="dropdown-content">
+                        <a href="https://replit.com/ai" target="_blank" rel="nofollow">Replit AI</a>
+                        <a href="https://mutable.ai/" target="_blank" rel="nofollow">MutableAI</a>
+                        <a href="https://www.bito.ai/" target="_blank" rel="nofollow">Bito Pro</a>
+                        <a href="https://codiga.io/" target="_blank" rel="nofollow">Codiga</a>
+                        <a href="https://www.phind.com/" target="_blank" rel="nofollow">Phind Pro</a>
+                        <a href="https://deepsource.io/" target="_blank" rel="nofollow">DeepSource</a>
+                        <a href="https://sourcegraph.com/" target="_blank" rel="nofollow">Sourcegraph Enterprise</a>
+                        <a href="https://monica.im/" target="_blank" rel="nofollow">Monica AI</a>
+                        <a href="https://continue.dev/" target="_blank" rel="nofollow">Continue Pro</a>
+                        <a href="https://www.v7labs.com/" target="_blank" rel="nofollow">V7 Go</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="column">
+            <h2 id="title-office" class="column-title" data-key="office" style="color: #4682b4; border-color: #4682b4;">Professional Office Tools</h2>
+            
+            <div class="tool-card" tabindex="0">
+                <h3 class="card-title" data-key="ai-resume-builder">AI Resume Builder</h3>
+                <div class="button-group">
+                    <div class="item-wrapper"><a href="https://www.canva.com/resumes/" target="_blank" class="btn btn-blue">Canva</a> <span class="status-badge free">FREE</span></div>
+                    <div class="item-wrapper"><a href="https://www.rezi.ai/" target="_blank" rel="nofollow" class="btn btn-blue">Rezi</a> <span class="status-badge premium">PREM</span></div>
+                </div>
+                <div class="see-more-links">
+                    <a onclick="toggleBox('free', this)" class="see-more-link" data-key="see-free" style="color: #00aaff; cursor: pointer;">+ See More Free Tools</a>
+                    <div id="free-cv" class="dropdown-content">
+                        <a href="https://flowcv.io/" target="_blank">FlowCV</a>
+                        <a href="https://rxresu.me/" target="_blank">Reactive Resume</a>
+                        <a href="https://novoresume.com/" target="_blank">Novoresume</a>
+                        <a href="https://resumaker.ai/" target="_blank">Resumaker Free</a>
+                        <a href="https://www.resume.com/" target="_blank">Resume.com</a>
+                        <a href="https://cake.resume/" target="_blank">CakeResume</a>
+                        <a href="https://standardresume.co/" target="_blank">Standard Resume</a>
+                        <a href="https://resumenerd.com/" target="_blank">ResumeNerd</a>
+                        <a href="https://app.jobscan.co/" target="_blank">Jobscan Free</a>
+                        <a href="https://wonsulting.ai/" target="_blank">Wonsulting</a>
+                    </div>
+                    <a onclick="toggleBox('prem', this)" class="see-more-link" data-key="see-premium" style="color: #ffaa00; cursor: pointer;">+ See More Premium Tools</a>
+                    <div id="prem-cv" class="dropdown-content">
+                        <a href="https://kickresume.com/" target="_blank" rel="nofollow">Kickresume</a>
+                        <a href="https://visualcv.com/" target="_blank" rel="nofollow">VisualCV</a>
+                        <a href="https://enhancv.com/" target="_blank" rel="nofollow">Enhancv</a>
+                        <a href="https://zety.com/" target="_blank" rel="nofollow">Zety</a>
+                        <a href="https://resume.io/" target="_blank" rel="nofollow">Resume.io</a>
+                        <a href="https://myperfectresume.com/" target="_blank" rel="nofollow">MyPerfectResume</a>
+                        <a href="https://career.io/" target="_blank" rel="nofollow">Career.io</a>
+                        <a href="https://resumegenius.com/" target="_blank" rel="nofollow">Resume Genius</a>
+                        <a href="https://hloom.com/" target="_blank" rel="nofollow">Hloom</a>
+                        <a href="https://tealhq.com/" target="_blank" rel="nofollow">Teal Pro</a>
+                    </div>
+                </div>
+            </div>
+            <div class="tool-card" tabindex="0">
+                <h3 class="card-title" data-key="ai-email-writer">AI Email Writer</h3>
+                <div class="button-group">
+                    <div class="item-wrapper"><a href="https://rytr.me/" target="_blank" class="btn btn-blue">Rytr</a> <span class="status-badge free">FREE</span></div>
+                    <div class="item-wrapper"><a href="https://www.copy.ai/" target="_blank" rel="nofollow" class="btn btn-blue">Copy.ai</a> <span class="status-badge premium">PREM</span></div>
+                </div>
+                <div class="see-more-links">
+                    <a onclick="toggleBox('free', this)" class="see-more-link" data-key="see-free" style="color: #00aaff; cursor: pointer;">+ See More Free Tools</a>
+                    <div id="free-email" class="dropdown-content">
+                        <a href="https://simplified.com/" target="_blank">Simplified</a>
+                        <a href="https://wordtune.com/" target="_blank">Wordtune</a>
+                        <a href="https://grammarly.com/" target="_blank">Grammarly AI</a>
+                        <a href="https://quillbot.com/" target="_blank">QuillBot</a>
+                        <a href="https://anyword.com/" target="_blank">Anyword Free</a>
+                        <a href="https://writefull.com/" target="_blank">Writefull</a>
+                        <a href="https://hemingwayapp.com/" target="_blank">Hemingway</a>
+                        <a href="https://procopywriters.ch/" target="_blank">ProCopy</a>
+                        <a href="https://logicball.com/" target="_blank">LogicBall</a>
+                        <a href="https://hyperwriteai.com/" target="_blank">HyperWrite</a>
+                    </div>
+                    <a onclick="toggleBox('prem', this)" class="see-more-link" data-key="see-premium" style="color: #ffaa00; cursor: pointer;">+ See More Premium Tools</a>
+                    <div id="prem-email" class="dropdown-content">
+                        <a href="https://jasper.ai/" target="_blank" rel="nofollow">Jasper</a>
+                        <a href="https://writesonic.com/" target="_blank" rel="nofollow">Writesonic</a>
+                        <a href="https://lavender.ai/" target="_blank" rel="nofollow">Lavender</a>
+                        <a href="https://regie.ai/" target="_blank" rel="nofollow">Regie.ai</a>
+                        <a href="https://warmer.ai/" target="_blank" rel="nofollow">Warmer.ai</a>
+                        <a href="https://smartwriter.ai/" target="_blank" rel="nofollow">SmartWriter</a>
+                        <a href="https://instantly.ai/" target="_blank" rel="nofollow">Instantly</a>
+                        <a href="https://mailshake.com/" target="_blank" rel="nofollow">Mailshake</a>
+                        <a href="https://woodpecker.co/" target="_blank" rel="nofollow">Woodpecker</a>
+                        <a href="https://outreach.io/" target="_blank" rel="nofollow">Outreach</a>
+                    </div>
+                </div>
+            </div>
+            <div class="tool-card" tabindex="0">
+                <h3 class="card-title" data-key="ai-translator">AI Translator Pro</h3>
+                <div class="button-group">
+                    <div class="item-wrapper"><a href="https://translate.google.com/" target="_blank" class="btn btn-blue">Google</a> <span class="status-badge free">FREE</span></div>
+                    <div class="item-wrapper"><a href="https://www.deepl.com/translator" target="_blank" rel="nofollow" class="btn btn-blue">DeepL</a> <span class="status-badge premium">PREM</span></div>
+                </div>
+                <div class="see-more-links">
+                    <a onclick="toggleBox('free', this)" class="see-more-link" data-key="see-free" style="color: #00aaff; cursor: pointer;">+ See More Free Tools</a>
+                    <div id="free-trans" class="dropdown-content">
+                        <a href="https://www.bing.com/translator" target="_blank">Bing Translate</a>
+                        <a href="https://papago.naver.com/" target="_blank">Papago</a>
+                        <a href="https://yandex.com/translate" target="_blank">Yandex</a>
+                        <a href="https://www.reverso.net/" target="_blank">Reverso</a>
+                        <a href="https://dictionary.cambridge.org/translate/" target="_blank">Cambridge</a>
+                        <a href="https://www.collinsdictionary.com/translator" target="_blank">Collins</a>
+                        <a href="https://www.translatedict.com/" target="_blank">TranslateDict</a>
+                        <a href="https://www.systransoft.com/" target="_blank">Systran Free</a>
+                        <a href="https://www.lexicool.com/" target="_blank">Lexicool</a>
+                        <a href="https://www.translate.com/" target="_blank">Translate.com</a>
+                    </div>
+                    <a onclick="toggleBox('prem', this)" class="see-more-link" data-key="see-premium" style="color: #ffaa00; cursor: pointer;">+ See More Premium Tools</a>
+                    <div id="prem-trans" class="dropdown-content">
+                        <a href="https://www.memsource.com/" target="_blank" rel="nofollow">Phrase</a>
+                        <a href="https://www.smartling.com/" target="_blank" rel="nofollow">Smartling</a>
+                        <a href="https://Lokalise.com/" target="_blank" rel="nofollow">Lokalise</a>
+                        <a href="https://crowdin.com/" target="_blank" rel="nofollow">Crowdin</a>
+                        <a href="https://www.transifex.com/" target="_blank" rel="nofollow">Transifex</a>
+                        <a href="https://weglot.com/" target="_blank" rel="nofollow">Weglot</a>
+                        <a href="https://stepes.com/" target="_blank" rel="nofollow">Stepes</a>
+                        <a href="https://onehourtranslation.com/" target="_blank" rel="nofollow">BLOND</a>
+                        <a href="https://unbabel.com/" target="_blank" rel="nofollow">Unbabel</a>
+                        <a href="https://textmaster.com/" target="_blank" rel="nofollow">TextMaster</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tool-card" tabindex="0">
+                <h3 class="card-title" data-key="ai-text-summarizer"> AI Text Summarizer</h3>
+                <div class="button-group">
+                    <div class="item-wrapper"><a href="https://smmry.com/" target="_blank" class="btn btn-blue">SMMRY</a> <span class="status-badge free">FREE</span></div>
+                    <div class="item-wrapper"><a href="https://quillbot.com/summarize" target="_blank" rel="nofollow" class="btn btn-blue">QuillBot</a> <span class="status-badge premium">PREM</span></div>
+                </div>
+                <div class="see-more-links">
+                    <a onclick="toggleBox('free', this)" class="see-more-link" data-key="see-free" style="color: #00aaff; cursor: pointer;">+ See More Free Tools</a>
+                    <div id="free-sum" class="dropdown-content">
+                        <a href="https://resoomer.com/" target="_blank">Resoomer</a>
+                        <a href="https://tldrthis.com/" target="_blank">TLDR This</a>
+                        <a href="https://paraphraser.io/" target="_blank">Paraphraser.io</a>
+                        <a href="https://www.summarizer.org/" target="_blank">Summarizer.org</a>
+                        <a href="https://toolsyep.com/en/web-summarizer/" target="_blank">ToolsYep</a>
+                        <a href="https://summarygenerator.com/" target="_blank">Summary Gen</a>
+                        <a href="https://autosummarizer.com/" target="_blank">AutoSummarizer</a>
+                        <a href="https://www.prepostseo.com/tool/text-summarizer" target="_blank">PrePostSeo</a>
+                        <a href="https://wordvice.ai/summarizer" target="_blank">Wordvice</a>
+                        <a href="https://editpad.org/tool/text-summarizer" target="_blank">Editpad</a>
+                    </div>
+                    <a onclick="toggleBox('prem', this)" class="see-more-link" data-key="see-premium" style="color: #ffaa00; cursor: pointer;">+ See More Premium Tools</a>
+                    <div id="prem-sum" class="dropdown-content">
+                        <a href="https://scholarcy.com/" target="_blank" rel="nofollow">Scholarcy</a>
+                        <a href="https://summari.com/" target="_blank" rel="nofollow">Summari</a>
+                        <a href="https://genei.io/" target="_blank" rel="nofollow">Genei</a>
+                        <a href="https://notion.so/product/ai" target="_blank" rel="nofollow">Notion AI</a>
+                        <a href="https://intellexer.com/" target="_blank" rel="nofollow">Intellexer</a>
+                        <a href="https://wordtune.com/read" target="_blank" rel="nofollow">Wordtune Read</a>
+                        <a href="https://otter.ai/" target="_blank" rel="nofollow">Otter AI</a>
+                        <a href="https://upword.ai/" target="_blank" rel="nofollow">Upword</a>
+                        <a href="https://getdigest.com/" target="_blank" rel="nofollow">GetDigest</a>
+                        <a href="https://shortlyai.com/" target="_blank" rel="nofollow">ShortlyAI</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="column">
+            <h2 id="title-media" class="column-title" data-key="transform" style="color: #00ced1; border-color: #00ced1;">Media Transform Tools</h2>
+            
+            <div class="tool-card" tabindex="0">
+                <h3 class="card-title" data-key="pdf-magic">PDF Magic</h3>
+                <div class="button-group">
+                    <div class="item-wrapper"><a href="https://www.ilovepdf.com/" target="_blank" class="btn btn-green">iLovePDF</a> <span class="status-badge free">FREE</span></div>
+                    <div class="item-wrapper"><a href="https://www.adobe.com/acrobat/online.html" target="_blank" rel="nofollow" class="btn btn-green">Adobe</a> <span class="status-badge premium">PREM</span></div>
+                </div>
+                <div class="see-more-links">
+                    <a onclick="toggleBox('free', this)" class="see-more-link" data-key="see-free" style="color: #00aaff; cursor: pointer;">+ See More Free Tools</a>
+                    <div id="free-pdf" class="dropdown-content">
+                        <a href="https://smallpdf.com/" target="_blank">SmallPDF</a>
+                        <a href="https://www.sejda.com/" target="_blank">Sejda</a>
+                        <a href="https://pdfcandy.com/" target="_blank">PDF Candy</a>
+                        <a href="https://tinywow.com/pdf/all" target="_blank">TinyWow</a>
+                        <a href="https://www.pdf2go.com/" target="_blank">PDF2Go</a>
+                        <a href="https://pdf2doc.com/" target="_blank">PDF2Doc</a>
+                        <a href="https://lightpdf.com/" target="_blank">LightPDF</a>
+                        <a href="https://sodapdf.com/online/" target="_blank">SodaPDF</a>
+                        <a href="https://pdfresizer.com/" target="_blank">PDF Resizer</a>
+                        <a href="https://cleverpdf.com/" target="_blank">CleverPDF</a>
+                    </div>
+                    <a onclick="toggleBox('prem', this)" class="see-more-link" data-key="see-premium" style="color: #ffaa00; cursor: pointer;">+ See More Premium Tools</a>
+                    <div id="prem-pdf" class="dropdown-content">
+                        <a href="https://www.foxit.com/" target="_blank" rel="nofollow">Foxit PDF</a>
+                        <a href="https://www.camscanner.com/" target="_blank" rel="nofollow">CamScanner</a>
+                        <a href="https://www.pdffiller.com/" target="_blank" rel="nofollow">PDFfiller</a>
+                        <a href="https://nitro.com/" target="_blank" rel="nofollow">Nitro PDF</a>
+                        <a href="https://luminpdf.com/" target="_blank" rel="nofollow">Lumin PDF</a>
+                        <a href="https://pdfexpert.com/" target="_blank" rel="nofollow">PDF Expert</a>
+                        <a href="https://www.xodo.com/" target="_blank" rel="nofollow">Xodo Pro</a>
+                        <a href="https://www.pdfescape.com/" target="_blank" rel="nofollow">PDFescape</a>
+                        <a href="https://www.gonitro.com/" target="_blank" rel="nofollow">GoNitro</a>
+                        <a href="https://www.pdfarchitect.org/" target="_blank" rel="nofollow">PDF Architect</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tool-card" tabindex="0">
+                <h3 class="card-title" data-key="video-to-gif">Video to GIF</h3>
+                <div class="button-group">
+                    <div class="item-wrapper"><a href="https://ezgif.com/video-to-gif" target="_blank" class="btn btn-green">EZGIF</a> <span class="status-badge free">FREE</span></div>
+                    <div class="item-wrapper"><a href="https://giphy.com/create/gifmaker" target="_blank" rel="nofollow" class="btn btn-green">Giphy Pro</a> <span class="status-badge premium">PREM</span></div>
+                </div>
+                <div class="see-more-links">
+                    <a onclick="toggleBox('free', this)" class="see-more-link" data-key="see-free" style="color: #00aaff; cursor: pointer;">+ See More Free Tools</a>
+                    <div id="free-gif" class="dropdown-content">
+                        <a href="https://cloudconvert.com/video-to-gif" target="_blank">CloudConvert</a>
+                        <a href="https://online-video-cutter.com/video-to-gif" target="_blank">123Apps</a>
+                        <a href="https://www.kapwing.com/tools/convert-video-to-gif" target="_blank">Kapwing</a>
+                        <a href="https://imgflip.com/gif-maker" target="_blank">Imgflip</a>
+                        <a href="https://zamzar.com/" target="_blank">Zamzar</a>
+                        <a href="https://convertio.co/mp4-gif/" target="_blank">Convertio</a>
+                        <a href="https://gifmaker.me/" target="_blank">GifMaker.me</a>
+                        <a href="https://makeagif.com/" target="_blank">MakeAGif</a>
+                        <a href="https://hnet.com/video-to-gif/" target="_blank">HNet</a>
+                        <a href="https://www.freeconvert.com/video-to-gif" target="_blank">FreeConvert</a>
+                    </div>
+                    <a onclick="toggleBox('prem', this)" class="see-more-link" data-key="see-premium" style="color: #ffaa00; cursor: pointer;">+ See More Premium Tools</a>
+                    <div id="prem-gif" class="dropdown-content">
+                        <a href="https://www.adobe.com/express/feature/video/convert/video-to-gif" target="_blank" rel="nofollow">Adobe Express</a>
+                        <a href="https://www.canva.com/create/gifs/" target="_blank" rel="nofollow">Canva GIF</a>
+                        <a href="https://www.snagit.com/" target="_blank" rel="nofollow">Snagit Pro</a>
+                        <a href="https://www.screenflow.com/" target="_blank" rel="nofollow">ScreenFlow</a>
+                        <a href="https://www.movavi.com/" target="_blank" rel="nofollow">Movavi Pro</a>
+                        <a href="https://www.wondershare.com/" target="_blank" rel="nofollow">Filmora Pro</a>
+                        <a href="https://www.cyberlink.com/" target="_blank" rel="nofollow">PowerDirector</a>
+                        <a href="https://www.veed.io/tools/video-to-gif" target="_blank" rel="nofollow">VEED.IO Pro</a>
+                        <a href="https://www.fotor.com/features/video-to-gif" target="_blank" rel="nofollow">Fotor Pro</a>
+                        <a href="https://www.clipchamp.com/" target="_blank" rel="nofollow">Clipchamp Pro</a>
+                    </div>
+                </div>
+            </div>
+            <div class="tool-card" tabindex="0">
+                <h3 class="card-title" data-key="text-to-professional-voice">Text to Professional Voice</h3>
+                <div class="button-group">
+                    <div class="item-wrapper">
+                        <a href="https://www.gstatic.com/cloud-site/specimen/index.html" target="_blank" class="btn btn-green">Google TTS</a> 
+                        <span class="status-badge free">FREE</span>
+                    </div>
+                    <div class="item-wrapper">
+                        <a href="https://murf.ai/" target="_blank" rel="nofollow" class="btn btn-green">Murf AI</a> 
+                        <span class="status-badge premium">PREM</span>
+                    </div>
+                </div>
+                <div class="see-more-links">
+                    <a onclick="toggleBox('free', this)" class="see-more-link" data-key="see-free" style="color: #00aaff; cursor: pointer;">+ See More Free Tools</a>
+                    <div id="free-tts" class="dropdown-content">
+                        <a href="https://ttsmp3.com/" target="_blank">TTSMP3</a>
+                        <a href="https://www.naturalreaders.com/online/" target="_blank">NaturalReader</a>
+                        <a href="https://www.vocalware.com/" target="_blank">Vocalware</a>
+                        <a href="https://notevibes.com/" target="_blank">Notevibes</a>
+                        <a href="https://www.ispeech.org/" target="_blank">iSpeech</a>
+                        <a href="https://www.balabolka.site/en/" target="_blank">Balabolka</a>
+                        <a href="https://www.panopreter.com/" target="_blank">Panopreter</a>
+                        <a href="https://www.zabaware.com/reader/" target="_blank">Zabaware</a>
+                        <a href="https://www.readaloud.net/" target="_blank">ReadAloud</a>
+                        <a href="https://www.freetts.com/" target="_blank">FreeTTS.com</a>
+                    </div>
+                    <a onclick="toggleBox('prem', this)" class="see-more-link" data-key="see-premium" style="color: #ffaa00; cursor: pointer;">+ See More Premium Tools</a>
+                    <div id="prem-tts" class="dropdown-content">
+                        <a href="https://elevenlabs.io/" target="_blank" rel="nofollow">ElevenLabs</a>
+                        <a href="https://www.lovo.ai/" target="_blank" rel="nofollow">Lovo.ai</a>
+                        <a href="https://play.ht/" target="_blank" rel="nofollow">Play.ht</a>
+                        <a href="https://www.speechlo.com/" target="_blank" rel="nofollow">Speechelo</a>
+                        <a href="https://wellsaidlabs.com/" target="_blank" rel="nofollow">WellSaid Labs</a>
+                        <a href="https://www.resemble.ai/" target="_blank" rel="nofollow">Resemble.ai</a>
+                        <a href="https://www.descript.com/overdub" target="_blank" rel="nofollow">Descript Overdub</a>
+                        <a href="https://www.ibm.com/cloud/watson-text-to-speech" target="_blank" rel="nofollow">Watson TTS</a>
+                        <a href="https://azure.microsoft.com/en-us/products/ai-services/ai-speech" target="_blank" rel="nofollow">Azure Speech</a>
+                        <a href="https://aws.amazon.com/polly/" target="_blank" rel="nofollow">Amazon Polly</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tool-card" tabindex="0">
+                <h3 class="card-title" data-key="text-to-ai-video">Text to AI Video</h3>
+                <div class="button-group">
+                    <div class="item-wrapper">
+                        <a href="https://www.capcut.com/editor-web" target="_blank" class="btn btn-green">CapCut Online</a> 
+                        <span class="status-badge free">FREE</span>
+                    </div>
+                    <div class="item-wrapper">
+                        <a href="https://invideo.io/" target="_blank" rel="nofollow" class="btn btn-green">InVideo AI</a> 
+                        <span class="status-badge premium">PREM</span>
+                    </div>
+                </div>
+                <div class="see-more-links">
+                    <a onclick="toggleBox('free', this)" class="see-more-link" data-key="see-free" style="color: #00aaff; cursor: pointer;">+ See More Free Tools</a>
+                    <div id="free-video" class="dropdown-content">
+                        <a href="https://www.canva.com/ai-video-generator/" target="_blank">Canva Video</a>
+                        <a href="https://pika.art/" target="_blank">Pika Labs</a>
+                        <a href="https://runwayml.com/" target="_blank">Runway Gen-2</a>
+                        <a href="https://www.kaiber.ai/" target="_blank">Kaiber</a>
+                        <a href="https://Sora.com" target="_blank">Sora (Waitlist)</a>
+                        <a href="https://www.flexclip.com/tools/ai-video-generator/" target="_blank">FlexClip AI</a>
+                        <a href="https://www.moovly.com/" target="_blank">Moovly Free</a>
+                        <a href="https://www.animaker.com/" target="_blank">Animaker AI</a>
+                        <a href="https://www.adobe.com/express/feature/video/animate/audio" target="_blank">Adobe Animate</a>
+                        <a href="https://www.lumen5.com/" target="_blank">Lumen5</a>
+                    </div>
+                    <a onclick="toggleBox('prem', this)" class="see-more-link" data-key="see-premium" style="color: #ffaa00; cursor: pointer;">+ See More Premium Tools</a>
+                    <div id="prem-video" class="dropdown-content">
+                        <a href="https://heygen.com/" target="_blank" rel="nofollow">HeyGen</a>
+                        <a href="https://www.synthesia.io/" target="_blank" rel="nofollow">Synthesia</a>
+                        <a href="https://pictory.ai/" target="_blank" rel="nofollow">Pictory</a>
+                        <a href="https://elai.io/" target="_blank" rel="nofollow">Elai.io</a>
+                        <a href="https://www.deepbrain.io/" target="_blank" rel="nofollow">DeepBrain AI</a>
+                        <a href="https://www.colossyan.com/" target="_blank" rel="nofollow">Colossyan</a>
+                        <a href="https://www.rephrase.ai/" target="_blank" rel="nofollow">Rephrase.ai</a>
+                        <a href="https://www.hourone.ai/" target="_blank" rel="nofollow">Hour One</a>
+                        <a href="https://www.veed.io/" target="_blank" rel="nofollow">VEED.IO Pro</a>
+                        <a href="https://www.deepword.ai/" target="_blank" rel="nofollow">Deep Word</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+    <p>&copy; 2025 <strong>All in One Toolbox</strong>. Designed by <strong>Abdulrahman</strong>.</p>
+    <p>All logos and external tool rights belong to their respective owners.</p>
+    <p>We provide links to these services for educational and productivity purposes.</p>
+    <a href="mailto:admin@ai-allin-one.com" style="color: #00aaff; text-decoration: none;">admin@ai-allin-one.com</a>
+</footer>
+<footer style="text-align: center; padding: 5px; background-color: #2c3e50; color: white; margin-top: 15px;">
+    <p>&copy; 2025 AAIO - AI All in One Toolbox</p>
+    <p>
+        <a href="terms.html" target="_blank" rel="noopener" style="color: #00aaff; text-decoration: none;">Terms of Service</a> | 
+        <a href="privacy.html" target="_blank" rel="noopener" style="color: #00aaff; text-decoration: none;">Privacy Policy</a>
+    </p>
+</footer>
+
+<div class="logo-circle-matrix">
+    <img src="logos/chatgpt.png" class="m-logo">
+    <img src="logos/claude.png" class="m-logo">
+    <img src="logos/perplexity.png" class="m-logo">
+    <img src="logos/deepseek.png" class="m-logo">        
+    <img src="logos/gemini.png" class="m-logo">
+</div>
+
+<span class="trigger-text">Ask AI Council</span><span class="trigger-text">Ask AI Council <small style="font-size: 0.6em; color: #00aaff; vertical-align: middle; margin-left: 5px; border: 1px solid #00aaff; padding: 2px 5px; border-radius: 4px;">Coming Soon</small></span>
+
+   <script>
+    // 1. وظيفة فتح القوائم (المفتاح العمومي - الحل المنقذ لـ 26 بطاقة)
+    function toggleBox(label, element) {
+    // هنا نتجاهل كلمة 'free' أو 'label' تماماً ونركز على موقع الرابط (element)
+    if (element) {
+        const box = element.nextElementSibling;
+        
+        if (box) {
+            // إغلاق أي صناديق أخرى مفتوحة
+            document.querySelectorAll('.dropdown-content').forEach(d => {
+                if (d !== box) d.style.display = "none";
+            });
+
+            // فتح أو إغلاق الصندوق الذي يلي الرابط مباشرة
+            const isDisplayed = window.getComputedStyle(box).display === "block";
+            box.style.display = isDisplayed ? "none" : "block";
+        }
+    }
+}
+
+    // 2. كود تبديل الوضع (Dark/Light Mode)
+    const toggleSwitch = document.querySelector('#checkbox');
+    const currentTheme = localStorage.getItem('theme');
+    if (currentTheme) {
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        if (currentTheme === 'light') toggleSwitch.checked = true;
+    }
+    toggleSwitch.addEventListener('change', (e) => {
+        const theme = e.target.checked ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+    });
+
+    // 3. كود الأكورديون للجوال (التحكم في الأعمدة)
+    document.querySelectorAll('.column h2').forEach(title => {
+        title.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                const column = title.parentElement;
+                document.querySelectorAll('.column').forEach(col => {
+                    if (col !== column) col.classList.remove('active');
+                });
+                column.classList.toggle('active');
+            }
+        });
+    });
+
+    // 4. كود الترجمة الاحترافي (مع حفظ الأصول)
+    const langPicker = document.getElementById('language-picker');
+    if (langPicker) {
+        langPicker.addEventListener('change', function() {
+            updateContent(this.value);
+        });
+    }
+
+    async function updateContent(lang) {
+        const elements = document.querySelectorAll('[data-key]');
+        if (lang === 'en') {
+            elements.forEach(el => {
+                if (el.getAttribute('data-original')) el.innerText = el.getAttribute('data-original');
+            });
+            return;
+        }
+        const promises = Array.from(elements).map(async (el) => {
+            if (!el.getAttribute('data-original')) el.setAttribute('data-original', el.innerText);
+            const originalText = el.getAttribute('data-original').replace('+', '').trim();
+            const response = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${lang}&dt=t&q=${encodeURIComponent(originalText)}`);
+            const result = await response.json();
+            if (result?.[0]?.[0]?.[0]) {
+                const prefix = el.getAttribute('data-original').includes('+') ? '+ ' : '';
+                el.innerText = prefix + result[0][0][0];
+            }
+        });
+        await Promise.all(promises);
+    }
+    // 5. كود التفاعل القسري للجوال (إعادة البروز للبطاقات)
+    document.addEventListener('DOMContentLoaded', function() {
+        const cards = document.querySelectorAll('.tool-card');
+        cards.forEach(card => {
+            card.addEventListener('touchstart', function() {
+                this.classList.add('card-active');
+            }, {passive: true});
+
+            card.addEventListener('touchend', function() {
+                setTimeout(() => {
+                    this.classList.remove('card-active');
+                }, 150);
+            }, {passive: true});
+
+            card.addEventListener('touchmove', function() {
+                this.classList.remove('card-active');
+            }, {passive: true});
+        });
+    });
+</script>
+</body>
+</html>
