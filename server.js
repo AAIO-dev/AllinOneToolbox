@@ -68,24 +68,23 @@ async function getRecentHistory() {
 }
 
 // --- 1. GEMINI (النسخة المحدثة مع الذاكرة السحابية) ---
+// --- Gemini Advisor ---
 app.post('/api/ask-gemini', async (req, res) => {
     const { prompt } = req.body;
     console.log("🚀 Gemini is checking the Council History...");
 
     try {
-        // 1. جلب تاريخ المحادثات من البحرين
         const historyText = await getRecentHistory();
 
-        // 2. دمج التاريخ مع سؤالك وتوجيه Gemini للمقارنة
         const finalPrompt = `
-هذا هو سجل آخر المحادثات في المجلس:
+This is the record of recent council discussions:
 ${historyText}
 ---
-بناءً على هذا السجل وعلى سؤال المستخدم التالي، قدم ردك مع مراعاة ما قاله زملاؤك (دعم، معارضة، أو تصحيح):
+Based on this record and the following user query, provide your response while considering your colleagues' input (support, oppose, or correct):
 ${prompt}`;
 
         const response = await axios.post(
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${process.env.GEMINI_API_KEY}`,
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
             {
                 system_instruction: { parts: [{ text: UNIFIED_PROMPT }] },
                 contents: [{ role: "user", parts: [{ text: finalPrompt }] }]
@@ -94,7 +93,6 @@ ${prompt}`;
 
         const reply = response.data.candidates[0].content.parts[0].text;
 
-        // 3. حفظ الرد الجديد في الذاكرة
         const database = client.db("AAIO-Memory");
         const history = database.collection("chat_history");
         await history.insertOne({
@@ -112,19 +110,18 @@ ${prompt}`;
     }
 });
 
+// --- Perplexity Advisor ---
 app.post('/api/ask-perplexity', async (req, res) => {
     const { prompt } = req.body;
     console.log("🚀 Perplexity is researching and checking History...");
     try {
-        // 1. استدعاء الذاكرة من البحرين
         const historyText = await getRecentHistory();
         
-        // 2. صياغة السؤال مع فلسفة البحث التاريخي
         const finalPrompt = `
-إليك سجل النقاشات الأخيرة في المجلس:
+Here is the record of recent council discussions:
 ${historyText}
 ---
-بناءً على هذا السجل وسؤال المستخدم التالي، قدم بحثاً دقيقاً مع نقد أو تأييد لما ذكره الزملاء:
+Based on this record and the following user query, provide accurate research with criticism or support for what colleagues mentioned:
 ${prompt}`;
 
         const response = await axios.post('https://api.perplexity.ai/chat/completions', {
@@ -142,7 +139,6 @@ ${prompt}`;
 
         const reply = response.data.choices[0].message.content;
 
-        // 3. تخليد الفلسفة في قاعدة البيانات
         const database = client.db("AAIO-Memory");
         await database.collection("chat_history").insertOne({
             advisor: "Perplexity",
@@ -159,11 +155,12 @@ ${prompt}`;
     }
 });
 
+// --- ChatGPT Advisor ---
 app.post('/api/ask-chatgpt', async (req, res) => {
     const { prompt } = req.body;
     try {
-        const historyText = await getRecentHistory(); // جلب الذاكرة
-        const finalPrompt = `سجل المجلس السابق:\n${historyText}\n---\nسؤال المستخدم: ${prompt}`;
+        const historyText = await getRecentHistory(); 
+        const finalPrompt = `Previous council record:\n${historyText}\n---\nUser Query: ${prompt}`;
 
         const response = await axios.post('https://api.openai.com/v1/chat/completions', {
             model: "gpt-4o",
@@ -177,7 +174,6 @@ app.post('/api/ask-chatgpt', async (req, res) => {
 
         const reply = response.data.choices[0].message.content;
 
-        // الحفظ في البحرين
         const database = client.db("AAIO-Memory");
         await database.collection("chat_history").insertOne({
             advisor: "ChatGPT",
@@ -193,11 +189,12 @@ app.post('/api/ask-chatgpt', async (req, res) => {
     }
 });
 
+// --- DeepSeek Advisor ---
 app.post('/api/ask-deepseek', async (req, res) => {
     const { prompt } = req.body;
     try {
         const historyText = await getRecentHistory();
-        const finalPrompt = `سجل المجلس:\n${historyText}\n---\nالمطلوب منك تحليل ما سبق والإجابة على: ${prompt}`;
+        const finalPrompt = `Council Record:\n${historyText}\n---\nTask: Analyze the context and answer: ${prompt}`;
 
         const response = await axios.post('https://api.deepseek.com/chat/completions', {
             model: "deepseek-reasoner",
@@ -226,11 +223,12 @@ app.post('/api/ask-deepseek', async (req, res) => {
     }
 });
 
+// --- Claude Advisor ---
 app.post('/api/ask-claude', async (req, res) => {
     const { prompt } = req.body;
     try {
         const historyText = await getRecentHistory();
-        const finalPrompt = `تاريخ الحوار في المجلس:\n${historyText}\n---\nبناءً عليه، أجب بدقة على: ${prompt}`;
+        const finalPrompt = `Council conversation history:\n${historyText}\n---\nBased on it, accurately answer: ${prompt}`;
 
         const response = await axios.post('https://api.anthropic.com/v1/messages', {
             model: "claude-3-haiku-20240307",
