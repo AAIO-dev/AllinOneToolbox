@@ -102,15 +102,20 @@ async function callPerplexity(prompt) { return await sendToServer('ask-perplexit
 
 // 1. الدالة المساعدة للاتصال بالسيرفر (سنحتاجها غداً بقوة)
 async function sendToServer(endpoint, prompt, name) {
+    // استبدل الرابط أدناه برابط السيرفر الخاص بك على Render (الذي ينتهي بـ .onrender.com)
+    const SERVER_BASE_URL = "https://aaio-server.onrender.com"; 
+
     try {
-        const response = await fetch(`${window.location.origin}/${endpoint}`, {
+        const response = await fetch(`${SERVER_BASE_URL}/${endpoint}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ prompt })
         });
+        
         const data = await response.json();
         return data.reply || `${name}: Received an empty response.`;
     } catch (e) {
+        console.error("Error connecting to server:", e);
         return `${name}: Connection error to AAIO Server.`;
     }
 }
