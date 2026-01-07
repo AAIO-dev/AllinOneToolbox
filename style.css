@@ -1018,14 +1018,13 @@ body .council-message .bot-name {
     margin-left: auto !important; 
     margin-bottom: 15px !important;
     padding: 15px 20px !important;
-    background: rgba(10, 10, 10, 0.85) !important; /* رفعنا الكثافة من 0.05 إلى 0.85 */
-    backdrop-filter: blur(8px) !important;
+    background: rgba(15, 15, 15, 0.8) !important;
+    backdrop-filter: blur(10px) !important;
     border-radius: 20px 20px 0 20px !important;
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
     direction: rtl;
     text-align: right;
-    
     word-wrap: break-word !important; 
     overflow-wrap: break-word !important;
     height: 90px !important; /* زدناه قليلاً ليرتاح الخط */
@@ -1033,6 +1032,7 @@ body .council-message .bot-name {
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
     cursor: pointer;
     position: relative !important;
+    z-index: 10 !important;
 }
 
 /* الحالة الموسعة لضمان ظهور السكرول */
