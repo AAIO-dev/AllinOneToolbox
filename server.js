@@ -44,37 +44,42 @@ app.get('/api/tools', async (req, res) => {
     }
 });
 
-// دالة لجلب آخر 5 محادثات من قاعدة البيانات بالبحرين
-async function getRecentHistory() {
+// دالة لجلب المحادثات من قاعدة البيانات بالبحرين
+async function getRecentHistory(sessionId) {
     try {
         const database = client.db("AAIO-Memory");
         const historyCollection = database.collection("chat_history");
         
-        // جلب آخر 5 سجلات مرتبة من الأحدث للأقدم
+        // التعديل الجوهري: البحث فقط عن السجلات التي تخص هذا المستخدم (sessionId)
         const recentLogs = await historyCollection
-            .find({})
+            .find({ sessionId: sessionId }) // فلترة ذكية
             .sort({ timestamp: -1 })
             .limit(5)
             .toArray();
             
-        // تنسيق السجلات كنص ليفهمه المستشارون
-        return recentLogs.map(log => 
-            `المستشار ${log.advisor} قال: ${log.botReply}`
+        if (recentLogs.length === 0) return "No previous context for this session.";
+
+        // تنسيق السجلات بلغة احترافية ليفهمها المستشارون
+        return recentLogs.reverse().map(log => 
+            `${log.advisor}: ${log.botReply}`
         ).join("\n---\n");
     } catch (error) {
-        console.error("❌ فشل في جلب التاريخ:", error);
-        return "لا يوجد تاريخ متاح حالياً.";
+        console.error("❌ History Retrieval Error:", error);
+        return "No history available.";
     }
 }
 
 // --- 1. GEMINI (النسخة المحدثة مع الذاكرة السحابية) ---
 // --- Gemini Advisor ---
 app.post('/api/ask-gemini', async (req, res) => {
-    const { prompt } = req.body;
-    console.log("🚀 Gemini processing request...");
+    // 1. استخراج الـ sessionId والـ prompt من الطلب القادم
+    const { prompt, sessionId } = req.body; 
+    console.log(`🚀 Gemini processing request for session: ${sessionId}`);
 
     try {
-        const historyText = await getRecentHistory();
+        // 2. تمرير الـ sessionId للدالة لجلب التاريخ الخاص بهذا المستخدم فقط
+        const historyText = await getRecentHistory(sessionId);
+        
         const finalPrompt = `
 Council History:
 ${historyText}
@@ -93,10 +98,12 @@ Note: Respond in the same language as the User Query.
 
         const reply = response.data.candidates[0].content.parts[0].text;
 
+        // 3. حفظ الـ sessionId في قاعدة البيانات لضمان استمرارية الذاكرة
         const database = client.db("AAIO-Memory");
         await database.collection("chat_history").insertOne({
+            sessionId: sessionId, // تخزين الهوية
             advisor: "Gemini",
-            userName: "Abdulrahman (Abu Fallah)", // تم تحويل الاسم للإنجليزية لعدم التأثير على اللغة
+            userName: "User", 
             userPrompt: prompt,
             botReply: reply,
             timestamp: new Date()
@@ -111,15 +118,20 @@ Note: Respond in the same language as the User Query.
 
 // --- Perplexity Advisor ---
 app.post('/api/ask-perplexity', async (req, res) => {
-    const { prompt } = req.body;
+    // 1. استلام الهوية والسؤال
+    const { prompt, sessionId } = req.body; 
+    console.log(`🚀 Perplexity processing for session: ${sessionId}`);
+
     try {
-        const historyText = await getRecentHistory();
+        // 2. جلب تاريخ هذه الجلسة فقط
+        const historyText = await getRecentHistory(sessionId);
+        
         const finalPrompt = `
 Council History:
 ${historyText}
 ---
 User Query: ${prompt}
-Note: You MUST respond in the exact same language used in the User Query above.
+Note: You MUST respond in the exact same language used in the User Query above. Ignore the language of the History if it differs.
 `;
 
         const response = await axios.post('https://api.perplexity.ai/chat/completions', {
@@ -134,10 +146,12 @@ Note: You MUST respond in the exact same language used in the User Query above.
 
         const reply = response.data.choices[0].message.content;
 
+        // 3. تخزين الرد مع ربطه بالـ sessionId
         const database = client.db("AAIO-Memory");
         await database.collection("chat_history").insertOne({
+            sessionId: sessionId, 
             advisor: "Perplexity",
-            userName: "Abdulrahman (Abu Fallah)",
+            userName: "User", // حافظنا على الخصوصية هنا
             userPrompt: prompt,
             botReply: reply,
             timestamp: new Date()
@@ -146,6 +160,7 @@ Note: You MUST respond in the exact same language used in the User Query above.
         res.json({ reply });
     } catch (error) {
         console.error("❌ Perplexity Error:", error.message);
+        // رسالة الخطأ بالإنجليزية كما اتفقنا
         res.status(500).json({ error: "Perplexity Service Unavailable" });
     }
 });

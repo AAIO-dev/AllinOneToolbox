@@ -1,3 +1,9 @@
+// إنشاء أو استرجاع هوية المستخدم الفريدة للجلسة
+if (!localStorage.getItem('council_session_id')) {
+    localStorage.setItem('council_session_id', 'session_' + Math.random().toString(36).substr(2, 9));
+}
+const SESSION_ID = localStorage.getItem('council_session_id');
+
 // 1. Council Constitution (Strict Professional Protocol)
 const COUNCIL_SYSTEM_PROMPT = `You are a key member of the AAIO Advisory Council.
 
@@ -105,16 +111,17 @@ async function sendToServer(endpoint, prompt, name) {
     const SERVER_BASE_URL = "https://ai-allin-one.com"; 
 
     try {
-        const response = await fetch(`${SERVER_BASE_URL}/api/${endpoint}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ prompt })
-        });
-        
-        if (!response.ok) {
-            const errorData = await response.json();
-            return `${name}: عذراً، السيرفر رد بخطأ (${response.status}).`;
-        }
+    const response = await fetch(`${SERVER_BASE_URL}/api/${endpoint}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        // التعديل هنا: إرسال الـ prompt ومعه الـ sessionId
+        body: JSON.stringify({ prompt, sessionId: SESSION_ID }) 
+    });
+    
+    if (!response.ok) {
+        // تحويل رسالة الخطأ للإنجليزية لضمان الاحترافية
+        return `${name}: [System Error] Server responded with status (${response.status}).`;
+    }
 
         const data = await response.json();
 return data.reply || `${name}: Received an empty response from the server.`;
