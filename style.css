@@ -1076,12 +1076,28 @@ body .council-message .bot-name {
     content: '−' !important; /* علامة الناقص */
 }
 
-/* 5. ألوان الهوية لكل أداة */
-.gemini-msg { border-right: 4px solid #8a2be2 !important; background: rgba(138, 43, 226, 0.1) !important; box-shadow: 0 4px 15px rgba(138, 43, 226, 0.25) !important; }
-.chatgpt-msg { border-right: 5px solid #10a37f !important; background: rgba(16, 163, 127, 0.08) !important; }
-.claude-msg { border-right: 5px solid #d97757 !important; background: rgba(217, 119, 87, 0.08) !important; }
-.deepseek-msg { border-right: 5px solid #4d6cfa !important; background: rgba(77, 108, 250, 0.08) !important; }
-.perplexity-msg { border-right: 4px solid #b0b0b0 !important; box-shadow: 0 4px 15px rgba(255, 255, 255, 0.15) !important; background: rgba(255, 255, 255, 0.05) !important; }
+/* 5. ألوان الهوية لكل أداة - التعديل الجديد للحجب */
+.gemini-msg { 
+    border-right: 4px solid #8a2be2 !important; 
+    background: linear-gradient(rgba(10,10,10,0.9), rgba(10,10,10,0.9)), rgba(138, 43, 226, 0.15) !important; 
+    box-shadow: 0 4px 15px rgba(138, 43, 226, 0.25) !important; 
+}
+.chatgpt-msg { 
+    border-right: 5px solid #10a37f !important; 
+    background: linear-gradient(rgba(10,10,10,0.9), rgba(10,10,10,0.9)), rgba(16, 163, 127, 0.12) !important; 
+}
+.claude-msg { 
+    border-right: 5px solid #d97757 !important; 
+    background: linear-gradient(rgba(10,10,10,0.9), rgba(10,10,10,0.9)), rgba(217, 119, 87, 0.12) !important; 
+}
+.deepseek-msg { 
+    border-right: 5px solid #4d6cfa !important; 
+    background: linear-gradient(rgba(10,10,10,0.9), rgba(10,10,10,0.9)), rgba(77, 108, 250, 0.12) !important; 
+}
+.perplexity-msg { 
+    border-right: 4px solid #b0b0b0 !important; 
+    background: linear-gradient(rgba(10,10,10,0.9), rgba(10,10,10,0.9)), rgba(255, 255, 255, 0.1) !important; 
+}
 
 .council-message:hover {
     transform: scale(1.01);
