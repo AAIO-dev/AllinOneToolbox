@@ -875,11 +875,12 @@ input:checked + .slider.round:before {
     body .council-message {
     display: flex !important;
     flex-direction: row !important; /* لجعل الصورة بجانب النص وليس فوقه */
-    align-items: center !important;
+    align-items: flex-start !important;
     height: 100px !important; 
     max-height: 400px;
     min-height: 0px !important;
     padding: 8px 12px !important; /* نحافة النصف */
+    padding-top: 12px !important;
     gap: 10px !important;
     width: 94% !important;
     margin: 0 auto 8px auto !important;
