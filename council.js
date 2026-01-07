@@ -171,7 +171,7 @@ function spawnThought() {
     thoughtNode.style.left = x + 'px';
     thoughtNode.style.top = y + 'px';
     
-    document.body.prepend(thoughtNode);
+    document.getElementById('stars-layer').appendChild(thoughtNode);
 
     setTimeout(() => { thoughtNode.style.opacity = '1'; }, 100);
     setTimeout(() => { 
