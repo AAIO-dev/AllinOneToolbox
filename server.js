@@ -71,17 +71,17 @@ async function getRecentHistory() {
 // --- Gemini Advisor ---
 app.post('/api/ask-gemini', async (req, res) => {
     const { prompt } = req.body;
-    console.log("🚀 Gemini is checking the Council History...");
+    console.log("🚀 Gemini processing request...");
 
     try {
         const historyText = await getRecentHistory();
-
         const finalPrompt = `
-This is the record of recent council discussions:
+Council History:
 ${historyText}
 ---
-Based on this record and the following user query, provide your response while considering your colleagues' input (support, oppose, or correct):
-${prompt}`;
+User Query: ${prompt}
+Note: Respond in the same language as the User Query.
+`;
 
         const response = await axios.post(
             `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
@@ -94,10 +94,9 @@ ${prompt}`;
         const reply = response.data.candidates[0].content.parts[0].text;
 
         const database = client.db("AAIO-Memory");
-        const history = database.collection("chat_history");
-        await history.insertOne({
+        await database.collection("chat_history").insertOne({
             advisor: "Gemini",
-            userName: "عبدالرحمن (أبو فلاح)",
+            userName: "Abdulrahman (Abu Fallah)", // تم تحويل الاسم للإنجليزية لعدم التأثير على اللغة
             userPrompt: prompt,
             botReply: reply,
             timestamp: new Date()
@@ -105,7 +104,7 @@ ${prompt}`;
 
         res.json({ reply });
     } catch (error) {
-        console.error("❌ Gemini Failure:", error.response?.data || error.message);
+        console.error("❌ Gemini Error:", error.response?.data || error.message);
         res.status(500).json({ error: "Gemini Service Unavailable" });
     }
 });
@@ -113,16 +112,15 @@ ${prompt}`;
 // --- Perplexity Advisor ---
 app.post('/api/ask-perplexity', async (req, res) => {
     const { prompt } = req.body;
-    console.log("🚀 Perplexity is researching and checking History...");
     try {
         const historyText = await getRecentHistory();
-        
         const finalPrompt = `
-Here is the record of recent council discussions:
+Council History:
 ${historyText}
 ---
-Based on this record and the following user query, provide accurate research with criticism or support for what colleagues mentioned:
-${prompt}`;
+User Query: ${prompt}
+Note: You MUST respond in the exact same language used in the User Query above.
+`;
 
         const response = await axios.post('https://api.perplexity.ai/chat/completions', {
             model: "sonar",
@@ -131,10 +129,7 @@ ${prompt}`;
                 { role: "user", content: finalPrompt }
             ]
         }, {
-            headers: {
-                'Authorization': `Bearer ${process.env.PERPLEXITY_API_KEY}`,
-                'Content-Type': 'application/json'
-            }
+            headers: { 'Authorization': `Bearer ${process.env.PERPLEXITY_API_KEY}` }
         });
 
         const reply = response.data.choices[0].message.content;
@@ -142,7 +137,7 @@ ${prompt}`;
         const database = client.db("AAIO-Memory");
         await database.collection("chat_history").insertOne({
             advisor: "Perplexity",
-            userName: "عبدالرحمن (أبو فلاح)",
+            userName: "Abdulrahman (Abu Fallah)",
             userPrompt: prompt,
             botReply: reply,
             timestamp: new Date()
@@ -150,7 +145,7 @@ ${prompt}`;
 
         res.json({ reply });
     } catch (error) {
-        console.error("❌ Perplexity Failure:", error.response?.data || error.message);
+        console.error("❌ Perplexity Error:", error.message);
         res.status(500).json({ error: "Perplexity Service Unavailable" });
     }
 });
@@ -160,7 +155,13 @@ app.post('/api/ask-chatgpt', async (req, res) => {
     const { prompt } = req.body;
     try {
         const historyText = await getRecentHistory(); 
-        const finalPrompt = `Previous council record:\n${historyText}\n---\nUser Query: ${prompt}`;
+        const finalPrompt = `
+Council History:
+${historyText}
+---
+User Query: ${prompt}
+Note: You MUST respond in the exact same language used in the User Query above.
+`;
 
         const response = await axios.post('https://api.openai.com/v1/chat/completions', {
             model: "gpt-4o",
@@ -174,10 +175,9 @@ app.post('/api/ask-chatgpt', async (req, res) => {
 
         const reply = response.data.choices[0].message.content;
 
-        const database = client.db("AAIO-Memory");
-        await database.collection("chat_history").insertOne({
+        await client.db("AAIO-Memory").collection("chat_history").insertOne({
             advisor: "ChatGPT",
-            userName: "عبدالرحمن (أبو فلاح)",
+            userName: "Abdulrahman (Abu Fallah)",
             userPrompt: prompt,
             botReply: reply,
             timestamp: new Date()
@@ -194,7 +194,13 @@ app.post('/api/ask-deepseek', async (req, res) => {
     const { prompt } = req.body;
     try {
         const historyText = await getRecentHistory();
-        const finalPrompt = `Council Record:\n${historyText}\n---\nTask: Analyze the context and answer: ${prompt}`;
+        const finalPrompt = `
+Council History:
+${historyText}
+---
+User Query: ${prompt}
+Note: You MUST respond in the exact same language used in the User Query above.
+`;
 
         const response = await axios.post('https://api.deepseek.com/chat/completions', {
             model: "deepseek-reasoner",
@@ -208,10 +214,9 @@ app.post('/api/ask-deepseek', async (req, res) => {
 
         const reply = response.data.choices[0].message.content;
 
-        const database = client.db("AAIO-Memory");
-        await database.collection("chat_history").insertOne({
+        await client.db("AAIO-Memory").collection("chat_history").insertOne({
             advisor: "DeepSeek",
-            userName: "عبدالرحمن (أبو فلاح)",
+            userName: "Abdulrahman (Abu Fallah)",
             userPrompt: prompt,
             botReply: reply,
             timestamp: new Date()
@@ -228,7 +233,13 @@ app.post('/api/ask-claude', async (req, res) => {
     const { prompt } = req.body;
     try {
         const historyText = await getRecentHistory();
-        const finalPrompt = `Council conversation history:\n${historyText}\n---\nBased on it, accurately answer: ${prompt}`;
+        const finalPrompt = `
+Council History:
+${historyText}
+---
+User Query: ${prompt}
+Note: You MUST respond in the exact same language used in the User Query above.
+`;
 
         const response = await axios.post('https://api.anthropic.com/v1/messages', {
             model: "claude-3-haiku-20240307",
@@ -245,10 +256,9 @@ app.post('/api/ask-claude', async (req, res) => {
 
         const reply = response.data.content[0].text;
 
-        const database = client.db("AAIO-Memory");
-        await database.collection("chat_history").insertOne({
+        await client.db("AAIO-Memory").collection("chat_history").insertOne({
             advisor: "Claude",
-            userName: "عبدالرحمن (أبو فلاح)",
+            userName: "Abdulrahman (Abu Fallah)",
             userPrompt: prompt,
             botReply: reply,
             timestamp: new Date()
