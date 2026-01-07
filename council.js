@@ -140,7 +140,7 @@ const thoughts = [
     "بماذا تفكر؟", "هل من تساؤل؟", "Need an insight?", "Seeking wisdom?",
     "¿Tienes una duda?", "O futuro espera", "Chiedi al consiglio", 
     "Bereit für Einsichten?", "Спроси нас", "知恵を借りる", "向委员会提问", 
-    "L'intelligence attend", "کیا آپ سوچ رہے ہیں؟", "क्या आप सोच रहे हैं؟", 
+    "L'intelligence attend", "کیا آپ سوچ رہے ہیں؟", "क्या आप सोच रहे हैं؟", "هل من تساؤل؟",
     "എന്താണ് ചിന്തിക്കുന്നത്؟", "Ne傾いている?", "چه در سر داری؟", 
     "Vad tänker du på?", "Mitä mietit?", "La ce te gândești?", 
     "Τι σκέφτεστε;", "Qual é a sua dúvida?", "질문이 있으십니까?",
