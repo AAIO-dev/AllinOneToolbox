@@ -117,11 +117,11 @@ async function sendToServer(endpoint, prompt, name) {
         }
 
         const data = await response.json();
-        return data.reply || `${name}: استلمت رداً فارغاً من السيرفر.`;
-    } catch (e) {
-        console.error("Connection Error:", e);
-        return `${name}: عذراً يا بو فلاح، لا أستطيع الوصول للسيرفر حالياً.`;
-    }
+return data.reply || `${name}: Received an empty response from the server.`;
+} catch (e) {
+    console.error("Connection Error:", e);
+    return `${name}: [System Error] Unable to reach the server. Please check your connection.`;
+}
 }
 
 // 2. مراقبة النقر لتوسيع صناديق المحادثة
