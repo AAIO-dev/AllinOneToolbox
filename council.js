@@ -135,13 +135,17 @@ document.getElementById('chat-window').addEventListener('click', function(e) {
     }
 });
 
-// مصفوفة اللغات الموسعة (أضفنا الأوردو، الهندي، الماليام، التركي، الفارسي، السويدي، الفنلندي، الروماني، اليوناني)
+// مصفوفة اللغات الموسعة 
 const thoughts = [
-    "بماذا تفكر؟", "Need an insight?", "¿Tienes una duda?", "O futuro espera", 
-    "Chiedi al consiglio", "Bereit für Einsichten?", "Спроси нас", "知恵を借りる", 
-    "向委员会提问", "L'intelligence attend", "کیا آپ سوچ رہے ہیں؟", "क्या आप सोच रहे हैं?", 
-    "എന്താണ് ചിന്തിക്കുന്നത്?", "Ne düşünüyorsun?", "چه در سر داری؟", "Vad tänker du på?", 
-    "Mitä mietit?", "La ce te gândești?", "Τι σκέφτεστε;", "Qual é a sua dúvida?"
+    "بماذا تفكر؟", "هل من تساؤل؟", "Need an insight?", "Seeking wisdom?",
+    "¿Tienes una duda?", "O futuro espera", "Chiedi al consiglio", 
+    "Bereit für Einsichten?", "Спроси нас", "知恵を借りる", "向委员会提问", 
+    "L'intelligence attend", "کیا آپ سوچ رہے ہیں؟", "क्या आप सोच रहे हैं؟", 
+    "എന്താണ് ചിന്തിക്കുന്നത്؟", "Ne傾いている?", "چه در سر داری؟", 
+    "Vad tänker du på?", "Mitä mietit?", "La ce te gândești?", 
+    "Τι σκέφτεστε;", "Qual é a sua dúvida?", "질문이 있으십니까?",
+    "มีคำถามไหม?", "Des questions ?", "Masz pytanie?", "Heeft u vragen?",
+    "Imate li pitanja?", "May tanong ka ba?", "Hỏi ý kiến?", "Thinking of...?"
 ];
 
 let lastThought = ""; // لمنع تكرار نفس اللغة مرتين متتاليتين
