@@ -36,7 +36,17 @@ async function startCouncilDiscussion() {
     const inputField = document.getElementById('user-input');
     const userInput = inputField.value.trim();
     const chatWindow = document.getElementById('chat-window');
+    const sendBtn = document.querySelector('.send-btn'); // قمنا بتعريف الزر هنا
+
     if (!userInput) return;
+
+    // --- هذه هي الإضافة التي ستريحك من مشكلة التكرار ---
+    inputField.value = ''; // مسح النص فوراً من الشريط
+    if (sendBtn) {
+        sendBtn.disabled = true; // تعطيل الزر
+        sendBtn.style.opacity = '0.5'; // تغيير شكل الزر ليعرف المستخدم أنه "قيد الإرسال"
+    }
+    // ----------------------------------------------
 
     chatWindow.innerHTML += `<div class="user-msg">${userInput}</div>`;
     
