@@ -180,10 +180,13 @@ Note: You MUST respond in the exact same language used in the User Query above. 
 });
 
 // --- ChatGPT Advisor ---
-app.post('/api/ask-chatgpt', async (req, res) => {
-    const { prompt } = req.body;
+aapp.post('/api/ask-chatgpt', async (req, res) => {
+    // 1. استلام الهوية (sessionId) والسؤال من الطلب
+    const { prompt, sessionId } = req.body;
     try {
-        const historyText = await getRecentHistory(); 
+        // 2. جلب تاريخ الجلسة الخاص بهذا المستخدم فقط
+        const historyText = await getRecentHistory(sessionId); 
+        
         const finalPrompt = `
 Council History:
 ${historyText}
@@ -193,7 +196,7 @@ Note: You MUST respond in the exact same language used in the User Query above.
 `;
 
         const response = await axios.post('https://api.openai.com/v1/chat/completions', {
-            model: "gpt-4o",
+            model: "gpt-4o", // تم الإبقاء على الموديل الأقوى كما هو في كودك
             messages: [
                 { role: "system", content: UNIFIED_PROMPT },
                 { role: "user", content: finalPrompt }
@@ -204,9 +207,11 @@ Note: You MUST respond in the exact same language used in the User Query above.
 
         const reply = response.data.choices[0].message.content;
 
+        // 3. تخزين الرد في MongoDB مع ربطه بالـ sessionId
         await client.db("AAIO-Memory").collection("chat_history").insertOne({
+            sessionId: sessionId, // إضافة حقل الهوية لضمان عدم تداخل الذاكرة
             advisor: "ChatGPT",
-            userName: "Abdulrahman (Abu Fallah)",
+            userName: "User", 
             userPrompt: prompt,
             botReply: reply,
             timestamp: new Date()
@@ -214,15 +219,19 @@ Note: You MUST respond in the exact same language used in the User Query above.
 
         res.json({ reply });
     } catch (error) {
+        console.error("❌ ChatGPT Error:", error.message);
         res.status(500).json({ error: "ChatGPT Service Unavailable" });
     }
 });
 
 // --- DeepSeek Advisor ---
 app.post('/api/ask-deepseek', async (req, res) => {
-    const { prompt } = req.body;
+    // 1. استلام الهوية والسؤال
+    const { prompt, sessionId } = req.body;
     try {
-        const historyText = await getRecentHistory();
+        // 2. جلب التاريخ المفلتر للجلسة
+        const historyText = await getRecentHistory(sessionId);
+        
         const finalPrompt = `
 Council History:
 ${historyText}
@@ -232,7 +241,7 @@ Note: You MUST respond in the exact same language used in the User Query above.
 `;
 
         const response = await axios.post('https://api.deepseek.com/chat/completions', {
-            model: "deepseek-reasoner",
+            model: "deepseek-reasoner", // الموديل الذي يتميز بالتفكير العميق
             messages: [
                 { role: "system", content: UNIFIED_PROMPT },
                 { role: "user", content: finalPrompt }
@@ -243,9 +252,11 @@ Note: You MUST respond in the exact same language used in the User Query above.
 
         const reply = response.data.choices[0].message.content;
 
+        // 3. تخزين الرد مع ربطه بالهوية
         await client.db("AAIO-Memory").collection("chat_history").insertOne({
+            sessionId: sessionId,
             advisor: "DeepSeek",
-            userName: "Abdulrahman (Abu Fallah)",
+            userName: "User",
             userPrompt: prompt,
             botReply: reply,
             timestamp: new Date()
@@ -253,27 +264,32 @@ Note: You MUST respond in the exact same language used in the User Query above.
 
         res.json({ reply });
     } catch (error) {
+        console.error("❌ DeepSeek Error:", error.message);
         res.status(500).json({ error: "DeepSeek Service Unavailable" });
     }
 });
 
 // --- Claude Advisor ---
 app.post('/api/ask-claude', async (req, res) => {
-    const { prompt } = req.body;
+    // 1. استلام الهوية والسؤال من المتصفح
+    const { prompt, sessionId } = req.body;
     try {
-        const historyText = await getRecentHistory();
+        // 2. جلب تاريخ الجلسة المفلتر
+        const historyText = await getRecentHistory(sessionId);
+        
+        // أضفنا تنبيهاً صارماً هنا لأن كلاود يميل أحياناً للغة العربية بناءً على تدريبه السابق
         const finalPrompt = `
 Council History:
 ${historyText}
 ---
 User Query: ${prompt}
-Note: You MUST respond in the exact same language used in the User Query above.
+Note: You MUST respond in the exact same language used in the User Query above. This is a technical requirement for the AAIO project.
 `;
 
         const response = await axios.post('https://api.anthropic.com/v1/messages', {
             model: "claude-3-haiku-20240307",
             max_tokens: 1024,
-            system: UNIFIED_PROMPT,
+            system: UNIFIED_PROMPT, // الدستور الموحد يرسل هنا كمؤشر نظام
             messages: [{ role: "user", content: finalPrompt }]
         }, {
             headers: {
@@ -285,9 +301,11 @@ Note: You MUST respond in the exact same language used in the User Query above.
 
         const reply = response.data.content[0].text;
 
+        // 3. تخزين الرد مع الهوية لضمان عدم تداخل الذاكرة
         await client.db("AAIO-Memory").collection("chat_history").insertOne({
+            sessionId: sessionId,
             advisor: "Claude",
-            userName: "Abdulrahman (Abu Fallah)",
+            userName: "User",
             userPrompt: prompt,
             botReply: reply,
             timestamp: new Date()
@@ -295,6 +313,7 @@ Note: You MUST respond in the exact same language used in the User Query above.
 
         res.json({ reply });
     } catch (error) {
+        console.error("❌ Claude Error:", error.response?.data || error.message);
         res.status(500).json({ error: "Claude Service Unavailable" });
     }
 });
