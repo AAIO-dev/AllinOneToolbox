@@ -876,7 +876,7 @@ input:checked + .slider.round:before {
     display: flex !important;
     flex-direction: row !important; /* لجعل الصورة بجانب النص وليس فوقه */
     align-items: center !important;
-    height: 120px !important; 
+    height: 100px !important; 
     max-height: 400px;
     min-height: 0px !important;
     padding: 8px 12px !important; /* نحافة النصف */
