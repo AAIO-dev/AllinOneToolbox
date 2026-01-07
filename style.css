@@ -893,8 +893,11 @@ body .council-message .council-logo {
     width: 28px !important; 
     height: 28px !important;
     min-width: 28px !important;
-    position: static !important;
-    margin: 0 !important;
+    position: sticky !important;
+    top: 5px !important;      /* المسافة من أعلى البوكس أثناء السكرول */
+    align-self: flex-start !important; /* لضمان عدم تمددها طولياً */
+    z-index: 10 !important;    /* لتبقى دائماً فوق النص */
+    margin-top: 0 !important;
 }
 
 /* ترتيب الاسم والنص تحت بعض بجانب الأيقونة */
