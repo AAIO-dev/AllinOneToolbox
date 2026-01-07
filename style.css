@@ -887,7 +887,7 @@ input:checked + .slider.round:before {
     border-radius: 15px 15px 15px 0 !important;
     overflow-y: auto !important;
     position: relative !important; /* ضروري لتفعيل الرتبة */
-    z-index: 10 !important;       /* رتبة أعلى من الفلاشات (التي هي 1) */
+    z-index: 9999 !important;       /* رتبة أعلى من الفلاشات (التي هي 1) */
 }
 
 /* ضبط الأيقونة لتكون "روح" الصندوق دون تمديده */
