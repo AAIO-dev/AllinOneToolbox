@@ -1262,7 +1262,7 @@ border: 2px solid rgba(106, 90, 205, 0.6) !important;
 .council-subtitle {
     font-family: 'Inter', sans-serif !important;
     color: rgba(255, 255, 255, 0.5) !important;
-    font-size: 14px !important;
+    font-size: 12px !important;
     text-align: center !important;
     letter-spacing: 4px !important;
     text-transform: uppercase !important;
@@ -1284,7 +1284,7 @@ border: 2px solid rgba(106, 90, 205, 0.6) !important;
 /* تنسيق السؤال في منتصف المجلس */
 .user-msg {
     text-align: center !important; /* تثبيت في الوسط مهما كانت اللغة */
-    font-size: 24px !important; /* خط كبير وواضح جداً */
+    font-size: 22px !important; /* خط كبير وواضح جداً */
     font-weight: 700 !important;
     color: #FFD700 !important; /* لون ذهبي صريح */
 text-shadow: 0 0 10px rgba(255, 215, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.2) !important; /* إشعاع ذهبي */
