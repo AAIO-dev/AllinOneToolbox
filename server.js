@@ -180,7 +180,7 @@ Note: You MUST respond in the exact same language used in the User Query above. 
 });
 
 // --- ChatGPT Advisor ---
-aapp.post('/api/ask-chatgpt', async (req, res) => {
+app.post('/api/ask-chatgpt', async (req, res) => {
     // 1. استلام الهوية (sessionId) والسؤال من الطلب
     const { prompt, sessionId } = req.body;
     try {
