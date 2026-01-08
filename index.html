@@ -725,8 +725,14 @@ async function loadTools() {
                 ? premTools.slice(1, 11) 
                 : freeTools.slice(11, 21); 
 
-            const containerId = categoryToContainer[groupName];
-            const targetContainer = document.getElementById(containerId);
+            const targetKey = categoryToContainer[groupName];
+// هذا السطر يبحث بالـ ID أولاً (للكومبيوتر) ثم يبحث بالنص (للهاتف) كخطة بديلة
+let targetContainer = document.getElementById(targetKey);
+
+if (!targetContainer) {
+    targetContainer = Array.from(document.querySelectorAll('.column-title'))
+        .find(el => el.textContent.trim() === groupName)?.parentElement;
+}
 
             if (targetContainer) {
                 const cardHTML = `
