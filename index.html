@@ -685,40 +685,52 @@ async function loadTools() {
         });
 
         // بناء الكروت لكل مجموعة
+        // بناء الكروت وتوزيعها باستخدام "القاموس"
+        const categoryToContainer = {
+            'Image Enhancer': 'Creative & Tech Tools',
+            'AI Background Remover': 'Creative & Tech Tools',
+            'AI Video Creator': 'Creative & Tech Tools',
+            'AI Voice Generator': 'Creative & Tech Tools',
+            'AI Code Assistant': 'Creative & Tech Tools',
+            'Text to AI Image': 'Creative & Tech Tools',
+            
+            'AI Resume Builder': 'Professional Office Tools',
+            'AI Email Writer': 'Professional Office Tools',
+            'AI Translator Pro': 'Professional Office Tools',
+            'AI Text Summarizer': 'Professional Office Tools',
+            
+            'PDF Magic': 'Media Transform Tools',
+            'Video to GIF': 'Media Transform Tools',
+            'Text to Professional Voice': 'Media Transform Tools',
+            'Text to AI Video': 'Media Transform Tools',
+            'Chat with PDF': 'Media Transform Tools'
+        };
+
         for (const groupName in groups) {
             const groupTools = groups[groupName];
             const firstFree = groupTools.find(t => t.pricing === 'free');
             const firstPrem = groupTools.find(t => t.pricing === 'premium');
             
-            // تحديد العمود المناسب بناءً على اسم المجموعة (سنحتاج لربطها لاحقاً بدقة)
-            // مؤقتاً سنضعها في العمود الأول للتجربة
-            const cardHTML = `
-                <div class="tool-card" tabindex="0">
-                    <h3 class="card-title">${groupName}</h3>
-                    <div class="button-group">
-                        <div class="item-wrapper">
-                            <a href="${firstFree?.url || '#'}" target="_blank" class="btn btn-purple">${firstFree?.name || 'N/A'}</a>
-                            <span class="status-badge free">FREE</span>
-                        </div>
-                        <div class="item-wrapper">
-                            <a href="${firstPrem?.url || '#'}" target="_blank" class="btn btn-purple">${firstPrem?.name || 'N/A'}</a>
-                            <span class="status-badge premium">PREM</span>
-                        </div>
-                    </div>
-                </div>`;
-            
-            // منطق التوزيع الاحترافي بناءً على بيانات السيرفر الحقيقية
-            let targetContainer;
-            
-            if (groupName.includes('Image') || groupName.includes('Video') || groupName.includes('Background') || groupName.includes('Enhancer')) {
-                targetContainer = containers['Creative & Tech Tools'];
-            } else if (groupName.includes('Resume') || groupName.includes('Email') || groupName.includes('Office') || groupName.includes('Writer')) {
-                targetContainer = containers['Professional Office Tools'];
-            } else {
-                targetContainer = containers['Media Transform Tools']; // يشمل الصوت، الترجمة، الـ PDF، والنصوص
-            }
+            // الربط الصريح بين اسم المجموعة والعمود
+            const containerName = categoryToContainer[groupName];
+            const targetContainer = containers[containerName];
 
             if (targetContainer) {
+                const cardHTML = `
+                    <div class="tool-card" tabindex="0">
+                        <h3 class="card-title">${groupName}</h3>
+                        <div class="button-group">
+                            <div class="item-wrapper">
+                                <a href="${firstFree?.url || '#'}" target="_blank" class="btn btn-purple">${firstFree?.name || 'N/A'}</a>
+                                <span class="status-badge free">FREE</span>
+                            </div>
+                            <div class="item-wrapper">
+                                <a href="${firstPrem?.url || '#'}" target="_blank" class="btn btn-purple">${firstPrem?.name || 'N/A'}</a>
+                                <span class="status-badge premium">PREM</span>
+                            </div>
+                        </div>
+                    </div>`;
+                
                 targetContainer.innerHTML += cardHTML;
             }
         }
