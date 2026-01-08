@@ -709,21 +709,24 @@ async function loadTools() {
         for (const groupName in groups) {
             const groupTools = groups[groupName];
             
-            // تحضير المعرف الفريد (ID) لإصلاح مشكلة الـ Toggle
+            // تحضير المعرف الفريد
             const groupID = groupName.replace(/\s+/g, '-').toLowerCase();
 
-            const freeTools = groupTools.filter(t => t.pricing === 'free');
+            // --- هنا توضع الجزئية التي سألت عنها (تحضير البيانات) ---
+            const freeTools = groupTools.filter(t => t.pricing.toLowerCase() === 'free');
             const mainFree = freeTools[0];
             const extraFree = freeTools.slice(1, 11);
 
-            const premTools = groupTools.filter(t => t.pricing === 'premium');
+            const premTools = groupTools.filter(t => t.pricing.toLowerCase() === 'premium');
             const mainPrem = premTools[0];
-            const extraPrem = premTools.slice(1, 11);
+            const extraPrem = premTools.slice(1, 11); 
+            // -------------------------------------------------------
             
             const containerName = categoryToContainer[groupName];
             const targetContainer = containers[containerName];
 
             if (targetContainer) {
+                // هنا يتم "حقن" البيانات في التصميم الذي أعدناه (الطبق النهائي)
                 const cardHTML = `
                     <div class="tool-card" tabindex="0">
                         <h3 class="card-title">${groupName}</h3>
@@ -746,7 +749,9 @@ async function loadTools() {
 
                             <a onclick="toggleBox('prem-${groupID}', this)" class="see-more-link" style="color: #ffaa00; cursor: pointer;">+ See More Premium Tools</a>
                             <div id="prem-${groupID}" class="dropdown-content">
-                                ${extraPrem.map(t => `<a href="${t.url}" target="_blank" rel="nofollow">${t.name}</a>`).join('')}
+                                ${extraPrem.length > 0 
+                                    ? extraPrem.map(t => `<a href="${t.url}" target="_blank" rel="nofollow">${t.name}</a>`).join('') 
+                                    : '<a>No more premium tools available</a>'}
                             </div>
                         </div>
                     </div>`;
