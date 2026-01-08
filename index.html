@@ -726,12 +726,16 @@ async function loadTools() {
                 : freeTools.slice(11, 21); 
 
             const targetKey = categoryToContainer[groupName];
-// هذا السطر يبحث بالـ ID أولاً (للكومبيوتر) ثم يبحث بالنص (للهاتف) كخطة بديلة
 let targetContainer = document.getElementById(targetKey);
 
 if (!targetContainer) {
-    targetContainer = Array.from(document.querySelectorAll('.column-title'))
-        .find(el => el.textContent.trim() === groupName)?.parentElement;
+    const allTitles = document.querySelectorAll('.column-title');
+    for (let i = 0; i < allTitles.length; i++) {
+        if (allTitles[i].textContent.trim() === groupName) {
+            targetContainer = allTitles[i].parentElement;
+            break;
+        }
+    }
 }
 
             if (targetContainer) {
