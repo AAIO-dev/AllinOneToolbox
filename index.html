@@ -686,24 +686,24 @@ async function loadTools() {
 
         // بناء الكروت لكل مجموعة
         // بناء الكروت وتوزيعها باستخدام "القاموس"
-       const categoryToContainer = {
-            'Image Enhancer': 'creative-container',
-            'AI Background Remover': 'creative-container',
-            'AI Video Creator': 'creative-container',
-            'AI Voice Generator': 'creative-container',
-            'AI Code Assistant': 'creative-container',
-            'Text to AI Image': 'creative-container',
+        const categoryToContainer = {
+            'Image Enhancer': 'Creative & Tech Tools',
+            'AI Background Remover': 'Creative & Tech Tools',
+            'AI Video Creator': 'Creative & Tech Tools',
+            'AI Voice Generator': 'Creative & Tech Tools',
+            'AI Code Assistant': 'Creative & Tech Tools',
+            'Text to AI Image': 'Creative & Tech Tools',
             
-            'AI Resume Builder': 'office-container',
-            'AI Email Writer': 'office-container',
-            'AI Translator Pro': 'office-container',
-            'AI Text Summarizer': 'office-container',
+            'AI Resume Builder': 'Professional Office Tools',
+            'AI Email Writer': 'Professional Office Tools',
+            'AI Translator Pro': 'Professional Office Tools',
+            'AI Text Summarizer': 'Professional Office Tools',
             
-            'PDF Magic': 'transform-container',
-            'Video to GIF': 'transform-container',
-            'Text to Professional Voice': 'transform-container',
-            'Text to AI Video': 'transform-container',
-            'Chat with PDF': 'transform-container'
+            'PDF Magic': 'Media Transform Tools',
+            'Video to GIF': 'Media Transform Tools',
+            'Text to Professional Voice': 'Media Transform Tools',
+            'Text to AI Video': 'Media Transform Tools',
+            'Chat with PDF': 'Media Transform Tools'
         };
 
         for (const groupName in groups) {
@@ -725,18 +725,8 @@ async function loadTools() {
                 ? premTools.slice(1, 11) 
                 : freeTools.slice(11, 21); 
 
-            const targetKey = categoryToContainer[groupName];
-let targetContainer = document.getElementById(targetKey);
-
-if (!targetContainer) {
-    const allTitles = document.querySelectorAll('.column-title');
-    for (let i = 0; i < allTitles.length; i++) {
-        if (allTitles[i].textContent.trim() === groupName) {
-            targetContainer = allTitles[i].parentElement;
-            break;
-        }
-    }
-}
+            const containerName = categoryToContainer[groupName];
+            const targetContainer = containers[containerName];
 
             if (targetContainer) {
                 const cardHTML = `
