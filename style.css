@@ -733,7 +733,7 @@ input:checked + .slider.round:before {
     color: #333333;
     border-color: rgba(0, 0, 0, 0.1);
 }
-* { border: 1px solid red !important; }
+
 /* تنسيق إجباري للهواتف لإنهاء الفوضى */
 @media screen and (max-width: 768px) {
     .main-container {
