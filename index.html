@@ -722,7 +722,7 @@ async function loadTools() {
             
             const containerName = categoryToContainer[groupName];
             const targetContainer = containers[containerName];
-
+console.log(`Group: ${groupName}`, groupTools);
             if (targetContainer) {
                 const cardHTML = `
                     <div class="tool-card" tabindex="0">
