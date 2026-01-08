@@ -733,6 +733,7 @@ input:checked + .slider.round:before {
     color: #333333;
     border-color: rgba(0, 0, 0, 0.1);
 }
+* { border: 1px solid red !important; }
 /* تنسيق إجباري للهواتف لإنهاء الفوضى */
 @media screen and (max-width: 768px) {
     .main-container {
@@ -837,9 +838,13 @@ input:checked + .slider.round:before {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* فاصل أنيق */
 }
 .column .tool-card {
+        display: block !important; /* البطاقات ستظهر فوراً بمجرد تحميلها */
+    }
+
+/* إظهار الكروت فقط عندما يأخذ العمود كلاس active */
+.column.active .tool-card {
     display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
+    animation: fadeIn 0.4s ease; /* حركة ظهور ناعمة */
 }
 
 /* إضافة السهم بجانب العنوان */
