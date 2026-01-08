@@ -710,19 +710,24 @@ async function loadTools() {
             const groupTools = groups[groupName];
             const groupID = groupName.replace(/\s+/g, '-').toLowerCase();
 
-            // تصحيح الفلترة: جعلها تقبل الكلمة مهما كان شكلها (سمول أو كابيتال)
-            const freeTools = groupTools.filter(t => t.pricing.trim().toLowerCase() === 'free');
-            const mainFree = freeTools[0];
-            const extraFree = freeTools.slice(1, 11);
+            // تصنيف الأدوات بناءً على بيانات الكونسول
+            const freeTools = groupTools.filter(t => t.pricing.toLowerCase() === 'free');
+            const premTools = groupTools.filter(t => t.pricing.toLowerCase() === 'premium');
 
-            // هنا السر: أضفنا .trim() لإزالة أي مسافات مخفية قد تعطل البحث
-            const premTools = groupTools.filter(t => t.pricing.trim().toLowerCase() === 'premium');
-            const mainPrem = premTools[0];
-            const extraPrem = premTools.slice(1, 11); 
-            
+            // توزيع المجاني
+            const mainFree = freeTools[0];
+            const extraFree = freeTools.slice(1, 11); // أول 10 أدوات مجانية إضافية
+
+            // توزيع المدفوع + سد العجز
+            const mainPrem = premTools[0]; 
+            // إذا كان المدفوع فارغاً، نسحب من فائض المجاني (من الأداة رقم 11 وما فوق)
+            const extraPrem = premTools.length > 1 
+                ? premTools.slice(1, 11) 
+                : freeTools.slice(11, 21); 
+
             const containerName = categoryToContainer[groupName];
             const targetContainer = containers[containerName];
-console.log(`Group: ${groupName}`, groupTools);
+
             if (targetContainer) {
                 const cardHTML = `
                     <div class="tool-card" tabindex="0">
@@ -748,9 +753,7 @@ console.log(`Group: ${groupName}`, groupTools);
                             <div id="prem-${groupID}" class="dropdown-content">
                                 ${extraPrem.length > 0 
                                     ? extraPrem.map(t => `<a href="${t.url}" target="_blank" rel="nofollow">${t.name}</a>`).join('') 
-                                    : extraPrem.length === 0 && premTools.length > 0
-                                        ? `<a href="${mainPrem.url}" target="_blank" rel="nofollow">${mainPrem.name}</a>` // تكرار الأداة الأولى إذا لم يوجد غيرها
-                                        : '<a>No more tools found on server</a>'}
+                                    : '<a>Explore More Options</a>'}
                             </div>
                         </div>
                     </div>`;
