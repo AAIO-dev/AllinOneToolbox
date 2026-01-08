@@ -725,8 +725,11 @@ async function loadTools() {
                 ? premTools.slice(1, 11) 
                 : freeTools.slice(11, 21); 
 
-            const containerName = categoryToContainer[groupName];
-            const targetContainer = containers[containerName];
+           const mainTitle = categoryToContainer[groupName];
+const targetContainer = Array.from(document.querySelectorAll('.column')).find(col => {
+    const title = col.querySelector('h2');
+    return title && title.innerText.trim() === mainTitle;
+});
 
             if (targetContainer) {
                 const cardHTML = `
