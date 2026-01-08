@@ -709,7 +709,6 @@ async function loadTools() {
         for (const groupName in groups) {
             const groupTools = groups[groupName];
             
-            // استخراج البيانات بنفس الترتيب
             const freeTools = groupTools.filter(t => t.pricing === 'free');
             const mainFree = freeTools[0];
             const extraFree = freeTools.slice(1, 11);
@@ -722,7 +721,6 @@ async function loadTools() {
             const targetContainer = containers[containerName];
 
             if (targetContainer) {
-                // ملاحظة لـ بو فلاح: استخدمت هنا بالضبط نفس الـ Classes القديمة لموقعك
                 const cardHTML = `
                     <div class="tool-card" tabindex="0">
                         <h3 class="card-title">${groupName}</h3>
@@ -730,7 +728,7 @@ async function loadTools() {
                             <div class="item-wrapper">
                                 <a href="${mainFree?.url || '#'}" target="_blank" class="btn btn-purple">${mainFree?.name || 'N/A'}</a>
                                 <span class="status-badge free">FREE</span>
-                                <div class="see-more" onclick="this.classList.toggle('active')">
+                                <div class="see-more">
                                     See More
                                     <div class="dropdown-content">
                                         ${extraFree.map(t => `<a href="${t.url}" target="_blank">${t.name}</a>`).join('')}
@@ -740,7 +738,7 @@ async function loadTools() {
                             <div class="item-wrapper">
                                 <a href="${mainPrem?.url || '#'}" target="_blank" class="btn btn-purple">${mainPrem?.name || 'N/A'}</a>
                                 <span class="status-badge premium">PREM</span>
-                                <div class="see-more" onclick="this.classList.toggle('active')">
+                                <div class="see-more">
                                     See More
                                     <div class="dropdown-content">
                                         ${extraPrem.map(t => `<a href="${t.url}" target="_blank">${t.name}</a>`).join('')}
