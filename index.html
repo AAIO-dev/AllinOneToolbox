@@ -709,6 +709,9 @@ async function loadTools() {
         for (const groupName in groups) {
             const groupTools = groups[groupName];
             
+            // تحضير المعرف الفريد (ID) لإصلاح مشكلة الـ Toggle
+            const groupID = groupName.replace(/\s+/g, '-').toLowerCase();
+
             const freeTools = groupTools.filter(t => t.pricing === 'free');
             const mainFree = freeTools[0];
             const extraFree = freeTools.slice(1, 11);
@@ -728,22 +731,22 @@ async function loadTools() {
                             <div class="item-wrapper">
                                 <a href="${mainFree?.url || '#'}" target="_blank" class="btn btn-purple">${mainFree?.name || 'N/A'}</a>
                                 <span class="status-badge free">FREE</span>
-                                <div class="see-more">
-                                    See More
-                                    <div class="dropdown-content">
-                                        ${extraFree.map(t => `<a href="${t.url}" target="_blank">${t.name}</a>`).join('')}
-                                    </div>
-                                </div>
                             </div>
                             <div class="item-wrapper">
-                                <a href="${mainPrem?.url || '#'}" target="_blank" class="btn btn-purple">${mainPrem?.name || 'N/A'}</a>
+                                <a href="${mainPrem?.url || '#'}" target="_blank" rel="nofollow" class="btn btn-purple">${mainPrem?.name || 'N/A'}</a>
                                 <span class="status-badge premium">PREM</span>
-                                <div class="see-more">
-                                    See More
-                                    <div class="dropdown-content">
-                                        ${extraPrem.map(t => `<a href="${t.url}" target="_blank">${t.name}</a>`).join('')}
-                                    </div>
-                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="see-more-links">
+                            <a onclick="toggleBox('free-${groupID}', this)" class="see-more-link" style="color: #00aaff; cursor: pointer;">+ See More Free Tools</a>
+                            <div id="free-${groupID}" class="dropdown-content">
+                                ${extraFree.map(t => `<a href="${t.url}" target="_blank">${t.name}</a>`).join('')}
+                            </div>
+
+                            <a onclick="toggleBox('prem-${groupID}', this)" class="see-more-link" style="color: #ffaa00; cursor: pointer;">+ See More Premium Tools</a>
+                            <div id="prem-${groupID}" class="dropdown-content">
+                                ${extraPrem.map(t => `<a href="${t.url}" target="_blank" rel="nofollow">${t.name}</a>`).join('')}
                             </div>
                         </div>
                     </div>`;
