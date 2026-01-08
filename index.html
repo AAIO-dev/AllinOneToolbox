@@ -708,10 +708,17 @@ async function loadTools() {
 
         for (const groupName in groups) {
             const groupTools = groups[groupName];
-            const firstFree = groupTools.find(t => t.pricing === 'free');
-            const firstPrem = groupTools.find(t => t.pricing === 'premium');
             
-            // الربط الصريح بين اسم المجموعة والعمود
+            // 1. فصل الأدوات المجانية: الأولى للواجهة والبقية للـ See More
+            const freeTools = groupTools.filter(t => t.pricing === 'free');
+            const mainFree = freeTools[0];
+            const extraFree = freeTools.slice(1, 11); // يأخذ من الأداة 2 إلى 11
+
+            // 2. فصل الأدوات المدفوعة: الأولى للواجهة والبقية للـ See More
+            const premTools = groupTools.filter(t => t.pricing === 'premium');
+            const mainPrem = premTools[0];
+            const extraPrem = premTools.slice(1, 11); // يأخذ من الأداة 2 إلى 11
+            
             const containerName = categoryToContainer[groupName];
             const targetContainer = containers[containerName];
 
@@ -721,12 +728,20 @@ async function loadTools() {
                         <h3 class="card-title">${groupName}</h3>
                         <div class="button-group">
                             <div class="item-wrapper">
-                                <a href="${firstFree?.url || '#'}" target="_blank" class="btn btn-purple">${firstFree?.name || 'N/A'}</a>
+                                <a href="${mainFree?.url || '#'}" target="_blank" class="btn btn-purple">${mainFree?.name || 'N/A'}</a>
                                 <span class="status-badge free">FREE</span>
+                                <div class="see-more-link" onclick="togglePopup(this)">See More</div>
+                                <div class="tools-popup">
+                                    ${extraFree.map(t => `<a href="${t.url}" target="_blank">${t.name}</a>`).join('')}
+                                </div>
                             </div>
                             <div class="item-wrapper">
-                                <a href="${firstPrem?.url || '#'}" target="_blank" class="btn btn-purple">${firstPrem?.name || 'N/A'}</a>
+                                <a href="${mainPrem?.url || '#'}" target="_blank" class="btn btn-purple">${mainPrem?.name || 'N/A'}</a>
                                 <span class="status-badge premium">PREM</span>
+                                <div class="see-more-link" onclick="togglePopup(this)">See More</div>
+                                <div class="tools-popup">
+                                    ${extraPrem.map(t => `<a href="${t.url}" target="_blank">${t.name}</a>`).join('')}
+                                </div>
                             </div>
                         </div>
                     </div>`;
