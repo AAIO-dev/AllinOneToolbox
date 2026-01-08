@@ -58,6 +58,25 @@ app.get('/api/tools', async (req, res) => {
     }
 });
 
+// مسار خاص لاستيراد الأدوات دفعة واحدة وتخزينها في MongoDB
+app.post('/api/tools/import', async (req, res) => {
+    try {
+        const toolsData = req.body; // البيانات التي سنرسلها من المتصفح
+        const database = client.db("AAIO-Data");
+        const toolsCollection = database.collection("tools");
+
+        // مسح البيانات القديمة لضمان عدم التكرار (اختياري حسب رغبتك)
+        await toolsCollection.deleteMany({}); 
+        
+        const result = await toolsCollection.insertMany(toolsData);
+        console.log(`Done! ${result.insertedCount} tools saved.`);
+        res.json({ success: true, count: result.insertedCount });
+    } catch (error) {
+        console.error("Import Error:", error);
+        res.status(500).json({ error: "Failed to save tools" });
+    }
+});
+
 // دالة لجلب المحادثات من قاعدة البيانات بالبحرين
 async function getRecentHistory(sessionId) {
     try {
