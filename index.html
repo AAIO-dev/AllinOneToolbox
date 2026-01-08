@@ -686,7 +686,7 @@ async function loadTools() {
 
         // بناء الكروت لكل مجموعة
         // بناء الكروت وتوزيعها باستخدام "القاموس"
-        const categoryToContainer = {
+       const categoryToContainer = {
             'Image Enhancer': 'creative-container',
             'AI Background Remover': 'creative-container',
             'AI Video Creator': 'creative-container',
@@ -725,8 +725,8 @@ async function loadTools() {
                 ? premTools.slice(1, 11) 
                 : freeTools.slice(11, 21); 
 
-            const containerName = categoryToContainer[groupName];
-            const targetContainer = containers[containerName];
+            const containerId = categoryToContainer[groupName];
+            const targetContainer = document.getElementById(containerId);
 
             if (targetContainer) {
                 const cardHTML = `
