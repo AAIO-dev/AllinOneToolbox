@@ -737,11 +737,11 @@ const targetContainer = document.getElementById(containerID);
                         <h3 class="card-title" data-key="${groupName}" data-original="${groupName}">${groupName}</h3>
                         <div class="button-group">
                             <div class="item-wrapper">
-                                <a href="${mainFree?.url || '#'}" target="_blank" class="btn btn-purple" data-key=${mainFree?.name || 'N/A'}</a>
+                                <a href="${mainFree?.url || '#'}" target="_blank" class="btn btn-purple" data-key="${mainFree?.name || 'N/A'}" data-original="${mainFree?.name || 'N/A'}">${mainFree?.name || 'N/A'}</a>
                                 <span class="status-badge free">FREE</span>
                             </div>
                             <div class="item-wrapper">
-                                <a href="${mainPrem?.url || '#'}" target="_blank" rel="nofollow" class="btn btn-purple" data-key=${mainPrem?.name || 'N/A'}</a>
+                                <a href="${mainPrem?.url || '#'}" target="_blank" rel="nofollow" class="btn btn-purple" data-key=${mainPrem?.name || 'N/A'}" data-original="${mainPrem?.name || 'N/A'}">${mainPrem?.name || 'N/A'}</a>
                                 <span class="status-badge premium">PREM</span>
                             </div>
                         </div>
