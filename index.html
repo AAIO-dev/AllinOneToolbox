@@ -28,6 +28,14 @@
     <option value="zh">中文</option>
     <option value="ja">日本語</option>
     <option value="ko">한국어</option>
+    <option value="hi">हिन्दी (Hindi)</option>
+    <option value="tr">Türkçe</option>
+    <option value="el">Ελληνικά</option>
+    <option value="nl">Nederlands</option>
+    <option value="pl">Polski</option>
+    <option value="sv">Svenska</option>
+    <option value="id">Bahasa Indonesia</option>
+    <option value="vi">Tiếng Việt</option>
 </select>
         </div>
 
@@ -724,7 +732,7 @@ const targetContainer = document.getElementById(containerID);
                 console.log("تم العثور على حاوية لـ:", groupName);
                 const cardHTML = `
                     <div class="tool-card" tabindex="0">
-                        <h3 class="card-title">${groupName}</h3>
+                        <h3 class="card-title" data-key="${groupName}" data-original="${groupName}">${groupName}</h3>
                         <div class="button-group">
                             <div class="item-wrapper">
                                 <a href="${mainFree?.url || '#'}" target="_blank" class="btn btn-purple">${mainFree?.name || 'N/A'}</a>
@@ -756,6 +764,11 @@ const targetContainer = document.getElementById(containerID);
             }
         }
         setTimeout(initMobileFeatures, 100);
+        // إعادة ترجمة البطاقات الجديدة بناءً على اللغة المختارة حالياً
+const currentLang = document.getElementById('language-picker').value;
+if (currentLang !== 'en') {
+    updateContent(currentLang);
+}
     } catch (error) {
         console.error("خطأ في جلب البيانات:", error);
     }
