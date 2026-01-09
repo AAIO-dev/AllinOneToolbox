@@ -609,13 +609,23 @@
         if (window.innerWidth <= 768) {
             const column = title.parentElement;
             
-            // سطر التحقق: سيطبع لنا اسم الكلاس والـ ID للأب في الكونسول
-            console.log("تم الضغط! الأب هو:", column.className, "والـ ID هو:", column.id);
-
+            // 1. إغلاق الأقسام الأخرى
             document.querySelectorAll('.column').forEach(col => {
-                if (col !== column) col.classList.remove('active');
+                if (col !== column) {
+                    col.classList.remove('active');
+                    col.style.display = "none"; // قيد إضافي لضمان الإغلاق
+                }
             });
+
+            // 2. تفعيل القسم الحالي
             column.classList.toggle('active');
+            
+            // 3. فك القيد البصري (هذا هو السطر السحري)
+            if (column.classList.contains('active')) {
+                column.style.display = "block"; 
+                column.style.visibility = "visible";
+                column.style.opacity = "1";
+            }
         }
     });
 });
