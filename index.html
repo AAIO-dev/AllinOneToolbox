@@ -605,16 +605,28 @@
 
     // 3. كود الأكورديون للجوال (التحكم في الأعمدة)
     document.querySelectorAll('.column h2').forEach(title => {
-        title.addEventListener('click', () => {
-            if (window.innerWidth <= 768) {
-                const column = title.parentElement;
-                document.querySelectorAll('.column').forEach(col => {
-                    if (col !== column) col.classList.remove('active');
-                });
+    title.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+            const column = title.parentElement;
+            
+            // إغلاق الآخرين
+            document.querySelectorAll('.column').forEach(col => {
+                if (col !== column) col.classList.remove('active');
+            });
+
+            // الفتح الذكي: نطلب من المتصفح أن يتنفس (Frame) ثم يحسب
+            requestAnimationFrame(() => {
                 column.classList.toggle('active');
-            }
-        });
+                
+                // إذا فتحنا، نجبره على قراءة الارتفاع الحقيقي
+                if(column.classList.contains('active')) {
+                    const scrollHeight = column.scrollHeight;
+                    column.style.maxHeight = scrollHeight + "px";
+                }
+            });
+        }
     });
+});
 
     // 4. كود الترجمة الاحترافي (مع حفظ الأصول)
     const langPicker = document.getElementById('language-picker');
@@ -761,7 +773,15 @@ const targetContainer = Array.from(document.querySelectorAll('.column')).find(co
                         </div>
                     </div>`;
                 
-                targetContainer.innerHTML += cardHTML;
+                // 1. حقن البطاقات (كما هي)
+targetContainer.innerHTML += cardHTML;
+
+// 2. "الهزة" البرمجية (Forced Reflow)
+// هذا السطر يخبر الجوال: "استيقظ واحسب الطول الآن!"
+void targetContainer.offsetHeight; 
+
+// 3. تأكيد الأبعاد للجوال
+targetContainer.style.height = 'auto';
             }
         }
         
