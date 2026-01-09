@@ -29,6 +29,7 @@
     <option value="ja">日本語</option>
     <option value="ko">한국어</option>
     <option value="hi">हिन्दी (Hindi)</option>
+    <option value="fa">فارسی</option>
     <option value="tr">Türkçe</option>
     <option value="el">Ελληνικά</option>
     <option value="nl">Nederlands</option>
@@ -641,7 +642,8 @@
 
     async function updateContent(lang) {
         // السطرين الجديدين للتحكم في اتجاه الصفحة
-    document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+    const rtlLanguages = ['ar', 'fa']; // أضفنا الفارسية احتياطاً
+    document.documentElement.dir = rtlLanguages.includes(lang) ? 'rtl' : 'ltr';
     document.documentElement.lang = lang;
         const elements = document.querySelectorAll('[data-key]');
         if (lang === 'en') {
@@ -735,11 +737,11 @@ const targetContainer = document.getElementById(containerID);
                         <h3 class="card-title" data-key="${groupName}" data-original="${groupName}">${groupName}</h3>
                         <div class="button-group">
                             <div class="item-wrapper">
-                                <a href="${mainFree?.url || '#'}" target="_blank" class="btn btn-purple">${mainFree?.name || 'N/A'}</a>
+                               <a href="${group.freeToolsLink}" class="see-more-link" data-key="see_more_free">+ See More Free Tools</a>
                                 <span class="status-badge free">FREE</span>
                             </div>
                             <div class="item-wrapper">
-                                <a href="${mainPrem?.url || '#'}" target="_blank" rel="nofollow" class="btn btn-purple">${mainPrem?.name || 'N/A'}</a>
+                                <a href="${mainPrem?.url || '#'}" target="_blank" rel="nofollow" class="btn btn-purple" data-key="${mainPrem?.name || 'N/A'}" data-original="${mainPrem?.name || 'N/A'}">${mainPrem?.name || 'N/A'}</a>
                                 <span class="status-badge premium">PREM</span>
                             </div>
                         </div>
