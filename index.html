@@ -759,10 +759,11 @@ const targetContainer = Array.from(document.querySelectorAll('.column')).find(co
                         </div>
                     </div>`;
                 
-                targetContainer.innerHTML += cardHTML;
+                // هذا السطر يحمي الهيكل من الانهيار
+            targetContainer.insertAdjacentHTML('beforeend', cardHTML);
             }
         }
-        
+        initMobileFeatures();
     } catch (error) {
         console.error("خطأ في جلب البيانات:", error);
     }
