@@ -602,8 +602,10 @@
     });
 
     // 3. كود الأكورديون للجوال (التحكم في الأعمدة)
+    function initMobileFeatures() {
+    // الأكورديون
     document.querySelectorAll('.column h2').forEach(title => {
-        title.addEventListener('click', () => {
+        title.onclick = () => {
             if (window.innerWidth <= 768) {
                 const column = title.parentElement;
                 document.querySelectorAll('.column').forEach(col => {
@@ -611,8 +613,14 @@
                 });
                 column.classList.toggle('active');
             }
-        });
+        };
     });
+    // تفاعل البطاقات
+    document.querySelectorAll('.tool-card').forEach(card => {
+        card.addEventListener('touchstart', function() { this.classList.add('card-active'); }, {passive: true});
+        card.addEventListener('touchend', function() { setTimeout(() => this.classList.remove('card-active'), 150); }, {passive: true});
+    });
+}
 
     // 4. كود الترجمة الاحترافي (مع حفظ الأصول)
     const langPicker = document.getElementById('language-picker');
