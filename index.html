@@ -603,7 +603,18 @@
         localStorage.setItem('theme', theme);
     });
 
-   
+    // 3. كود الأكورديون للجوال (التحكم في الأعمدة)
+    document.querySelectorAll('.column h2').forEach(title => {
+        title.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                const column = title.parentElement;
+                document.querySelectorAll('.column').forEach(col => {
+                    if (col !== column) col.classList.remove('active');
+                });
+                column.classList.toggle('active');
+            }
+        });
+    });
 
     // 4. كود الترجمة الاحترافي (مع حفظ الأصول)
     const langPicker = document.getElementById('language-picker');
@@ -633,8 +644,25 @@
         });
         await Promise.all(promises);
     }
-    
-   
+    // 5. كود التفاعل القسري للجوال (إعادة البروز للبطاقات)
+    document.addEventListener('DOMContentLoaded', function() {
+        const cards = document.querySelectorAll('.tool-card');
+        cards.forEach(card => {
+            card.addEventListener('touchstart', function() {
+                this.classList.add('card-active');
+            }, {passive: true});
+
+            card.addEventListener('touchend', function() {
+                setTimeout(() => {
+                    this.classList.remove('card-active');
+                }, 150);
+            }, {passive: true});
+
+            card.addEventListener('touchmove', function() {
+                this.classList.remove('card-active');
+            }, {passive: true});
+        });
+    });
 </script>
 <script>
 async function loadTools() {
@@ -736,39 +764,7 @@ const targetContainer = Array.from(document.querySelectorAll('.column')).find(co
                 targetContainer.innerHTML += cardHTML;
             }
         }
-
-         // 3. كود الأكورديون للجوال (التحكم في الأعمدة)
-    document.querySelectorAll('.column h2 id').forEach(title => {
-        title.addEventListener('click', () => {
-            if (window.innerWidth <= 768) {
-                const column = title.parentElement;
-                document.querySelectorAll('.column').forEach(col => {
-                    if (col !== column) col.classList.remove('active');
-                });
-                column.classList.toggle('active');
-            }
-        });
-    });
-
-// 5. كود التفاعل القسري للجوال (إعادة البروز للبطاقات)
-// ربط أحداث اللمس بالبطاقات بعد بنائها مباشرة
-const cards = document.querySelectorAll('.tool-card');
-cards.forEach(card => {
-    card.addEventListener('touchstart', function() {
-        this.classList.add('card-active');
-    }, {passive: true});
-
-    card.addEventListener('touchend', function() {
-        setTimeout(() => {
-            this.classList.remove('card-active');
-        }, 150);
-    }, {passive: true});
-
-    card.addEventListener('touchmove', function() {
-        this.classList.remove('card-active');
-    }, {passive: true});
-});
-
+        
     } catch (error) {
         console.error("خطأ في جلب البيانات:", error);
     }
