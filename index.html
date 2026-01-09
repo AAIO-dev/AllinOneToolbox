@@ -644,25 +644,8 @@
         });
         await Promise.all(promises);
     }
-    // 5. كود التفاعل القسري للجوال (إعادة البروز للبطاقات)
-    document.addEventListener('DOMContentLoaded', function() {
-        const cards = document.querySelectorAll('.tool-card');
-        cards.forEach(card => {
-            card.addEventListener('touchstart', function() {
-                this.classList.add('card-active');
-            }, {passive: true});
-
-            card.addEventListener('touchend', function() {
-                setTimeout(() => {
-                    this.classList.remove('card-active');
-                }, 150);
-            }, {passive: true});
-
-            card.addEventListener('touchmove', function() {
-                this.classList.remove('card-active');
-            }, {passive: true});
-        });
-    });
+    
+   
 </script>
 <script>
 async function loadTools() {
@@ -764,6 +747,26 @@ const targetContainer = Array.from(document.querySelectorAll('.column')).find(co
                 targetContainer.innerHTML += cardHTML;
             }
         }
+
+// 5. كود التفاعل القسري للجوال (إعادة البروز للبطاقات)
+// ربط أحداث اللمس بالبطاقات بعد بنائها مباشرة
+const cards = document.querySelectorAll('.tool-card');
+cards.forEach(card => {
+    card.addEventListener('touchstart', function() {
+        this.classList.add('card-active');
+    }, {passive: true});
+
+    card.addEventListener('touchend', function() {
+        setTimeout(() => {
+            this.classList.remove('card-active');
+        }, 150);
+    }, {passive: true});
+
+    card.addEventListener('touchmove', function() {
+        this.classList.remove('card-active');
+    }, {passive: true});
+});
+
     } catch (error) {
         console.error("خطأ في جلب البيانات:", error);
     }
