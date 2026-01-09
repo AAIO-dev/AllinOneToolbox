@@ -605,30 +605,17 @@
 
     // 3. كود الأكورديون للجوال (التحكم في الأعمدة)
     document.querySelectorAll('.column h2').forEach(title => {
-    title.addEventListener('click', () => {
-        if (window.innerWidth <= 768) {
-            const column = title.parentElement;
-            
-            // 1. إغلاق الأقسام الأخرى
-            document.querySelectorAll('.column').forEach(col => {
-                if (col !== column) {
-                    col.classList.remove('active');
-                    col.style.display = "none"; // قيد إضافي لضمان الإغلاق
-                }
-            });
-
-            // 2. تفعيل القسم الحالي
-            column.classList.toggle('active');
-            
-            // 3. فك القيد البصري (هذا هو السطر السحري)
-            if (column.classList.contains('active')) {
-                column.style.display = "block"; 
-                column.style.visibility = "visible";
-                column.style.opacity = "1";
+        title.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                const column = title.parentElement;
+                document.querySelectorAll('.column').forEach(col => {
+                    if (col !== column) col.classList.remove('active');
+                });
+                column.classList.toggle('active');
+                
             }
-        }
+        });
     });
-});
 
     // 4. كود الترجمة الاحترافي (مع حفظ الأصول)
     const langPicker = document.getElementById('language-picker');
@@ -775,7 +762,7 @@ const targetContainer = Array.from(document.querySelectorAll('.column')).find(co
                         </div>
                     </div>`;
                 
-                targetContainer.innerHTML += cardHTML;
+                targetContainer.insertAdjacentHTML('beforeend', cardHTML);
             }
         }
         
