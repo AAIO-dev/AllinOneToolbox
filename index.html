@@ -660,5 +660,58 @@
         });
     });
 </script>
+<script>
+async function loadTools() {
+    try {
+        const response = await fetch('http://localhost:3000/api/tools');
+        const tools = await response.json();
+
+        // تحديد الحاويات الثلاثة التي أضفت لها IDs
+        const containers = {
+            'Creative & Tech Tools': document.getElementById('creative-container'),
+            'Professional Office Tools': document.getElementById('office-container'),
+            'Media Transform Tools': document.getElementById('transform-container')
+        };
+
+        // تجميع الأدوات حسب الـ category (مثل Image Enhancer)
+        const groups = {};
+        tools.forEach(tool => {
+            if (!groups[tool.category]) groups[tool.category] = [];
+            groups[tool.category].push(tool);
+        });
+
+        // بناء الكروت لكل مجموعة
+        for (const groupName in groups) {
+            const groupTools = groups[groupName];
+            const firstFree = groupTools.find(t => t.pricing === 'free');
+            const firstPrem = groupTools.find(t => t.pricing === 'premium');
+            
+            // تحديد العمود المناسب بناءً على اسم المجموعة (سنحتاج لربطها لاحقاً بدقة)
+            // مؤقتاً سنضعها في العمود الأول للتجربة
+            const cardHTML = `
+                <div class="tool-card" tabindex="0">
+                    <h3 class="card-title">${groupName}</h3>
+                    <div class="button-group">
+                        <div class="item-wrapper">
+                            <a href="${firstFree?.url || '#'}" target="_blank" class="btn btn-purple">${firstFree?.name || 'N/A'}</a>
+                            <span class="status-badge free">FREE</span>
+                        </div>
+                        <div class="item-wrapper">
+                            <a href="${firstPrem?.url || '#'}" target="_blank" class="btn btn-purple">${firstPrem?.name || 'N/A'}</a>
+                            <span class="status-badge premium">PREM</span>
+                        </div>
+                    </div>
+                </div>`;
+            
+            containers['Creative & Tech Tools'].innerHTML += cardHTML;
+        }
+    } catch (error) {
+        console.error("خطأ في جلب البيانات:", error);
+    }
+}
+
+// تشغيل الوظيفة عند تحميل الصفحة
+window.onload = loadTools;
+</script>
 </body>
 </html>
