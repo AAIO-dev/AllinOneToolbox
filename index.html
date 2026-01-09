@@ -712,11 +712,9 @@ console.log("البيانات وصلت:", tools);
                 ? premTools.slice(1, 11) 
                 : freeTools.slice(11, 21); 
 
-           const mainTitle = categoryToContainer[groupName];
-const targetContainer = Array.from(document.querySelectorAll('.column')).find(col => {
-    const title = col.querySelector('h2');
-    return title && title.innerText.trim() === mainTitle;
-});
+          const containerID = categoryToContainer[groupName] === 'Creative & Tech Tools' ? 'creative-container' :
+                    categoryToContainer[groupName] === 'Professional Office Tools' ? 'office-container' : 'transform-container';
+const targetContainer = document.getElementById(containerID);
 
             if (targetContainer) {
                 console.log("تم العثور على حاوية لـ:", groupName);
