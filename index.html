@@ -707,7 +707,20 @@ async function loadTools() {
                     </div>
                 </div>`;
             
-            containers['Creative & Tech Tools'].innerHTML += cardHTML;
+            // منطق التوزيع الاحترافي بناءً على بيانات السيرفر الحقيقية
+            let targetContainer;
+            
+            if (groupName.includes('Image') || groupName.includes('Video') || groupName.includes('Background') || groupName.includes('Enhancer')) {
+                targetContainer = containers['Creative & Tech Tools'];
+            } else if (groupName.includes('Resume') || groupName.includes('Email') || groupName.includes('Office') || groupName.includes('Writer')) {
+                targetContainer = containers['Professional Office Tools'];
+            } else {
+                targetContainer = containers['Media Transform Tools']; // يشمل الصوت، الترجمة، الـ PDF، والنصوص
+            }
+
+            if (targetContainer) {
+                targetContainer.innerHTML += cardHTML;
+            }
         }
     } catch (error) {
         console.error("خطأ في جلب البيانات:", error);
