@@ -751,14 +751,19 @@ const targetContainer = Array.from(document.querySelectorAll('.column')).find(co
                     </div>`;
                 
                 // 1. حقن البطاقات (كما هي)
-targetContainer.innerHTML += cardHTML;
+// داخل حلقة التكرار التي تبني البطاقات (مثلاً .forEach أو .map)
+if (targetContainer) {
+    const cardHTML = `... (كود البطاقة كما هو عندك) ...`;
 
-// 2. "الهزة" البرمجية (Forced Reflow)
-// هذا السطر يخبر الجوال: "استيقظ واحسب الطول الآن!"
-void targetContainer.offsetHeight; 
+    // 1. الحقن الفعلي
+    targetContainer.insertAdjacentHTML('beforeend', cardHTML);
 
-// 3. تأكيد الأبعاد للجوال
-targetContainer.style.height = 'auto';
+    // 2. سطر "الاستفزاز" (يجبر الجوال على تحديث أبعاد الحاوية فوراً)
+    void targetContainer.offsetHeight; 
+    
+    // 3. تأمين الظهور البصري
+    targetContainer.style.minHeight = '1px'; 
+}
             }
         }
         
@@ -771,20 +776,30 @@ targetContainer.style.height = 'auto';
     title.addEventListener('click', () => {
         if (window.innerWidth <= 768) {
             const column = title.parentElement;
-            
-            // إغلاق الآخرين
+            const container = column.id; // نستخدم الـ ID الذي تأكدنا منه
+
+            // إغلاق بقية الأقسام
             document.querySelectorAll('.column').forEach(col => {
-                if (col !== column) col.classList.remove('active');
+                if (col !== column) {
+                    col.classList.remove('active');
+                    col.style.maxHeight = null;
+                }
             });
 
-            // الفتح الذكي: نطلب من المتصفح أن يتنفس (Frame) ثم يحسب
+            // "الفتح على مرحلتين" لضمان استجابة محرك الرندر في الجوال
             requestAnimationFrame(() => {
                 column.classList.toggle('active');
-                
-                // إذا فتحنا، نجبره على قراءة الارتفاع الحقيقي
-                if(column.classList.contains('active')) {
-                    const scrollHeight = column.scrollHeight;
-                    column.style.maxHeight = scrollHeight + "px";
+
+                if (column.classList.contains('active')) {
+                    // حساب الارتفاع الحقيقي للمحتوى المحقون من MongoDB
+                    const realHeight = column.scrollHeight;
+                    column.style.maxHeight = realHeight + "px";
+                    
+                    // تأكيد نهائي للمتصفح أن المحتوى يجب أن يكون مرئياً
+                    column.style.overflow = "visible";
+                } else {
+                    column.style.maxHeight = "0px";
+                    column.style.overflow = "hidden";
                 }
             });
         }
