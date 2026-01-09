@@ -612,6 +612,11 @@
                     if (col !== column) col.classList.remove('active');
                 });
                 column.classList.toggle('active');
+                if(column.classList.contains('active')) {
+    column.style.maxHeight = "none"; 
+} else {
+    column.style.maxHeight = "0";
+}
             }
         });
     });
