@@ -603,30 +603,7 @@
         localStorage.setItem('theme', theme);
     });
 
-    // 3. كود الأكورديون للجوال (التحكم في الأعمدة)
-    document.querySelectorAll('.column h2').forEach(title => {
-    title.addEventListener('click', () => {
-        if (window.innerWidth <= 768) {
-            const column = title.parentElement;
-            
-            // إغلاق الآخرين
-            document.querySelectorAll('.column').forEach(col => {
-                if (col !== column) col.classList.remove('active');
-            });
-
-            // الفتح الذكي: نطلب من المتصفح أن يتنفس (Frame) ثم يحسب
-            requestAnimationFrame(() => {
-                column.classList.toggle('active');
-                
-                // إذا فتحنا، نجبره على قراءة الارتفاع الحقيقي
-                if(column.classList.contains('active')) {
-                    const scrollHeight = column.scrollHeight;
-                    column.style.maxHeight = scrollHeight + "px";
-                }
-            });
-        }
-    });
-});
+    
 
     // 4. كود الترجمة الاحترافي (مع حفظ الأصول)
     const langPicker = document.getElementById('language-picker');
@@ -789,6 +766,30 @@ targetContainer.style.height = 'auto';
         console.error("خطأ في جلب البيانات:", error);
     }
 }
+// 3. كود الأكورديون للجوال (التحكم في الأعمدة)
+    document.querySelectorAll('.column h2').forEach(title => {
+    title.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+            const column = title.parentElement;
+            
+            // إغلاق الآخرين
+            document.querySelectorAll('.column').forEach(col => {
+                if (col !== column) col.classList.remove('active');
+            });
+
+            // الفتح الذكي: نطلب من المتصفح أن يتنفس (Frame) ثم يحسب
+            requestAnimationFrame(() => {
+                column.classList.toggle('active');
+                
+                // إذا فتحنا، نجبره على قراءة الارتفاع الحقيقي
+                if(column.classList.contains('active')) {
+                    const scrollHeight = column.scrollHeight;
+                    column.style.maxHeight = scrollHeight + "px";
+                }
+            });
+        }
+    });
+});
 
 // تشغيل الوظيفة عند تحميل الصفحة
 window.onload = loadTools;
