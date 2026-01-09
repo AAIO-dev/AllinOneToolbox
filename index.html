@@ -605,21 +605,20 @@
 
     // 3. كود الأكورديون للجوال (التحكم في الأعمدة)
     document.querySelectorAll('.column h2').forEach(title => {
-        title.addEventListener('click', () => {
-            if (window.innerWidth <= 768) {
-                const column = title.parentElement;
-                document.querySelectorAll('.column').forEach(col => {
-                    if (col !== column) col.classList.remove('active');
-                });
-                column.classList.toggle('active');
-                if(column.classList.contains('active')) {
-    column.style.maxHeight = "none"; 
-} else {
-    column.style.maxHeight = "0";
-}
-            }
-        });
+    title.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+            const column = title.parentElement;
+            
+            // سطر التحقق: سيطبع لنا اسم الكلاس والـ ID للأب في الكونسول
+            console.log("تم الضغط! الأب هو:", column.className, "والـ ID هو:", column.id);
+
+            document.querySelectorAll('.column').forEach(col => {
+                if (col !== column) col.classList.remove('active');
+            });
+            column.classList.toggle('active');
+        }
     });
+});
 
     // 4. كود الترجمة الاحترافي (مع حفظ الأصول)
     const langPicker = document.getElementById('language-picker');
