@@ -51,10 +51,11 @@
 
 </div>
     <div class="main-container">
-        <div class="column">
-            <h2 id="title-creative" class="column-title" data-key="creative" style="color: #6f42c1; border-color: #6f42c1;">Creative & Tech Tools</h2>
+
+        <div class="column" id="creative-container">
+        <h2 id="title-creative" class="column-title" data-key="creative" style="color: #6f42c1; border-color: #6f42c1;">Creative & Tech Tools</h2>
             
-            <div class="tool-card" tabindex="0">
+            <!--<div class="tool-card" tabindex="0">
     <h3 class="card-title" data-key="img-enhancer">Image Enhancer</h3>
     <div class="button-group">
         <div class="item-wrapper"><a href="https://www.upscale.media/" target="_blank" class="btn btn-purple">Upscale</a> <span class="status-badge free">FREE</span></div>
@@ -232,13 +233,13 @@
                         <a href="https://www.v7labs.com/" target="_blank" rel="nofollow">V7 Go</a>
                     </div>
                 </div>
-            </div>
+            </div>-->
         </div>
 
-        <div class="column">
+        <div class="column" id="office-container">
             <h2 id="title-office" class="column-title" data-key="office" style="color: #4682b4; border-color: #4682b4;">Professional Office Tools</h2>
             
-            <div class="tool-card" tabindex="0">
+            <!--<div class="tool-card" tabindex="0">
                 <h3 class="card-title" data-key="ai-resume-builder">AI Resume Builder</h3>
                 <div class="button-group">
                     <div class="item-wrapper"><a href="https://www.canva.com/resumes/" target="_blank" class="btn btn-blue">Canva</a> <span class="status-badge free">FREE</span></div>
@@ -378,13 +379,13 @@
                         <a href="https://shortlyai.com/" target="_blank" rel="nofollow">ShortlyAI</a>
                     </div>
                 </div>
-            </div>
+            </div>-->
         </div>
 
-        <div class="column">
+        <div class="column" id="transform-container">
             <h2 id="title-media" class="column-title" data-key="transform" style="color: #00ced1; border-color: #00ced1;">Media Transform Tools</h2>
             
-            <div class="tool-card" tabindex="0">
+            <!--<div class="tool-card" tabindex="0">
                 <h3 class="card-title" data-key="pdf-magic">PDF Magic</h3>
                 <div class="button-group">
                     <div class="item-wrapper"><a href="https://www.ilovepdf.com/" target="_blank" class="btn btn-green">iLovePDF</a> <span class="status-badge free">FREE</span></div>
@@ -537,7 +538,7 @@
                         <a href="https://www.deepword.ai/" target="_blank" rel="nofollow">Deep Word</a>
                     </div>
                 </div>
-            </div>
+            </div>-->
         </div>
     </div>
 
@@ -658,6 +659,116 @@
             }, {passive: true});
         });
     });
+
+
+async function loadTools() {
+    try {
+       const response = await fetch('https://ai-allin-one.com/api/tools');
+        const tools = await response.json();
+
+        // تحديد الحاويات الثلاثة التي أضفت لها IDs
+        const containers = {
+            'Creative & Tech Tools': document.getElementById('creative-container'),
+            'Professional Office Tools': document.getElementById('office-container'),
+            'Media Transform Tools': document.getElementById('transform-container')
+        };
+
+        // تجميع الأدوات حسب الـ category (مثل Image Enhancer)
+        const groups = {};
+        tools.forEach(tool => {
+            if (!groups[tool.category]) groups[tool.category] = [];
+            groups[tool.category].push(tool);
+        });
+
+        // بناء الكروت لكل مجموعة
+        // بناء الكروت وتوزيعها باستخدام "القاموس"
+        const categoryToContainer = {
+            'Image Enhancer': 'Creative & Tech Tools',
+            'AI Background Remover': 'Creative & Tech Tools',
+            'AI Video Creator': 'Creative & Tech Tools',
+            'AI Voice Generator': 'Creative & Tech Tools',
+            'AI Code Assistant': 'Creative & Tech Tools',
+            'Text to AI Image': 'Creative & Tech Tools',
+            
+            'AI Resume Builder': 'Professional Office Tools',
+            'AI Email Writer': 'Professional Office Tools',
+            'AI Translator Pro': 'Professional Office Tools',
+            'AI Text Summarizer': 'Professional Office Tools',
+            
+            'PDF Magic': 'Media Transform Tools',
+            'Video to GIF': 'Media Transform Tools',
+            'Text to Professional Voice': 'Media Transform Tools',
+            'Text to AI Video': 'Media Transform Tools',
+            'Chat with PDF': 'Media Transform Tools'
+        };
+
+        for (const groupName in groups) {
+            const groupTools = groups[groupName];
+            const groupID = groupName.replace(/\s+/g, '-').toLowerCase();
+
+            // تصنيف الأدوات بناءً على بيانات الكونسول
+            const freeTools = groupTools.filter(t => t.pricing.toLowerCase() === 'free');
+            const premTools = groupTools.filter(t => t.pricing.toLowerCase() === 'premium');
+
+            // توزيع المجاني
+            const mainFree = freeTools[0];
+            const extraFree = freeTools.slice(1, 11); // أول 10 أدوات مجانية إضافية
+
+            // توزيع المدفوع + سد العجز
+            const mainPrem = premTools[0]; 
+            // إذا كان المدفوع فارغاً، نسحب من فائض المجاني (من الأداة رقم 11 وما فوق)
+            const extraPrem = premTools.length > 1 
+                ? premTools.slice(1, 11) 
+                : freeTools.slice(11, 21); 
+
+           const mainTitle = categoryToContainer[groupName];
+const targetContainer = Array.from(document.querySelectorAll('.column')).find(col => {
+    const title = col.querySelector('h2');
+    return title && title.innerText.trim() === mainTitle;
+});
+
+            if (targetContainer) {
+                const cardHTML = `
+                    <div class="tool-card" tabindex="0">
+                        <h3 class="card-title">${groupName}</h3>
+                        <div class="button-group">
+                            <div class="item-wrapper">
+                                <a href="${mainFree?.url || '#'}" target="_blank" class="btn btn-purple">${mainFree?.name || 'N/A'}</a>
+                                <span class="status-badge free">FREE</span>
+                            </div>
+                            <div class="item-wrapper">
+                                <a href="${mainPrem?.url || '#'}" target="_blank" rel="nofollow" class="btn btn-purple">${mainPrem?.name || 'N/A'}</a>
+                                <span class="status-badge premium">PREM</span>
+                            </div>
+                        </div>
+                        
+                        <div class="see-more-links">
+                            <a onclick="toggleBox('free-${groupID}', this)" class="see-more-link" style="color: #00aaff; cursor: pointer;">+ See More Free Tools</a>
+                            <div id="free-${groupID}" class="dropdown-content">
+                                ${extraFree.map(t => `<a href="${t.url}" target="_blank">${t.name}</a>`).join('')}
+                            </div>
+
+                            <a onclick="toggleBox('prem-${groupID}', this)" class="see-more-link" style="color: #ffaa00; cursor: pointer;">+ See More Premium Tools</a>
+                            <div id="prem-${groupID}" class="dropdown-content">
+                                ${extraPrem.length > 0 
+                                    ? extraPrem.map(t => `<a href="${t.url}" target="_blank" rel="nofollow">${t.name}</a>`).join('') 
+                                    : '<a>Explore More Options</a>'}
+                            </div>
+                        </div>
+                    </div>`;
+                
+                targetContainer.innerHTML += cardHTML;
+            }
+        }
+        
+    } catch (error) {
+        console.error("خطأ في جلب البيانات:", error);
+    }
+}
+
+// تشغيل الوظيفة عند تحميل الصفحة
+window.onload = loadTools;
 </script>
+
 </body>
 </html>
