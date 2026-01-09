@@ -604,7 +604,7 @@
     });
 
     // 3. كود الأكورديون للجوال (التحكم في الأعمدة)
-    document.querySelectorAll('.column h2 id').forEach(title => {
+    document.querySelectorAll('.column h2').forEach(title => {
         title.addEventListener('click', () => {
             if (window.innerWidth <= 768) {
                 const column = title.parentElement;
@@ -761,7 +761,7 @@ const targetContainer = Array.from(document.querySelectorAll('.column')).find(co
                         </div>
                     </div>`;
                 
-                targetContainer.innerHTML += cardHTML;
+                targetContainer.insertAdjacentHTML('beforeend', cardHTML);
             }
         }
         
