@@ -29,6 +29,7 @@
     <option value="ja">日本語</option>
     <option value="ko">한국어</option>
     <option value="hi">हिन्दी (Hindi)</option>
+    <option value="fa">فارسی</option>
     <option value="tr">Türkçe</option>
     <option value="el">Ελληνικά</option>
     <option value="nl">Nederlands</option>
@@ -736,13 +737,13 @@ const targetContainer = document.getElementById(containerID);
                         <h3 class="card-title" data-key="${groupName}" data-original="${groupName}">${groupName}</h3>
                         <div class="button-group">
                             <div class="item-wrapper">
-                                <a href="${mainFree?.url || '#'}" target="_blank" class="btn btn-purple">${mainFree?.name || 'N/A'}</a>
-                                <span class="status-badge free">FREE</span>
-                            </div>
-                            <div class="item-wrapper">
-                                <a href="${mainPrem?.url || '#'}" target="_blank" rel="nofollow" class="btn btn-purple">${mainPrem?.name || 'N/A'}</a>
-                                <span class="status-badge premium">PREM</span>
-                            </div>
+     <a href="${group.freeToolsLink}" class="btn btn-purple" data-key="see_more_free" data-original="+ See More Free Tools">+ See More Free Tools</a>
+      <span class="status-badge free">FREE</span>
+    </div>
+    <div class="item-wrapper">
+    <a href="${mainPrem?.url || '#'}" target="_blank" rel="nofollow" class="btn btn-purple" data-key="${mainPrem?.name || 'N/A'}" data-original="${mainPrem?.name || 'N/A'}">${mainPrem?.name || 'N/A'}</a>
+    <span class="status-badge premium">PREM</span>
+    </div>
                         </div>
                         
                         <div class="see-more-links">
