@@ -658,46 +658,6 @@
             }, {passive: true});
         });
     });
-    <div id="toolModal" class="modal-overlay">
-    <div class="modal-content">
-        <span class="close-modal">&times;</span>
-        
-        <div id="modalBody"></div>
-    </div>
-</div>
-// دالة التحكم بالبوب أب
-document.addEventListener('click', function(e) {
-    // 1. هل الضغط كان على زر "See More"؟
-    if (e.target.classList.contains('see-more-btn')) {
-        e.preventDefault();
-        
-        const modal = document.getElementById('toolModal');
-        const modalBody = document.getElementById('modalBody');
-        
-        // العثور على القائمة المنسدلة التي تلي الزر مباشرة
-        const dropdown = e.target.nextElementSibling;
-        
-        if (dropdown) {
-            // نقل الروابط إلى نافذة البوب أب
-            modalBody.innerHTML = dropdown.innerHTML;
-            
-            // إظهار النافذة
-            modal.style.display = 'flex';
-            
-            // منع الصفحة الرئيسية من التمرير خلف النافذة
-            document.body.style.overflow = 'hidden';
-        }
-    }
-
-    // 2. هل الضغط كان على زر الإغلاق (X) أو خارج الصندوق؟
-    if (e.target.classList.contains('close-modal') || e.target.classList.contains('modal-overlay')) {
-        const modal = document.getElementById('toolModal');
-        modal.style.display = 'none';
-        
-        // إعادة التمرير للصفحة
-        document.body.style.overflow = 'auto';
-    }
-});
 </script>
 </body>
 </html>
