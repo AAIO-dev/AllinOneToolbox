@@ -733,7 +733,6 @@ input:checked + .slider.round:before {
     color: #333333;
     border-color: rgba(0, 0, 0, 0.1);
 }
-
 /* تنسيق إجباري للهواتف لإنهاء الفوضى */
 @media screen and (max-width: 768px) {
     .main-container {
@@ -838,8 +837,8 @@ input:checked + .slider.round:before {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* فاصل أنيق */
 }
 .column .tool-card {
-        display: block !important; /* البطاقات ستظهر فوراً بمجرد تحميلها */
-    }
+    display: none !important;
+}
 
 /* إظهار الكروت فقط عندما يأخذ العمود كلاس active */
 .column.active .tool-card {
