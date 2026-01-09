@@ -210,7 +210,7 @@ body {
     box-shadow: 0 20px 40px rgba(0,0,0,0.3);
     transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
     position: relative;
-    overflow: hiddvisible !important;
+    overflow: hidden;
 
     /* السطرين السحريين للآيفون */
     cursor: pointer; 
