@@ -612,7 +612,6 @@
                     if (col !== column) col.classList.remove('active');
                 });
                 column.classList.toggle('active');
-                
             }
         });
     });
@@ -762,7 +761,7 @@ const targetContainer = Array.from(document.querySelectorAll('.column')).find(co
                         </div>
                     </div>`;
                 
-                targetContainer.insertAdjacentHTML('beforeend', cardHTML);
+                targetContainer.innerHTML += cardHTML;
             }
         }
         
