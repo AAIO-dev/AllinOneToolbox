@@ -766,7 +766,7 @@ const targetContainer = Array.from(document.querySelectorAll('.column')).find(co
                         </div>
                     </div>`;
                 
-                targetContainer.insertAdjacentHTML('beforeend', cardHTML);
+                targetContainer.innerHTML += cardHTML;
             }
         }
         
