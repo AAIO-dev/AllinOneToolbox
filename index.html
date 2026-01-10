@@ -733,33 +733,33 @@ const targetContainer = document.getElementById(containerID);
             if (targetContainer) {
                 console.log("تم العثور على حاوية لـ:", groupName);
                 const cardHTML = `
-                    <div class="tool-card" tabindex="0">
-                        <h3 class="card-title" data-key="${groupName}" data-original="${groupName}">${groupName}</h3>
-                        <div class="button-group">
-                            <div class="item-wrapper">
-                                <a href="${mainFree?.url || '#'}" target="_blank" class="btn btn-purple" data-key="${mainFree?.name || 'N/A'}" data-original="${mainFree?.name || 'N/A'}">${mainFree?.name || 'N/A'}</a>
-                                <span class="status-badge free">FREE</span>
-                            </div>
-                            <div class="item-wrapper">
-                                <a href="${mainPrem?.url || '#'}" target="_blank" rel="nofollow" class="btn btn-purple" data-key=${mainPrem?.name || 'N/A'}" data-original="${mainPrem?.name || 'N/A'}">${mainPrem?.name || 'N/A'}</a>
-                                <span class="status-badge premium">PREM</span>
-                            </div>
-                        </div>
-                        
-                        <div class="see-more-links">
-                            <a onclick="toggleBox('free-${groupID}', this)" class="see-more-link" style="color: #00aaff; cursor: pointer;">+ See More Free Tools</a>
-                            <div id="free-${groupID}" class="dropdown-content">
-                                ${extraFree.map(t => `<a href="${t.url}" target="_blank">${t.name}</a>`).join('')}
-                            </div>
+    <div class="tool-card" tabindex="0">
+        <h3 class="card-title" data-key="${groupName}" data-original="${groupName}">${groupName}</h3>
+        <div class="button-group">
+            <div class="item-wrapper">
+                <a href="${mainFree?.url || '#'}" target="_blank" class="btn btn-purple" data-key="${mainFree?.name || 'N/A'}" data-original="${mainFree?.name || 'N/A'}">${mainFree?.name || 'N/A'}</a>
+                <span class="status-badge free">FREE</span>
+            </div>
+            <div class="item-wrapper">
+                <a href="${mainPrem?.url || '#'}" target="_blank" rel="nofollow" class="btn btn-purple" data-key="${mainPrem?.name || 'N/A'}" data-original="${mainPrem?.name || 'N/A'}">${mainPrem?.name || 'N/A'}</a>
+                <span class="status-badge premium">PREM</span>
+            </div>
+        </div>
+        
+        <div class="see-more-links">
+            <a onclick="toggleBox('free-${groupID}', this)" class="see-more-link" style="color: #00aaff; cursor: pointer;" data-key="see_more_free" data-original="+ See More Free Tools">+ See More Free Tools</a>
+            <div id="free-${groupID}" class="dropdown-content">
+                ${extraFree.map(t => `<a href="${t.url}" target="_blank">${t.name}</a>`).join('')}
+            </div>
 
-                            <a onclick="toggleBox('prem-${groupID}', this)" class="see-more-link" style="color: #ffaa00; cursor: pointer;">+ See More Premium Tools</a>
-                            <div id="prem-${groupID}" class="dropdown-content">
-                                ${extraPrem.length > 0 
-                                    ? extraPrem.map(t => `<a href="${t.url}" target="_blank" rel="nofollow">${t.name}</a>`).join('') 
-                                    : '<a>Explore More Options</a>'}
-                            </div>
-                        </div>
-                    </div>`;
+            <a onclick="toggleBox('prem-${groupID}', this)" class="see-more-link" style="color: #ffaa00; cursor: pointer;" data-key="see_more_premium" data-original="+ See More Premium Tools">+ See More Premium Tools</a>
+            <div id="prem-${groupID}" class="dropdown-content">
+                ${extraPrem.length > 0 
+                    ? extraPrem.map(t => `<a href="${t.url}" target="_blank" rel="nofollow">${t.name}</a>`).join('') 
+                    : '<a>Explore More Options</a>'}
+            </div>
+        </div>
+    </div>`;
                 
                 // هذا السطر يحمي الهيكل من الانهيار
             targetContainer.insertAdjacentHTML('beforeend', cardHTML);
