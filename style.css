@@ -428,7 +428,6 @@ body {
     border-radius: 4px; 
     font-weight: bold; 
     border: 1px solid; 
-    background: white;
     text-transform: uppercase;
 }
 .free { color: #00aaff; border-color: #00aaff; }
