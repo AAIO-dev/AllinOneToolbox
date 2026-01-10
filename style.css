@@ -469,24 +469,16 @@ color: #7dd3fc !important; /* أزرق فاتح جداً للوضوح */
 border: 1px solid rgba(125, 211, 252, 0.3) !important;
 }
 
-/* هذا لتثبيت شكل البادج فوق كما ظهر في الصورة */
 [data-theme="dark"] .status-badge.prem {
-    display: inline-block !important;
-    background-color: #451a03 !important; /* نفس اللون */
-    color: #fbbf24 !important;
-    border: 1px solid #92400e !important;
-    padding: 6px 15px !important; /* الحشوة الأكبر للزر */
-    border-radius: 6px !important;
+background-color:#451a03 !important; /* بني ذهبي غامق */
+color: #fbbf24 !important; /* ذهبي ساطع للوضوح */
+border: 1px solid #92400e !important;
 }
 
-/* هذا لإعادة إحياء زر السي مور بالأسفل */
 [data-theme="dark"] a[onclick*="prem"] {
-    display: inline-block !important;
-    background-color: #451a03 !important; /* نفس اللون */
-    color: #fbbf24 !important;
-    border: 1px solid #92400e !important;
-    padding: 6px 15px !important; /* الحشوة الأكبر للزر */
-    border-radius: 6px !important;
+background-color: #451a03 !important; /* بني ذهبي غامق */
+color: #fbbf24 !important;
+border: 1px solid #92400e !important;
 }
 
 
