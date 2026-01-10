@@ -661,17 +661,35 @@
             const originalText = el.getAttribute('data-original').replace('+', '').trim();
 
 // --- الخطوة الجديدة: إضافة الفلتر الذكي هنا ---
+// 1. تحديد المصطلحات التي لا تلمسها الترجمة نهائياً
+const protectedTerms = {
+    'PDF': '[[1]]',
+    'GIF': '[[2]]'
+};
+
 let textToTranslate = originalText;
-textToTranslate = textToTranslate
-    .replace(/\bPDF\b/gi, 'PDF Document') // يمنع "قوات الدفاع"
-    .replace(/\bResume\b/gi, 'CV Profile'); // يمنع "استئناف البناء"
+
+// 2. تشفير الكلمات (تحويل PDF إلى [[1]]) قبل الإرسال لجوجل
+Object.keys(protectedTerms).forEach(term => {
+    const regex = new RegExp(`\\b${term}\\b`, 'gi');
+    textToTranslate = textToTranslate.replace(regex, protectedTerms[term]);
+});
 // -------------------------------------------
             const response = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${lang}&dt=t&q=${encodeURIComponent(textToTranslate)}`);
             const result = await response.json();
-            if (result?.[0]?.[0]?.[0]) {
-                const prefix = el.getAttribute('data-original').includes('+') ? '+ ' : '';
-                el.innerText = prefix + result[0][0][0];
-            }
+           if (result?.[0]?.[0]?.[0]) {
+    let translatedText = result[0][0][0];
+
+    // 3. فك التشفير (إعادة [[1]] إلى PDF) بعد الترجمة
+    Object.keys(protectedTerms).forEach(term => {
+        const placeholder = protectedTerms[term];
+        // استخدام replaceAll لضمان استرجاع كل الرموز
+        translatedText = translatedText.split(placeholder).join(term);
+    });
+
+    const prefix = el.getAttribute('data-original').includes('+') ? '+ ' : '';
+    el.innerText = prefix + translatedText;
+}
         });
         await Promise.all(promises);
     }
