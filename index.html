@@ -667,25 +667,29 @@ const protectedTerms = {
     'GIF': '[[2]]'
 };
 
-let textToTranslate = originalText;
+// 1. تجهيز النص للترجمة (إضافة سياق تقني لضبط القواعد اللغوية)
+let textToTranslate = originalText
+    .replace(/\bPDF\b/gi, 'PDF File Processing')
+    .replace(/\bGIF\b/gi, 'GIF File Processing');
 
-// 2. تشفير الكلمات (تحويل PDF إلى [[1]]) قبل الإرسال لجوجل
-Object.keys(protectedTerms).forEach(term => {
-    const regex = new RegExp(`\\b${term}\\b`, 'gi');
-    textToTranslate = textToTranslate.replace(regex, protectedTerms[term]);
-});
-// -------------------------------------------
-            const response = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${lang}&dt=t&q=${encodeURIComponent(textToTranslate)}`);
-            const result = await response.json();
-           if (result?.[0]?.[0]?.[0]) {
+// 2. إرسال الطلب لجوجل (هذا الجزء كما هو في كودك الأصلي)
+const response = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${lang}&dt=t&q=${encodeURIComponent(textToTranslate)}`);
+const result = await response.json();
+
+if (result?.[0]?.[0]?.[0]) {
     let translatedText = result[0][0][0];
 
-    // 3. فك التشفير (إعادة [[1]] إلى PDF) بعد الترجمة
-    Object.keys(protectedTerms).forEach(term => {
-        const placeholder = protectedTerms[term];
-        // استخدام replaceAll لضمان استرجاع كل الرموز
-        translatedText = translatedText.split(placeholder).join(term);
+    // 3. التنظيف الذكي: حذف الكلمات الوصفية التي أضفناها ليبقى العنوان نظيفاً
+    // نحذفها بالإنجليزية وبالعربية لضمان المسح الكامل
+    const termsToRemove = ['File Processing', 'Processing', 'معالجة ملفات', 'معالجة']; 
+    
+    termsToRemove.forEach(term => {
+        const reg = new RegExp(term, 'gi');
+        translatedText = translatedText.replace(reg, '');
     });
+
+    // تنظيف المسافات الزائدة
+    translatedText = translatedText.replace(/\s+/g, ' ').trim();
 
     const prefix = el.getAttribute('data-original').includes('+') ? '+ ' : '';
     el.innerText = prefix + translatedText;
