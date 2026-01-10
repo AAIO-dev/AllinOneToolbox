@@ -441,16 +441,17 @@ color: #0369a1 !important;
 border: 1px solid #bae6fd !important;
 }
 
-[data-theme="light"] .status-badge.prem {
+[data-theme="light"] .status-badge.prem, 
+[data-theme="light"] .status-badge.premium {
 background-color: #fffbeb !important;
 color: #d97706 !important; /* برتقالي ذهبي للربح */
-border: #fef3c7 !important;
+border-color: #fef3c7 !important;
 }
 
 [data-theme="light"] a[onclick*="prem"] {
 background-color: #fffbeb !important;
 color: #d97706 !important; /* برتقالي ذهبي للربح */
-border: #fef3c7 !important;
+border-color: #fef3c7 !important;
 }
 
 
@@ -468,12 +469,11 @@ color: #7dd3fc !important; /* أزرق فاتح جداً للوضوح */
 border: 1px solid rgba(125, 211, 252, 0.3) !important;
 }
 
-[data-theme="dark"] .status-badge.prem {
+[data-theme="dark"] .status-badge.prem, 
+[data-theme="dark"] .status-badge.premium {
 background-color:#451a03 !important; /* بني ذهبي غامق */
 color: #fbbf24 !important; /* ذهبي ساطع للوضوح */
 border: 1px solid #92400e !important;
-padding: 2px 6px !important;
-display: inline-block !important;
 }
 
 [data-theme="dark"] a[onclick*="prem"] {
