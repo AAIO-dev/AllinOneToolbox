@@ -1370,6 +1370,3 @@ text-shadow: 0 0 10px rgba(255, 215, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.2) !i
 .close-modal:hover {
     color: #fff; /* يتغير اللون عند تمرير الماوس */
 }
-* {
-    outline: 2px solid red !important;
-}
