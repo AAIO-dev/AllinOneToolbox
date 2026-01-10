@@ -472,6 +472,8 @@ border: 1px solid rgba(125, 211, 252, 0.3) !important;
 background-color:#451a03 !important; /* بني ذهبي غامق */
 color: #fbbf24 !important; /* ذهبي ساطع للوضوح */
 border: 1px solid #92400e !important;
+padding: 2px 6px !important;
+display: inline-block !important;
 }
 
 [data-theme="dark"] a[onclick*="prem"] {
