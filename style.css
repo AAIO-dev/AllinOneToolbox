@@ -410,49 +410,170 @@ body {
     color: #00261a !important; /* أخضر غاباتي شديد السواد */
     text-shadow: 0.5px 0.5px 0px rgba(255,255,255,0.3);
 }
-/* 1. زر See More المجاني - لايت */
+
+/* تنسيق روابط See More   أزرار    */
+
+[data-theme="light"] a[onclick*="toggleBox"] {
+
+display: inline-block !important;
+
+padding: 6px 15px !important;
+
+margin: 10px 4px !important;
+
+border-radius: 6px !important;
+
+font-size: 11px !important;
+
+font-weight: 700 !important;
+
+text-decoration: none !important;
+
+cursor: pointer !important;
+
+transition: all 0.3s ease !important;
+
+border: 1px solid transparent !important;
+
+}
+
+/* زر الأدوات المجانية (الذي يحتوي على كلمة free) */
+
 [data-theme="light"] a[onclick*="free"] {
-    background-color: #e0f2fe !important; /* بهتان سماوي */
-    color: #00aaff !important;           /* نص تركوازي */
-    border-color: #bae6fd !important;
+
+background-color: #f5f3ff !important;
+
+color: #7c3aed !important; /* بنفسجي هادئ */
+
+border-color: #ddd6fe !important;
+
 }
 
-/* 2. زر See More البريميوم - لايت */
+/* زر الأدوات المدفوعة (الذي يحتوي على كلمة prem) */
+
 [data-theme="light"] a[onclick*="prem"] {
-    background-color: #fff7ed !important; /* بهتان برتقالي */
-    color: #c2410c !important;           /* نص برتقالي */
-    border-color: #ffedd5 !important;
+
+background-color: #fffbeb !important;
+
+color: #d97706 !important; /* برتقالي ذهبي للربح */
+
+border-color: #fef3c7 !important;
+
 }
 
-/* 3. شارة FREE - لايت */
-[data-theme="light"] .status-badge.free {
-    background-color: #e0f2fe !important;
-    color: #00aaff !important; /* تم توحيده مع الزر */
-    border: 1px solid #bae6fd !important;
-}
 
-/* 4. شارة PREM - لايت (مطابقة تماماً لزر البريميوم) */
-[data-theme="light"] .status-badge.prem {
-    background-color: #fff7ed !important; /* نفس خلفية الزر */
-    color: #c2410c !important;           /* نفس لون نص الزر */
-    border: 1px solid #ffedd5 !important;
-}
 
-/* 1. زر See More المجاني - دارك */
-[data-theme="dark"] a[onclick*="free"] {
-    background-color: rgba(0, 170, 255, 0.1) !important; /* تركوازي شفاف */
-    color: #00aaff !important;
-    border: 1px solid #00aaff !important;
-}
-
-/* 2. شارة FREE - دارك */
 [data-theme="dark"] .status-badge.free {
-    background-color: rgba(0, 170, 255, 0.2) !important;
-    color: #00aaff !important;
-    border: 1px solid rgba(0, 170, 255, 0.3) !important;
-}
-/* ملاحظة: أبقينا البريميوم الداكن كما هو في كودك لأنه متناسق أصلاً */
 
+background-color: rgba(3, 105, 161, 0.2) !important; /* أزرق شفاف ليتناسب مع السواد */
+
+color: #7dd3fc !important; /* أزرق فاتح جداً للوضوح */
+
+border: 1px solid rgba(125, 211, 252, 0.3) !important;
+
+}
+
+
+
+[data-theme="dark"] .status-badge.prem {
+
+background-color: rgba(180, 83, 9, 0.2) !important; /* ذهبي شفاف */
+
+color: #fbbf24 !important; /* ذهبي ساطع للوضوح */
+
+border: 1px solid rgba(251, 191, 36, 0.3) !important;
+
+}
+
+
+
+/* 2. أزرار See More في الوضع الداكن */
+
+[data-theme="dark"] a[onclick*="toggleBox"] {
+
+display: inline-block !important;
+
+padding: 6px 15px !important;
+
+margin: 10px 4px !important;
+
+border-radius: 6px !important;
+
+font-size: 11px !important;
+
+font-weight: 700 !important;
+
+transition: all 0.3s ease !important;
+
+}
+
+
+
+[data-theme="dark"] a[onclick*="free"] {
+
+background-color: #2e1065 !important; /* بنفسجي عميق جداً */
+
+color: #a78bfa !important;
+
+border: 1px solid #4c1d95 !important;
+
+}
+
+
+
+[data-theme="dark"] a[onclick*="prem"] {
+
+background-color: #451a03 !important; /* بني ذهبي غامق */
+
+color: #fbbf24 !important;
+
+border: 1px solid #92400e !important;
+
+}
+
+/* 2. تلوين شارة FREE بالأزرق السماوي */
+
+[data-theme="light"] .status-badge.free {
+
+background-color: #e0f2fe !important;
+
+color: #0369a1 !important;
+
+border: 1px solid #bae6fd !important;
+
+}
+
+
+
+/* 3. تلوين شارة PREM بالذهبي البرتقالي */
+
+[data-theme="light"] .status-badge.prem {
+
+background-color: #fff7ed !important;
+
+color: #c2410c !important;
+
+border: 1px solid #ffedd5 !important;
+
+}
+
+.status-badge {
+
+font-size: 0.6em;
+
+padding: 2px 5px;
+
+border-radius: 4px;
+
+font-weight: bold;
+
+border: 1px solid;
+
+background: white;
+
+text-transform: uppercase;
+
+}
 .free { color: #00aaff; border-color: #00aaff; }
 .premium { color: #ffaa00; border-color: #ffaa00; }
 
