@@ -438,15 +438,15 @@ border: 1px solid #bae6fd !important;
 /* 3. تلوين شارة PREM بالذهبي البرتقالي */
 
 [data-theme="light"] .status-badge.prem {
-background-color: #fff7ed !important;
-color: #c2410c !important;
-border: 1px solid #ffedd5 !important;
+background-color: #fffbeb !important;
+color: #d97706 !important; /* برتقالي ذهبي للربح */
+border-color: #fef3c7 !important;
 }
 
 [data-theme="light"] a[onclick*="free"] {
-background-color: #f5f3ff !important;
-color: #7c3aed !important; /* بنفسجي هادئ */
-border-color: #ddd6fe !important;
+background-color: #e0f2fe !important;
+color: #0369a1 !important;
+border: 1px solid #bae6fd !important;
 }
 
 [data-theme="light"] a[onclick*="prem"] {
