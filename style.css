@@ -469,14 +469,22 @@ color: #7dd3fc !important; /* أزرق فاتح جداً للوضوح */
 border: 1px solid rgba(125, 211, 252, 0.3) !important;
 }
 
-/* هذا الكود سيجبر البريميوم على التلون مهما كان اسمه */
-[data-theme="dark"] .status-badge.prem, 
-[data-theme="dark"] .status-badge.premium {
-    background-color: #451a03 !important; 
-    background: #451a03 !important; /* زيادة تأكيد */
-    color: #fbbf24 !important; 
+/* هذا لتثبيت شكل البادج فوق كما ظهر في الصورة */
+[data-theme="dark"] .status-badge.prem {
+    background-color: #451a03 !important;
+    color: #fbbf24 !important;
     border: 1px solid #92400e !important;
-    display: inline-block !important; /* لضمان ظهور الخلفية */
+    padding: 2px 5px !important; /* لضمان الحجم */
+}
+
+/* هذا لإعادة إحياء زر السي مور بالأسفل */
+[data-theme="dark"] a[onclick*="prem"] {
+    display: inline-block !important;
+    background-color: #451a03 !important; /* نفس اللون */
+    color: #fbbf24 !important;
+    border: 1px solid #92400e !important;
+    padding: 6px 15px !important; /* الحشوة الأكبر للزر */
+    border-radius: 6px !important;
 }
 
 
