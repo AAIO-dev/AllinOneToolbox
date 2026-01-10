@@ -463,22 +463,20 @@ color: #7dd3fc !important; /* أزرق فاتح جداً للوضوح */
 border: 1px solid rgba(125, 211, 252, 0.3) !important;
 }
 
-[data-theme="dark"] .status-badge.prem {
-background-color:#451a03 !important; /* بني ذهبي غامق */
-color: #fbbf24 !important; /* ذهبي ساطع للوضوح */
-border: 1px solid #92400e !important;
-}
-
 [data-theme="dark"] a[onclick*="free"] {
 background-color: rgba(3, 105, 161, 0.2) !important; /* أزرق شفاف ليتناسب مع السواد */
 color: #7dd3fc !important; /* أزرق فاتح جداً للوضوح */
 border: 1px solid rgba(125, 211, 252, 0.3) !important;
 }
 
-[data-theme="dark"] a[onclick*="prem"] {
-background-color: #451a03 !important; /* بني ذهبي غامق */
-color: #fbbf24 !important;
-border: 1px solid #92400e !important;
+/* هذا الكود سيجبر البريميوم على التلون مهما كان اسمه */
+[data-theme="dark"] .status-badge.prem, 
+[data-theme="dark"] .status-badge.premium {
+    background-color: #451a03 !important; 
+    background: #451a03 !important; /* زيادة تأكيد */
+    color: #fbbf24 !important; 
+    border: 1px solid #92400e !important;
+    display: inline-block !important; /* لضمان ظهور الخلفية */
 }
 
 
