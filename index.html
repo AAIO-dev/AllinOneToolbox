@@ -734,7 +734,7 @@ const targetContainer = document.getElementById(containerID);
                 console.log("تم العثور على حاوية لـ:", groupName);
                 const cardHTML = `
     <div class="tool-card" tabindex="0">
-        <h3 class="card-title" data-key="${groupName}" data-original="${groupName}">${groupName}</h3>
+        <h3 class="card-title" data-key="${groupName.replace(/\bAI\b/g, '').trim()}" data-original="${groupName.replace(/\bAI\b/g, '').trim()}">${groupName.replace(/\bAI\b/g, '').trim()}</h3>
         <div class="button-group">
             <div class="item-wrapper">
                 <a href="${mainFree?.url || '#'}" target="_blank" class="btn btn-purple">${mainFree?.name || 'N/A'}</a>
