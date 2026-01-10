@@ -311,7 +311,7 @@ body {
     transform: rotate(5deg) scale(1.1); /* ميلان خفيف وتكبير */
 }
 
-/* تنسيق النصوص بجانب الأيقونات (مثل FREE و PREM) */
+
 /* تحويل الحاوية البيضاء إلى حاوية زجاجية فخمة */
 .item-wrapper {
     display: flex;
@@ -435,25 +435,24 @@ color: #0369a1 !important;
 border: 1px solid #bae6fd !important;
 }
 
-/* 3. تلوين شارة PREM بالذهبي البرتقالي */
-
-[data-theme="light"] .status-badge.prem {
-background-color: #fffbeb !important;
-color: #d97706 !important; /* برتقالي ذهبي للربح */
-border-color: #fef3c7 !important;
-}
-
 [data-theme="light"] a[onclick*="free"] {
 background-color: #e0f2fe !important;
 color: #0369a1 !important;
 border: 1px solid #bae6fd !important;
 }
 
+[data-theme="light"] .status-badge.prem {
+background-color: #fffbeb !important;
+color: #d97706 !important; /* برتقالي ذهبي للربح */
+border: #fef3c7 !important;
+}
+
 [data-theme="light"] a[onclick*="prem"] {
 background-color: #fffbeb !important;
 color: #d97706 !important; /* برتقالي ذهبي للربح */
-border-color: #fef3c7 !important;
+border: #fef3c7 !important;
 }
+
 
 
 
