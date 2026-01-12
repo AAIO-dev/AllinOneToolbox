@@ -744,6 +744,8 @@ input:checked + .slider.round:before {
         flex-direction: column !important; 
         align-items: center !important;
         padding: 0px !important;
+        width: 100vw !important;  /* إجبار العرض على حجم الشاشة بدقة */
+        overflow-x: hidden !important; /* قفل أي خروج جانبي داخل هذه الحاوية */
     }
     body .header {
         padding: 20px 10px !important; /* تقليل الحشو لرفع المحتوى للأعلى */
@@ -774,8 +776,9 @@ input:checked + .slider.round:before {
     /* تعديل مكان النبضة الثانية في الهاتف */
     .header-pulse {
         bottom: 30px !important; 
-        width: 130% !important; /* تقليل العرض قليلاً ليناسب الشاشة الصغيرة */
-        left: -15% !important;   /* موازنة العرض الجديد في المنتصف */
+        width: 100% !important; /* تقليل العرض قليلاً ليناسب الشاشة الصغيرة */
+        left: 0 !important;   /* موازنة العرض الجديد في المنتصف */
+        transform: none !important;
     }
 
     .column {
@@ -836,9 +839,12 @@ input:checked + .slider.round:before {
     align-items: center;
     justify-content: center;
     gap: 10px;
-    padding: 10px 0 !important; /* تم تقليلها لتصغير المساحة */
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 15px !important; /* تم تقليلها لتصغير المساحة */
     background: transparent;    /* تم إلغاء المربعات الخفيفة */
     border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* فاصل أنيق */
+    overflow: hidden;
 }
 .column .tool-card {
     display: none !important;
