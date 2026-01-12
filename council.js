@@ -199,3 +199,17 @@ function spawnThought() {
 
 // لزيادة الكثافة: نطلق ومضة كل 1.5 ثانية بدلاً من 4، مما يجعل 3-4 ومضات تظهر معاً في نفس اللحظة
 setInterval(spawnThought, 1500);
+
+function testCapture() {
+    const chatWindow = document.getElementById('chat-window');
+    if (chatWindow) {
+        console.log("تم العثور على نافذة المحادثة بنجاح!");
+        console.log("محتوى المحادثة الحالي هو:", chatWindow.innerText);
+        alert("تم قراءة النص بنجاح، تفقد الـ Console في المتصفح");
+    } else {
+        alert("خطأ: لم نجد عنصر chat-window!");
+    }
+}
+
+// ربط مؤقت للزر للتجربة
+document.getElementById('full-export-btn').onclick = testCapture;
