@@ -207,65 +207,67 @@ function spawnThought() {
 setInterval(spawnThought, 1500);
 
 // --- كود تصدير المحادثة الملكي (PDF) ---
+// --- وظيفة تصدير المحادثة إلى PDF بلمسات AAIO الملكية ---
 async function exportCouncilPDF() {
     const chatWindow = document.getElementById('chat-window');
     const exportBtn = document.getElementById('full-export-btn');
 
-    // 1. فحص إذا كانت هناك محادثة أصلاً
+    // منع التصدير إذا كانت النافذة فارغة
     if (chatWindow.children.length === 0) {
-        alert("المجلس لم ينطق بعد! ابدأ نقاشاً أولاً لتتمكن من تصديره.");
+        alert("المجلس صامت! ابدأ نقاشاً أولاً لتتمكن من تصديره.");
         return;
     }
 
-    // 2. إظهار حالة التحميل على الزر
-    const originalContent = exportBtn.innerHTML;
+    // إظهار حالة التحميل على الزر
+    const originalBtnContent = exportBtn.innerHTML;
     exportBtn.innerHTML = "⏳";
     exportBtn.style.opacity = "0.6";
 
     try {
-        // خيارات التقاط الشاشة (Snapshot) لضمان سلامة الخط العربي والتنسيق
+        // إعدادات التصدير وتعدد الصفحات
         const options = {
-            margin: [15, 15, 15, 15], // هوامش الصفحة
-            filename: `AAIO_Council_${new Date().toLocaleDateString()}.pdf`,
+            margin: [15, 15, 15, 15],
+            filename: `AAIO_Council_Discussion_${new Date().getTime()}.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { 
                 scale: 2, 
-                useCORS: true, 
-                letterRendering: true,
-                backgroundColor: "#1a1a2e" // لون خلفية الموقع لضمان التناسق
+                useCORS: true,
+                backgroundColor: "#1a1a2e" 
             },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
         };
 
-        // 3. بناء هيكل الـ PDF بلمساتك الفنية (ذهبي وبنفسجي)
-        const element = document.createElement('div');
-        element.style.padding = "20px";
-        element.style.color = "#ffffff";
-        element.style.direction = "rtl"; // لضمان اتجاه المحتوى العربي
+        // بناء "القالب الملكي" للـ PDF
+        const pdfTemplate = document.createElement('div');
+        pdfTemplate.style.padding = "15px";
+        pdfTemplate.style.color = "#ffffff";
+        pdfTemplate.style.backgroundColor = "#1a1a2e";
+        pdfTemplate.style.direction = "rtl";
         
-        element.innerHTML = `
-            <div style="border-right: 5px solid #d4af37; border-left: 2px solid #a29bfe; padding: 10px; margin-bottom: 20px;">
-                <h1 style="color: #d4af37; font-size: 24px; margin: 0;">AAIO Council</h1>
-                <p style="color: #a29bfe; font-size: 14px; margin: 5px 0;">Official Discussion Transcript</p>
+        pdfTemplate.innerHTML = `
+            <div style="border-right: 6px solid #d4af37; border-left: 2px solid #a29bfe; padding: 15px; margin-bottom: 30px; background: rgba(255,255,255,0.05);">
+                <h1 style="color: #d4af37; margin:0; font-size: 26px; font-family: sans-serif;">AAIO ADVISORY COUNCIL</h1>
+                <p style="color: #a29bfe; margin:5px 0; font-size: 14px;">وثيقة رسمية مفرغة من نقاشات المجلس الاستشاري</p>
             </div>
-            <div style="opacity: 0.05; position: absolute; top: 40%; left: 20%; font-size: 100px; transform: rotate(-45deg); pointer-events: none;">
+            <div style="position: fixed; top: 50%; left: 20%; font-size: 120px; color: rgba(255,255,255,0.03); transform: rotate(-45deg); pointer-events: none; z-index: -1;">
                 AAIO
             </div>
             ${chatWindow.innerHTML}
         `;
 
-        // 4. تنفيذ التصدير
-        await html2pdf().set(options).from(element).save();
+        // تنفيذ عملية التحويل والتحميل
+        await html2pdf().set(options).from(pdfTemplate).save();
 
     } catch (error) {
-        console.error("Export Error:", error);
-        alert("عذراً، حدث خطأ أثناء تجهيز الملف.");
+        console.error("PDF Export Error:", error);
+        alert("عذراً، حدث خطأ تقني أثناء تجهيز الوثيقة.");
     } finally {
-        // 5. إعادة الزر لحالته الطبيعية
-        exportBtn.innerHTML = originalContent;
+        // إعادة الزر لحالته الطبيعية
+        exportBtn.innerHTML = originalBtnContent;
         exportBtn.style.opacity = "1";
     }
 }
 
-// ربط الزر بالدالة الجديدة
+// ربط الزر بالوظيفة الجديدة
 document.getElementById('full-export-btn').onclick = exportCouncilPDF;
