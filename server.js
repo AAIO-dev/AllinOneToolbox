@@ -114,6 +114,8 @@ app.post('/api/ask-gemini', async (req, res) => {
         const historyText = await getRecentHistory(sessionId);
         
         const finalPrompt = `
+${UNIFIED_PROMPT}
+---
 Council History:
 ${historyText}
 ---
@@ -160,6 +162,8 @@ app.post('/api/ask-perplexity', async (req, res) => {
         const historyText = await getRecentHistory(sessionId);
         
         const finalPrompt = `
+${UNIFIED_PROMPT}
+---
 Council History:
 ${historyText}
 ---
@@ -207,6 +211,8 @@ app.post('/api/ask-chatgpt', async (req, res) => {
         const historyText = await getRecentHistory(sessionId); 
         
         const finalPrompt = `
+${UNIFIED_PROMPT}
+---
 Council History:
 ${historyText}
 ---
@@ -252,6 +258,8 @@ app.post('/api/ask-deepseek', async (req, res) => {
         const historyText = await getRecentHistory(sessionId);
         
         const finalPrompt = `
+${UNIFIED_PROMPT}
+---
 Council History:
 ${historyText}
 ---
@@ -298,6 +306,8 @@ app.post('/api/ask-claude', async (req, res) => {
         
         // أضفنا تنبيهاً صارماً هنا لأن كلاود يميل أحياناً للغة العربية بناءً على تدريبه السابق
         const finalPrompt = `
+${UNIFIED_PROMPT}
+---
 Council History:
 ${historyText}
 ---
@@ -334,6 +344,78 @@ Note: You MUST respond in the exact same language used in the User Query above. 
     } catch (error) {
         console.error("❌ Claude Error:", error.response?.data || error.message);
         res.status(500).json({ error: "Claude Service Unavailable" });
+    }
+});
+
+// --- Llama 3.1 Advisor (via Groq) ---
+app.post('/api/ask-llama', async (req, res) => {
+    const { prompt, sessionId } = req.body;
+    try {
+        const historyText = await getRecentHistory(sessionId);
+        const finalPrompt = `
+${UNIFIED_PROMPT}
+---
+Council History:
+${historyText}
+---
+User Query: ${prompt}
+Note: Respond in the same language as the User Query.
+`;
+
+        const response = await axios.post('https://api.groq.com/openai/v1/chat/completions', {
+            model: "llama-3.1-70b-versatile",
+            messages: [
+                { role: "system", content: UNIFIED_PROMPT },
+                { role: "user", content: finalPrompt }
+            ]
+        }, {
+            headers: { 'Authorization': `Bearer ${process.env.GROQ_API_KEY}` }
+        });
+
+        const reply = response.data.choices[0].message.content;
+        await client.db("AAIO-Memory").collection("chat_history").insertOne({
+            sessionId, advisor: "Llama", userPrompt: prompt, botReply: reply, timestamp: new Date()
+        });
+        res.json({ reply });
+    } catch (error) {
+        console.error("❌ Llama Error:", error.message);
+        res.status(500).json({ error: "Llama Service Unavailable" });
+    }
+});
+
+// --- Mistral Large Advisor ---
+app.post('/api/ask-mistral', async (req, res) => {
+    const { prompt, sessionId } = req.body;
+    try {
+        const historyText = await getRecentHistory(sessionId);
+        const finalPrompt = `
+${UNIFIED_PROMPT}
+---
+Council History:
+${historyText}
+---
+User Query: ${prompt}
+Note: Respond in the same language as the User Query.
+`;
+
+        const response = await axios.post('https://api.mistral.ai/v1/chat/completions', {
+            model: "mistral-large-latest",
+            messages: [
+                { role: "system", content: UNIFIED_PROMPT },
+                { role: "user", content: finalPrompt }
+            ]
+        }, {
+            headers: { 'Authorization': `Bearer ${process.env.MISTRAL_API_KEY}` }
+        });
+
+        const reply = response.data.choices[0].message.content;
+        await client.db("AAIO-Memory").collection("chat_history").insertOne({
+            sessionId, advisor: "Mistral", userPrompt: prompt, botReply: reply, timestamp: new Date()
+        });
+        res.json({ reply });
+    } catch (error) {
+        console.error("❌ Mistral Error:", error.message);
+        res.status(500).json({ error: "Mistral Service Unavailable" });
     }
 });
 

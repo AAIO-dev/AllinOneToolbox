@@ -26,7 +26,9 @@ const councilMembers = [
     { id: 'chatgpt', name: 'ChatGPT', logo: 'logos/chatgpt.png', style: 'chatgpt-msg' },
     { id: 'claude', name: 'Claude', logo: 'logos/claude.png', style: 'claude-msg' },
     { id: 'deepseek', name: 'DeepSeek', logo: 'logos/deepseek.png', style: 'deepseek-msg' },
-    { id: 'perplexity', name: 'Perplexity', logo: 'logos/perplexity.png', style: 'perplexity-msg' }
+    { id: 'perplexity', name: 'Perplexity', logo: 'logos/perplexity.png', style: 'perplexity-msg' },
+    { id: 'llama', name: 'Llama', logo: 'logos/llama.png', style: 'llama-msg' }, // العضو الجديد
+    { id: 'mistral', name: 'Mistral', logo: 'logos/mistral.png', style: 'mistral-msg' } // العضو الجديد
 ];
 
 let conversationHistory = [];
@@ -105,6 +107,8 @@ async function generateCouncilResponse(name, history) {
     if (name === "Perplexity") return await callPerplexity(finalPrompt);
     if (name === "Claude") return await callClaude(finalPrompt);
     if (name === "Gemini") return await callGemini(finalPrompt);
+    if (name === "Llama") return await callLlama(finalPrompt);   // إضافة
+    if (name === "Mistral") return await callMistral(finalPrompt); // إضافة
 
     return "Unknown Advisor";
 }
@@ -115,6 +119,8 @@ async function callChatGPT(prompt) { return await sendToServer('ask-chatgpt', pr
 async function callDeepSeek(prompt) { return await sendToServer('ask-deepseek', prompt, "DeepSeek"); }
 async function callClaude(prompt) { return await sendToServer('ask-claude', prompt, "Claude"); }
 async function callPerplexity(prompt) { return await sendToServer('ask-perplexity', prompt, "Perplexity"); }
+async function callLlama(prompt) { return await sendToServer('ask-llama', prompt, "Llama"); }
+async function callMistral(prompt) { return await sendToServer('ask-mistral', prompt, "Mistral"); }
 
 // 1. الدالة المساعدة للاتصال بالسيرفر (سنحتاجها غداً بقوة)
 async function sendToServer(endpoint, prompt, name) {
