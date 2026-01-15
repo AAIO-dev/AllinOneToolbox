@@ -206,16 +206,66 @@ function spawnThought() {
 // لزيادة الكثافة: نطلق ومضة كل 1.5 ثانية بدلاً من 4، مما يجعل 3-4 ومضات تظهر معاً في نفس اللحظة
 setInterval(spawnThought, 1500);
 
-function testCapture() {
+// --- كود تصدير المحادثة الملكي (PDF) ---
+async function exportCouncilPDF() {
     const chatWindow = document.getElementById('chat-window');
-    if (chatWindow) {
-        console.log("تم العثور على نافذة المحادثة بنجاح!");
-        console.log("محتوى المحادثة الحالي هو:", chatWindow.innerText);
-        alert("تم قراءة النص بنجاح، تفقد الـ Console في المتصفح");
-    } else {
-        alert("خطأ: لم نجد عنصر chat-window!");
+    const exportBtn = document.getElementById('full-export-btn');
+
+    // 1. فحص إذا كانت هناك محادثة أصلاً
+    if (chatWindow.children.length === 0) {
+        alert("المجلس لم ينطق بعد! ابدأ نقاشاً أولاً لتتمكن من تصديره.");
+        return;
+    }
+
+    // 2. إظهار حالة التحميل على الزر
+    const originalContent = exportBtn.innerHTML;
+    exportBtn.innerHTML = "⏳";
+    exportBtn.style.opacity = "0.6";
+
+    try {
+        // خيارات التقاط الشاشة (Snapshot) لضمان سلامة الخط العربي والتنسيق
+        const options = {
+            margin: [15, 15, 15, 15], // هوامش الصفحة
+            filename: `AAIO_Council_${new Date().toLocaleDateString()}.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { 
+                scale: 2, 
+                useCORS: true, 
+                letterRendering: true,
+                backgroundColor: "#1a1a2e" // لون خلفية الموقع لضمان التناسق
+            },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        // 3. بناء هيكل الـ PDF بلمساتك الفنية (ذهبي وبنفسجي)
+        const element = document.createElement('div');
+        element.style.padding = "20px";
+        element.style.color = "#ffffff";
+        element.style.direction = "rtl"; // لضمان اتجاه المحتوى العربي
+        
+        element.innerHTML = `
+            <div style="border-right: 5px solid #d4af37; border-left: 2px solid #a29bfe; padding: 10px; margin-bottom: 20px;">
+                <h1 style="color: #d4af37; font-size: 24px; margin: 0;">AAIO Council</h1>
+                <p style="color: #a29bfe; font-size: 14px; margin: 5px 0;">Official Discussion Transcript</p>
+            </div>
+            <div style="opacity: 0.05; position: absolute; top: 40%; left: 20%; font-size: 100px; transform: rotate(-45deg); pointer-events: none;">
+                AAIO
+            </div>
+            ${chatWindow.innerHTML}
+        `;
+
+        // 4. تنفيذ التصدير
+        await html2pdf().set(options).from(element).save();
+
+    } catch (error) {
+        console.error("Export Error:", error);
+        alert("عذراً، حدث خطأ أثناء تجهيز الملف.");
+    } finally {
+        // 5. إعادة الزر لحالته الطبيعية
+        exportBtn.innerHTML = originalContent;
+        exportBtn.style.opacity = "1";
     }
 }
 
-// ربط مؤقت للزر للتجربة
-document.getElementById('full-export-btn').onclick = testCapture;
+// ربط الزر بالدالة الجديدة
+document.getElementById('full-export-btn').onclick = exportCouncilPDF;
