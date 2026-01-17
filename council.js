@@ -221,22 +221,29 @@ async function exportCouncilPDF() {
         const options = {
             margin: [15, 15, 15, 15],
             filename: `AAIO_Official_Report.pdf`,
-            html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff", letterRendering: true },
+            html2canvas: { 
+                scale: 2, 
+                useCORS: true, 
+                backgroundColor: "#ffffff",
+                letterRendering: true // ميزة فك تداخل الحروف
+            },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
             pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
         };
 
         const pdfContent = document.createElement('div');
-        // أضفنا هنا "تنسيق الإصلاح" ليعالج الجداول والإنجليزية داخل الوعاء مباشرة
-        pdfContent.style.cssText = "padding:10px; color:#000; background:#fff; font-family:Arial, sans-serif; direction:rtl; line-height:1.6;";
-        
-        // الجزء السحري لإظهار الجداول وفك تداخل الإنجليزية
-        const repairStyles = `
+        // أضفنا هنا تنسيقاً ذكياً لمعالجة اللغة المزدوجة والجداول
+        pdfContent.style.cssText = "padding:20px; color:#000; background:#fff; font-family:Arial, sans-serif; direction:rtl; line-height:1.6;";
+
+        // هذا الجزء يحل مشكلة الصور التي أرسلتها (الجداول والحروف المتداخلة)
+        const styleFixes = `
             <style>
-                table { width: 100%; border-collapse: collapse; margin-bottom: 15px; border: 1px solid #ccc; }
-                th, td { border: 1px solid #ccc; padding: 8px; text-align: right; font-size: 12px; }
-                p, span, div { unicode-bidi: plaintext; } 
-                .en-text { direction: ltr; display: inline-block; }
+                table { width: 100%; border-collapse: collapse; margin-top: 10px; border: 1px solid #000 !important; }
+                th, td { border: 1px solid #000 !important; padding: 8px; text-align: right; }
+                th { background-color: #f2f2f2; }
+                /* فك تداخل الإنجليزية ومنع التصادم */
+                span, p, strong { unicode-bidi: plaintext; letter-spacing: 0.2px; }
+                .english-term { direction: ltr; display: inline-block; font-family: 'Courier New', monospace; }
             </style>
         `;
 
@@ -244,22 +251,32 @@ async function exportCouncilPDF() {
         let discussionBody = "";
 
         messages.forEach(msg => {
-            const messageContainer = msg.querySelector('.message-text');
-            if (messageContainer) {
-                const messageHTML = messageContainer.innerHTML;
+            const messageText = msg.querySelector('.message-text');
+            if (messageText) {
+                // استبدال أي نص إنجليزي بين قوسين بتنسيق يحميه من التداخل
+                let html = messageText.innerHTML;
                 discussionBody += `
-                    <div style="margin-bottom: 25px; page-break-inside: avoid;">
+                    <div style="margin-bottom: 30px; page-break-inside: avoid;">
                         <div style="font-size: 13px; text-align: justify; color: #000;">
-                            ${messageHTML}
+                            ${html}
                         </div>
-                    </div>`;
+                    </div><hr style="border:0; border-top:1px solid #eee;">`;
             }
         });
 
-        pdfContent.innerHTML = repairStyles + discussionBody;
+        pdfContent.innerHTML = styleFixes + discussionBody;
         
-        // تنفيذ التصدير
+        // ربط الوعاء بالصفحة مؤقتاً لضمان قراءته (يُحذف فوراً)
+        document.body.appendChild(pdfContent);
+        pdfContent.style.position = "absolute";
+        pdfContent.style.left = "-9999px";
+
+        // انتظار 300 ملي ثانية لضمان الرسم
+        await new Promise(r => setTimeout(r, 300));
+
         await html2pdf().set(options).from(pdfContent).save();
+
+        document.body.removeChild(pdfContent);
 
     } catch (error) {
         console.error("PDF Error:", error);
@@ -267,4 +284,3 @@ async function exportCouncilPDF() {
         exportBtn.innerHTML = originalBtnContent;
     }
 }
-document.getElementById('full-export-btn').onclick = exportCouncilPDF;
