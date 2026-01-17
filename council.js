@@ -212,51 +212,49 @@ async function exportCouncilPDF() {
     const chatWindow = document.getElementById('chat-window');
     const exportBtn = document.getElementById('full-export-btn');
 
-    if (!chatWindow) return alert("لم يتم العثور على نافذة المحادثة!");
+    if (chatWindow.children.length === 0) return alert("المجلس صامت!");
 
-    // حفظ حالة الزر
-    const originalBtn = exportBtn.innerHTML;
+    const originalBtnContent = exportBtn.innerHTML;
     exportBtn.innerHTML = "⏳";
 
     try {
-        // إنشاء حاوية "بيضاء" تماماً تشبه صفحة الوورد
-        const printContainer = document.createElement('div');
-        printContainer.style.cssText = "padding:20px; background:#fff; color:#000; font-family:Arial; direction:rtl; text-align:right;";
-
-        // استخلاص كل الرسائل ونقل محتواها (الهيكلي) فقط
-        const messages = chatWindow.querySelectorAll('.council-message');
-        
-        messages.forEach(msg => {
-            const content = msg.querySelector('.message-text')?.innerHTML || "";
-            
-            const section = document.createElement('div');
-            section.style.marginBottom = "30px";
-            // هنا ننقل المحتوى كما هو (كأننا قمنا باللصق في نوتيون)
-            section.innerHTML = content;
-            
-            // التأكد من أن كل النصوص داخل هذا القسم سوداء للرؤية
-            section.querySelectorAll('*').forEach(el => {
-                el.style.color = "black";
-                el.style.backgroundColor = "transparent";
-            });
-
-            printContainer.appendChild(section);
-        });
-
         const options = {
-            margin: [10, 10, 10, 10],
-            filename: 'Word_Style_Test.pdf',
-            html2canvas: { scale: 2, useCORS: true },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            margin: [15, 15, 15, 15],
+            filename: `AAIO_Official_Report.pdf`,
+            html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff" },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
         };
 
-        // تنفيذ عملية التصدير من الحاوية الجديدة
-        await html2pdf().set(options).from(printContainer).save();
+        // إنشاء وعاء أبيض بسيط جداً بدون أي ترويسة أو زخارف
+        const pdfContent = document.createElement('div');
+        pdfContent.style.cssText = "padding:10px; color:#000; background:#fff; font-family:Arial; direction:rtl; line-height:1.4;";
+
+        const messages = chatWindow.querySelectorAll('.council-message');
+        let discussionBody = "";
+
+        messages.forEach(msg => {
+            // استخراج المحتوى الهيكلي (النصوص، الجداول، النقاط) كما هي في الموقع
+            const messageHTML = msg.querySelector('.message-text')?.innerHTML || msg.innerHTML;
+
+            // إضافة المحتوى في أقسام بسيطة مفصولة بمسافة فقط
+            discussionBody += `
+                <div style="margin-bottom: 25px; page-break-inside: avoid;">
+                    <div style="font-size: 13px; text-align: justify; color: #000;">
+                        ${messageHTML}
+                    </div>
+                </div>`;
+        });
+
+        pdfContent.innerHTML = discussionBody;
+        
+        // تنفيذ التصدير من الحاوية التي تحتوي على "البيانات" فقط
+        await html2pdf().set(options).from(pdfContent).save();
 
     } catch (error) {
-        console.error("Export Error:", error);
+        console.error("PDF Error:", error);
     } finally {
-        exportBtn.innerHTML = originalBtn;
+        exportBtn.innerHTML = originalBtnContent;
     }
 }
 document.getElementById('full-export-btn').onclick = exportCouncilPDF;
