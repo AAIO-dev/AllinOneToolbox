@@ -208,64 +208,63 @@ setInterval(spawnThought, 1500);
 
 // --- كود تصدير المحادثة الملكي (PDF) ---
 // --- وظيفة تصدير المحادثة إلى PDF بلمسات AAIO الملكية ---
-function exportCouncilPDF() {
+async function exportCouncilPDF() {
     const chatWindow = document.getElementById('chat-window');
-    if (!chatWindow || chatWindow.children.length === 0) return alert("المجلس صامت!");
+    const exportBtn = document.getElementById('full-export-btn');
 
-    // 1. فتح نافذة جديدة للطباعة
-    const printWindow = window.open('', '_blank', 'height=600,width=800');
+    if (chatWindow.children.length === 0) return alert("المجلس صامت!");
 
-    // 2. تجهيز المحتوى بتنسيق "نوتيون" نظيف
-    let content = "";
-    const messages = chatWindow.querySelectorAll('.council-message');
-    
-    messages.forEach(msg => {
-        const textHTML = msg.querySelector('.message-text')?.innerHTML || "";
-        content += `<div class="message-block">${textHTML}</div><hr>`;
-    });
+    const originalBtnContent = exportBtn.innerHTML;
+    exportBtn.innerHTML = "⏳";
 
-    // 3. كتابة محتوى النافذة مع CSS ذكي للطباعة
-    printWindow.document.write(`
-        <html dir="rtl">
-        <head>
-            <title>تقرير مجلس AAIO الاستشاري</title>
+    try {
+        const options = {
+            margin: [15, 15, 15, 15],
+            filename: `AAIO_Official_Report.pdf`,
+            html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff", letterRendering: true },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+        };
+
+        const pdfContent = document.createElement('div');
+        // أضفنا هنا "تنسيق الإصلاح" ليعالج الجداول والإنجليزية داخل الوعاء مباشرة
+        pdfContent.style.cssText = "padding:10px; color:#000; background:#fff; font-family:Arial, sans-serif; direction:rtl; line-height:1.6;";
+        
+        // الجزء السحري لإظهار الجداول وفك تداخل الإنجليزية
+        const repairStyles = `
             <style>
-                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 40px; color: #000; background: #fff; line-height: 1.6; }
-                .message-block { margin-bottom: 20px; text-align: justify; }
-                hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
-                
-                /* تنسيق الجداول لتبدو مثل نوتيون */
-                table { width: 100%; border-collapse: collapse; margin: 15px 0; }
-                th, td { border: 1px solid #ddd; padding: 12px; text-align: right; }
-                th { background-color: #f9f9f9; }
-
-                /* حل مشكلة تداخل الإنجليزية */
-                span, p, td { unicode-bidi: plaintext; }
-                
-                @media print {
-                    body { padding: 0; }
-                    button { display: none; }
-                }
+                table { width: 100%; border-collapse: collapse; margin-bottom: 15px; border: 1px solid #ccc; }
+                th, td { border: 1px solid #ccc; padding: 8px; text-align: right; font-size: 12px; }
+                p, span, div { unicode-bidi: plaintext; } 
+                .en-text { direction: ltr; display: inline-block; }
             </style>
-        </head>
-        <body>
-            <h1 style="text-align:center; color:#1a1a2e;">تقرير مداولات مجلس AAIO</h1>
-            <p style="text-align:center; color:#666;">بتاريخ: ${new Date().toLocaleDateString('ar-SA')}</p>
-            <hr style="border-top: 2px solid #000;">
-            ${content}
-            <script>
-                // انتظر قليلاً لضمان تحميل النصوص ثم افتح نافذة الطباعة
-                setTimeout(() => {
-                    window.print();
-                    window.close();
-                }, 500);
-            </script>
-        </body>
-        </html>
-    `);
+        `;
 
-    printWindow.document.close();
+        const messages = chatWindow.querySelectorAll('.council-message');
+        let discussionBody = "";
+
+        messages.forEach(msg => {
+            const messageContainer = msg.querySelector('.message-text');
+            if (messageContainer) {
+                const messageHTML = messageContainer.innerHTML;
+                discussionBody += `
+                    <div style="margin-bottom: 25px; page-break-inside: avoid;">
+                        <div style="font-size: 13px; text-align: justify; color: #000;">
+                            ${messageHTML}
+                        </div>
+                    </div>`;
+            }
+        });
+
+        pdfContent.innerHTML = repairStyles + discussionBody;
+        
+        // تنفيذ التصدير
+        await html2pdf().set(options).from(pdfContent).save();
+
+    } catch (error) {
+        console.error("PDF Error:", error);
+    } finally {
+        exportBtn.innerHTML = originalBtnContent;
+    }
 }
-
-// ربط الزر بالدالة
 document.getElementById('full-export-btn').onclick = exportCouncilPDF;
