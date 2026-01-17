@@ -210,24 +210,53 @@ setInterval(spawnThought, 1500);
 // --- وظيفة تصدير المحادثة إلى PDF بلمسات AAIO الملكية ---
 async function exportCouncilPDF() {
     const chatWindow = document.getElementById('chat-window');
-    
-    // 1. أخذ نسخة طبق الأصل من نافذة المحادثة
-    const clone = chatWindow.cloneNode(true);
+    const exportBtn = document.getElementById('full-export-btn');
 
-    // 2. مسح أي تنسيقات داكنة برمجياً لجعل النص يظهر (لأن الخلفية في الـ PDF بيضاء)
-    clone.querySelectorAll('*').forEach(el => {
-        el.style.color = 'black';
-        el.style.backgroundColor = 'transparent';
-    });
+    if (!chatWindow) return alert("لم يتم العثور على نافذة المحادثة!");
 
-    const options = {
-        margin: [10, 10, 10, 10],
-        filename: 'Test_Transfer.pdf',
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
+    // حفظ حالة الزر
+    const originalBtn = exportBtn.innerHTML;
+    exportBtn.innerHTML = "⏳";
 
-    // 3. تصدير النسخة كما هي
-    await html2pdf().set(options).from(clone).save();
+    try {
+        // إنشاء حاوية "بيضاء" تماماً تشبه صفحة الوورد
+        const printContainer = document.createElement('div');
+        printContainer.style.cssText = "padding:20px; background:#fff; color:#000; font-family:Arial; direction:rtl; text-align:right;";
+
+        // استخلاص كل الرسائل ونقل محتواها (الهيكلي) فقط
+        const messages = chatWindow.querySelectorAll('.council-message');
+        
+        messages.forEach(msg => {
+            const content = msg.querySelector('.message-text')?.innerHTML || "";
+            
+            const section = document.createElement('div');
+            section.style.marginBottom = "30px";
+            // هنا ننقل المحتوى كما هو (كأننا قمنا باللصق في نوتيون)
+            section.innerHTML = content;
+            
+            // التأكد من أن كل النصوص داخل هذا القسم سوداء للرؤية
+            section.querySelectorAll('*').forEach(el => {
+                el.style.color = "black";
+                el.style.backgroundColor = "transparent";
+            });
+
+            printContainer.appendChild(section);
+        });
+
+        const options = {
+            margin: [10, 10, 10, 10],
+            filename: 'Word_Style_Test.pdf',
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        // تنفيذ عملية التصدير من الحاوية الجديدة
+        await html2pdf().set(options).from(printContainer).save();
+
+    } catch (error) {
+        console.error("Export Error:", error);
+    } finally {
+        exportBtn.innerHTML = originalBtn;
+    }
 }
 document.getElementById('full-export-btn').onclick = exportCouncilPDF;
