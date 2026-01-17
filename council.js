@@ -212,7 +212,7 @@ async function exportCouncilPDF() {
     const chatWindow = document.getElementById('chat-window');
     const exportBtn = document.getElementById('full-export-btn');
 
-    if (!chatWindow || chatWindow.children.length === 0) return alert("المجلس صامت!");
+    if (chatWindow.children.length === 0) return alert("المجلس صامت!");
 
     const originalBtnContent = exportBtn.innerHTML;
     exportBtn.innerHTML = "⏳";
@@ -227,13 +227,12 @@ async function exportCouncilPDF() {
         };
 
         const pdfContent = document.createElement('div');
-        // تم تقليل المسافة بين الأسطر لتماسك النص
-        pdfContent.style.cssText = "padding:10px; color:#000; background:#fff; font-family:Arial, sans-serif; direction:rtl; line-height:1.4;";
+        pdfContent.style.cssText = "padding:10px; color:#000; background:#fff; font-family:Arial; direction:rtl; line-height:1.8;";
 
         let htmlHeader = `
-            <div style="border-right: 5px solid #d4af37; padding: 10px; margin-bottom: 25px;">
-                <h1 style="margin:0; color:#1a1a2e; font-size:22px;">AAIO ADVISORY COUNCIL</h1>
-                <p style="margin:5px 0; color:#666; font-size:11px;">تقرير مفرغ للمداولات الاستشارية - ${new Date().toLocaleDateString('ar-SA')}</p>
+            <div style="border-right: 5px solid #d4af37; padding: 10px; margin-bottom: 40px;">
+                <h1 style="margin:0; color:#1a1a2e; font-size:24px;">AAIO ADVISORY COUNCIL</h1>
+                <p style="margin:5px 0; color:#666; font-size:12px;">تقرير مفرغ للمداولات الاستشارية - ${new Date().toLocaleDateString('ar-SA')}</p>
             </div>
         `;
 
@@ -242,29 +241,25 @@ async function exportCouncilPDF() {
 
         messages.forEach(msg => {
             const isUser = msg.classList.contains('user-message');
-            const messageContainer = msg.querySelector('.message-text');
-            
-            if (!messageContainer) return;
+            // استخراج اسم المستشار الفعلي فقط من الـ attributes أو الـ strong الأولي
+            const senderName = msg.querySelector('strong')?.innerText.split(':')[0] || "المستشار";
+            // استخراج المحتوى مع الحفاظ على التنسيق (النقاط، الفقرات)
+            const messageHTML = msg.querySelector('.message-text')?.innerHTML || msg.innerHTML;
 
             if (isUser) {
-                // تنسيق سؤال المستخدم
                 discussionBody += `
-                    <div style="margin-bottom: 20px; background: #f9f9f9; padding: 12px; border-radius: 5px; border: 1px solid #eee;">
-                        <p style="font-weight: bold; color: #333; margin-bottom: 5px; font-size: 14px;">الموضوع / السؤال المطروح:</p>
-                        <div style="font-size: 14px; font-weight: bold;">${messageContainer.innerHTML}</div>
+                    <div style="margin-bottom: 30px; background: #f9f9f9; padding: 15px; border-radius: 5px;">
+                        <p style="font-weight: bold; color: #333; margin-bottom: 10px;">الموضوع / السؤال المطروح:</p>
+                        <div style="font-size: 16px; font-weight: bold; color: #000;">${messageHTML}</div>
                     </div>`;
             } else {
-                // استخراج اسم المستشار من أول strong فقط لضمان عدم الخلط
-                const firstStrong = messageContainer.querySelector('strong');
-                const senderName = firstStrong ? firstStrong.innerText.replace(':', '') : "مستشار AAIO";
-                
                 discussionBody += `
-                    <div style="margin-bottom: 25px; page-break-inside: avoid;">
-                        <div style="color: #d4af37; font-weight: bold; font-size: 15px; border-bottom: 1px solid #d4af37; padding-bottom: 3px; margin-bottom: 10px;">
+                    <div style="margin-bottom: 35px; page-break-inside: avoid;">
+                        <div style="color: #d4af37; font-weight: bold; font-size: 16px; border-bottom: 1px solid #d4af37; padding-bottom: 5px; margin-bottom: 15px;">
                             ${senderName}
                         </div>
-                        <div style="font-size: 12.5px; text-align: justify; color: #111;">
-                            ${messageContainer.innerHTML}
+                        <div style="font-size: 13px; text-align: justify; padding-right: 10px; color: #222;">
+                            ${messageHTML}
                         </div>
                     </div>`;
             }
