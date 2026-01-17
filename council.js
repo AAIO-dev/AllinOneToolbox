@@ -208,50 +208,54 @@ setInterval(spawnThought, 1500);
 
 // --- كود تصدير المحادثة الملكي (PDF) ---
 // --- وظيفة تصدير المحادثة إلى PDF بلمسات AAIO الملكية ---
-function exportCouncilPDF() {
+async function exportCouncilPDF() {
     const chatWindow = document.getElementById('chat-window');
-    if (!chatWindow || chatWindow.children.length === 0) return alert("المجلس صامت!");
+    const exportBtn = document.getElementById('full-export-btn');
 
-    // 1. استخراج المحتوى
-    const messages = chatWindow.querySelectorAll('.council-message');
-    let reportHTML = "";
-    
-    messages.forEach(msg => {
-        const text = msg.querySelector('.message-text')?.innerHTML || "";
-        reportHTML += `<div class="msg-box">${text}</div><hr>`;
-    });
+    if (chatWindow.children.length === 0) return alert("المجلس صامت!");
 
-    // 2. فتح نافذة طباعة جديدة (تخطي مشاكل الـ Canvas والبياض)
-    const printWin = window.open('', '', 'width=900,height=700');
-    
-    printWin.document.write(`
-        <html dir="rtl">
-        <head>
-            <title>تقرير AAIO الاستشاري</title>
-            <style>
-                body { font-family: 'Arial', sans-serif; padding: 30px; line-height: 1.6; color: #000; background: #fff; }
-                .msg-box { margin-bottom: 20px; text-align: justify; }
-                table { width: 100%; border-collapse: collapse; margin: 15px 0; border: 2px solid #000; }
-                th, td { border: 1px solid #000; padding: 10px; text-align: right; }
-                /* حل مشكلة الإنجليزية */
-                p, span, td { unicode-bidi: plaintext; letter-spacing: 0.5px; }
-                @media print { hr { page-break-after: always; visibility: hidden; } }
-            </style>
-        </head>
-        <body>
-            <h1 style="text-align:center;">تقرير مجلس AAIO الاستشاري</h1>
-            <p style="text-align:center;">بتاريخ: ${new Date().toLocaleDateString('ar-SA')}</p>
-            <hr>
-            ${reportHTML}
-            <script>
-                setTimeout(() => {
-                    window.print();
-                    window.close();
-                }, 500);
-            </script>
-        </body>
-        </html>
-    `);
+    const originalBtnContent = exportBtn.innerHTML;
+    exportBtn.innerHTML = "⏳";
+
+    try {
+        const options = {
+            margin: [15, 15, 15, 15],
+            filename: `AAIO_Official_Report.pdf`,
+            html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff" },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+        };
+
+        // إنشاء وعاء أبيض بسيط جداً بدون أي ترويسة أو زخارف
+        const pdfContent = document.createElement('div');
+        pdfContent.style.cssText = "padding:10px; color:#000; background:#fff; font-family:Arial; direction:rtl; line-height:1.4;";
+
+        const messages = chatWindow.querySelectorAll('.council-message');
+        let discussionBody = "";
+
+        messages.forEach(msg => {
+            // استخراج المحتوى الهيكلي (النصوص، الجداول، النقاط) كما هي في الموقع
+            const messageHTML = msg.querySelector('.message-text')?.innerHTML || msg.innerHTML;
+
+            // إضافة المحتوى في أقسام بسيطة مفصولة بمسافة فقط
+            discussionBody += `
+                <div style="margin-bottom: 25px; page-break-inside: avoid;">
+                    <div style="font-size: 13px; text-align: justify; color: #000;">
+                        ${messageHTML}
+                    </div>
+                </div>`;
+        });
+
+        pdfContent.innerHTML = discussionBody;
+        
+        // تنفيذ التصدير من الحاوية التي تحتوي على "البيانات" فقط
+        await html2pdf().set(options).from(pdfContent).save();
+
+    } catch (error) {
+        console.error("PDF Error:", error);
+    } finally {
+        exportBtn.innerHTML = originalBtnContent;
+    }
     
     printWin.document.close();
 
