@@ -212,62 +212,66 @@ async function exportCouncilPDF() {
     const chatWindow = document.getElementById('chat-window');
     const exportBtn = document.getElementById('full-export-btn');
 
-    // منع التصدير إذا كانت النافذة فارغة
-    if (chatWindow.children.length === 0) {
-        alert("المجلس صامت! ابدأ نقاشاً أولاً لتتمكن من تصديره.");
-        return;
-    }
+    if (chatWindow.children.length === 0) return alert("المجلس صامت!");
 
-    // إظهار حالة التحميل على الزر
     const originalBtnContent = exportBtn.innerHTML;
     exportBtn.innerHTML = "⏳";
-    exportBtn.style.opacity = "0.6";
 
     try {
-        // إعدادات التصدير وتعدد الصفحات
         const options = {
-            margin: [15, 15, 15, 15],
-            filename: `AAIO_Council_Discussion_${new Date().getTime()}.pdf`,
+            margin: [20, 15, 20, 15],
+            filename: `AAIO_Official_Transcript.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { 
-                scale: 2, 
-                useCORS: true,
-                backgroundColor: "#1a1a2e" 
-            },
+            html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff" },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
             pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
         };
 
-        // بناء "القالب الملكي" للـ PDF
-        const pdfTemplate = document.createElement('div');
-        pdfTemplate.style.padding = "15px";
-        pdfTemplate.style.color = "#ffffff";
-        pdfTemplate.style.backgroundColor = "#1a1a2e";
-        pdfTemplate.style.direction = "rtl";
-        
-        pdfTemplate.innerHTML = `
-            <div style="border-right: 6px solid #d4af37; border-left: 2px solid #a29bfe; padding: 15px; margin-bottom: 30px; background: rgba(255,255,255,0.05);">
-                <h1 style="color: #d4af37; margin:0; font-size: 26px; font-family: sans-serif;">AAIO ADVISORY COUNCIL</h1>
-                <p style="color: #a29bfe; margin:5px 0; font-size: 14px;">وثيقة رسمية مفرغة من نقاشات المجلس الاستشاري</p>
+        // بناء قالب الوثيقة الرسمية (خلفية بيضاء ونصوص سوداء)
+        const pdfContent = document.createElement('div');
+        pdfContent.style.cssText = "padding:20px; color:#000000; background:#ffffff; font-family:Arial, sans-serif; direction:rtl; line-height:1.6;";
+
+        // الهوية الرسمية في الأعلى
+        let htmlHeader = `
+            <div style="border-right: 5px solid #d4af37; border-left: 2px solid #a29bfe; padding: 10px; margin-bottom: 30px;">
+                <h1 style="margin:0; color:#1a1a2e; font-size:22px;">AAIO ADVISORY COUNCIL</h1>
+                <p style="margin:5px 0; color:#666; font-size:12px;">وثيقة رسمية مفرغة - ${new Date().toLocaleDateString('ar-SA')}</p>
             </div>
-            <div style="position: fixed; top: 50%; left: 20%; font-size: 120px; color: rgba(255,255,255,0.03); transform: rotate(-45deg); pointer-events: none; z-index: -1;">
-                AAIO
-            </div>
-            ${chatWindow.innerHTML}
+            <div style="position: fixed; top: 40%; left: 15%; font-size: 150px; color: rgba(0,0,0,0.03); transform: rotate(-45deg); pointer-events: none; z-index: -1;">AAIO</div>
         `;
 
-        // تنفيذ عملية التحويل والتحميل
-        await html2pdf().set(options).from(pdfTemplate).save();
+        // استخراج السؤال ومعالجته (أسود وعريض)
+        const messages = chatWindow.querySelectorAll('.council-message');
+        let discussionBody = "";
+
+        messages.forEach(msg => {
+            const isUser = msg.classList.contains('user-message');
+            const senderName = msg.querySelector('strong')?.innerText || "المستشار";
+            const messageText = msg.querySelector('.message-text')?.innerText || msg.innerText;
+
+            if (isUser) {
+                // تنسيق السؤال
+                discussionBody += `<div style="margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
+                                    <p><strong>السؤال:</strong></p>
+                                    <p style="font-size: 16px; font-weight: bold;">${messageText}</p>
+                                   </div>`;
+            } else {
+                // تفريغ رد المستشار (نص تحت اسم)
+                discussionBody += `<div style="margin-bottom: 20px;">
+                                    <p style="color: #d4af37; font-weight: bold; margin-bottom: 5px; font-size: 14px; border-right: 3px solid #d4af37; padding-right: 8px;">${senderName}</p>
+                                    <p style="font-size: 13px; text-align: justify;">${messageText}</p>
+                                   </div>`;
+            }
+        });
+
+        pdfContent.innerHTML = htmlHeader + discussionBody;
+
+        await html2pdf().set(options).from(pdfContent).save();
 
     } catch (error) {
-        console.error("PDF Export Error:", error);
-        alert("عذراً، حدث خطأ تقني أثناء تجهيز الوثيقة.");
+        console.error("PDF Error:", error);
     } finally {
-        // إعادة الزر لحالته الطبيعية
         exportBtn.innerHTML = originalBtnContent;
-        exportBtn.style.opacity = "1";
     }
 }
-
-// ربط الزر بالوظيفة الجديدة
 document.getElementById('full-export-btn').onclick = exportCouncilPDF;
