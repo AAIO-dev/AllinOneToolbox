@@ -212,7 +212,7 @@ async function exportCouncilPDF() {
     const chatWindow = document.getElementById('chat-window');
     const exportBtn = document.getElementById('full-export-btn');
 
-    if (chatWindow.children.length === 0) return alert("المجلس صامت!");
+    if (!chatWindow || chatWindow.children.length === 0) return alert("المجلس صامت!");
 
     const originalBtnContent = exportBtn.innerHTML;
     exportBtn.innerHTML = "⏳";
@@ -226,30 +226,45 @@ async function exportCouncilPDF() {
             pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
         };
 
-        // إنشاء وعاء أبيض بسيط جداً بدون أي ترويسة أو زخارف
         const pdfContent = document.createElement('div');
-        pdfContent.style.cssText = "padding:10px; color:#000; background:#fff; font-family:Arial; direction:rtl; line-height:1.4;";
+        
+        // إضافة تنسيقات "ذكاء نوتيون" لضمان سلامة الجداول والنصوص المختلطة
+        const style = document.createElement('style');
+        style.innerHTML = `
+            .pdf-body { font-family: Arial, sans-serif; direction: rtl; line-height: 1.5; color: #000; }
+            .pdf-body table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+            .pdf-body th, .pdf-body td { border: 1px solid #ccc; padding: 8px; text-align: right; }
+            .pdf-body p, .pdf-body li { unicode-bidi: embed; } /* لفصل تداخل اللغات */
+            .pdf-body code, .pdf-body span[lang="en"] { direction: ltr; display: inline-block; }
+        `;
+        document.head.appendChild(style);
+
+        pdfContent.className = "pdf-body";
+        pdfContent.style.cssText = "padding:10px; background:#fff;";
 
         const messages = chatWindow.querySelectorAll('.council-message');
         let discussionBody = "";
 
         messages.forEach(msg => {
-            // استخراج المحتوى الهيكلي (النصوص، الجداول، النقاط) كما هي في الموقع
-            const messageHTML = msg.querySelector('.message-text')?.innerHTML || msg.innerHTML;
+            const messageContainer = msg.querySelector('.message-text');
+            if (!messageContainer) return;
 
-            // إضافة المحتوى في أقسام بسيطة مفصولة بمسافة فقط
+            // نأخذ الـ HTML كاملاً للحفاظ على الجداول والنقاط
+            const contentHTML = messageContainer.innerHTML;
+
             discussionBody += `
-                <div style="margin-bottom: 25px; page-break-inside: avoid;">
-                    <div style="font-size: 13px; text-align: justify; color: #000;">
-                        ${messageHTML}
+                <div style="margin-bottom: 30px; page-break-inside: avoid;">
+                    <div style="font-size: 13px; text-align: justify;">
+                        ${contentHTML}
                     </div>
                 </div>`;
         });
 
         pdfContent.innerHTML = discussionBody;
-        
-        // تنفيذ التصدير من الحاوية التي تحتوي على "البيانات" فقط
         await html2pdf().set(options).from(pdfContent).save();
+        
+        // تنظيف الاستايل بعد الانتهاء
+        style.remove();
 
     } catch (error) {
         console.error("PDF Error:", error);
