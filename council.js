@@ -212,7 +212,7 @@ async function exportCouncilPDF() {
     const chatWindow = document.getElementById('chat-window');
     const exportBtn = document.getElementById('full-export-btn');
 
-    if (chatWindow.children.length === 0) return alert("المجلس صامت!");
+    if (!chatWindow || chatWindow.children.length === 0) return alert("المجلس صامت!");
 
     const originalBtnContent = exportBtn.innerHTML;
     exportBtn.innerHTML = "⏳";
@@ -222,17 +222,17 @@ async function exportCouncilPDF() {
             margin: [15, 15, 15, 15],
             filename: `AAIO_Official_Report.pdf`,
             html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff" },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
 
         const pdfContent = document.createElement('div');
-        pdfContent.style.cssText = "padding:10px; color:#000; background:#fff; font-family:Arial, sans-serif; direction:rtl; line-height:1.5;";
+        // تقليل line-height لضبط المسافات التي كانت متباعدة
+        pdfContent.style.cssText = "padding:10px; color:#000; background:#fff; font-family:Arial, sans-serif; direction:rtl; line-height:1.4;";
 
         let htmlHeader = `
-            <div style="border-right: 5px solid #d4af37; padding: 10px; margin-bottom: 25px;">
-                <h1 style="margin:0; color:#1a1a2e; font-size:22px;">AAIO ADVISORY COUNCIL</h1>
-                <p style="margin:5px 0; color:#666; font-size:11px;">وثيقة رسمية مفرغة للمداولات - ${new Date().toLocaleDateString('ar-SA')}</p>
+            <div style="border-right: 5px solid #d4af37; padding: 10px; margin-bottom: 20px;">
+                <h1 style="margin:0; color:#1a1a2e; font-size:20px;">AAIO ADVISORY COUNCIL</h1>
+                <p style="margin:5px 0; color:#666; font-size:11px;">وثيقة رسمية مفرغة - ${new Date().toLocaleDateString('ar-SA')}</p>
             </div>
         `;
 
@@ -241,35 +241,32 @@ async function exportCouncilPDF() {
 
         messages.forEach(msg => {
             const isUser = msg.classList.contains('user-message');
+            const messageTextContent = msg.querySelector('.message-text');
             
-            // 1. استخراج اسم المستشار بدقة (أول وسم strong فقط)
-            const firstStrong = msg.querySelector('.message-text strong');
-            let senderName = firstStrong ? firstStrong.innerText.replace(':', '') : "المستشار";
-            
-            // 2. الحصول على المحتوى الكامل للرسالة
-            let messageHTML = msg.querySelector('.message-text')?.innerHTML || "";
+            if (!messageTextContent) return;
 
             if (isUser) {
-                // تنسيق السؤال (أسود عريض ومحدد)
+                // تنسيق السؤال (خلفية رمادية خفيفة)
                 discussionBody += `
-                    <div style="margin-bottom: 20px; background: #f2f2f2; padding: 12px; border-radius: 4px; border: 1px solid #ddd;">
-                        <p style="font-weight: bold; color: #1a1a2e; margin-bottom: 5px; font-size: 14px;">السؤال المطروح:</p>
-                        <div style="font-size: 14px; font-weight: bold; line-height: 1.4;">${messageHTML}</div>
+                    <div style="margin-bottom: 15px; background: #f5f5f5; padding: 10px; border: 1px solid #eee;">
+                        <strong style="display:block; margin-bottom:5px;">الموضوع المطروح:</strong>
+                        <div style="font-size: 13px;">${messageTextContent.innerHTML}</div>
                     </div>`;
             } else {
-                // 3. تنظيف الرد: حذف اسم المستشار من داخل المحتوى لكي لا يتكرر كعنوان
-                if (firstStrong) {
-                    messageHTML = messageHTML.replace(firstStrong.outerHTML, '').trim();
-                }
+                // استخراج اسم المستشار (أول نص عريض يظهر)
+                const nameTag = messageTextContent.querySelector('strong');
+                const name = nameTag ? nameTag.innerText : "مستشار AAIO";
+                
+                // أخذ المحتوى بالكامل كما هو (للحفاظ على النقاط والترتيب)
+                const fullContent = messageTextContent.innerHTML;
 
-                // 4. بناء هيكل الرد (الاسم كعنوان ذهبي متبوعاً بالرد المنظم)
                 discussionBody += `
-                    <div style="margin-bottom: 25px; page-break-inside: avoid;">
-                        <div style="color: #d4af37; font-weight: bold; font-size: 15px; border-bottom: 1px solid #eee; padding-bottom: 4px; margin-bottom: 10px;">
-                            ${senderName}
+                    <div style="margin-bottom: 20px; page-break-inside: avoid;">
+                        <div style="color: #d4af37; font-weight: bold; font-size: 14px; border-bottom: 1px solid #f0f0f0; margin-bottom: 8px; padding-bottom: 3px;">
+                            ${name}
                         </div>
-                        <div style="font-size: 12.5px; text-align: justify; color: #111; padding-right: 5px;">
-                            ${messageHTML}
+                        <div style="font-size: 12px; text-align: justify;">
+                            ${fullContent}
                         </div>
                     </div>`;
             }
