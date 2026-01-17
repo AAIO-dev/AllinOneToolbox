@@ -284,3 +284,6 @@ async function exportCouncilPDF() {
         exportBtn.innerHTML = originalBtnContent;
     }
 }
+
+// ربط الزر بالوظيفة الجديدة
+document.getElementById('full-export-btn').onclick = exportCouncilPDF;
