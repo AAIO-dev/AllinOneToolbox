@@ -221,23 +221,31 @@ async function exportCouncilPDF() {
         const options = {
             margin: [15, 15, 15, 15],
             filename: `AAIO_Official_Report.pdf`,
-            html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff" },
+            // إضافة ميزة تحسين رسم الحروف (letterRendering)
+            html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff", letterRendering: true },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
             pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
         };
 
-        // إنشاء وعاء أبيض بسيط جداً بدون أي ترويسة أو زخارف
         const pdfContent = document.createElement('div');
-        pdfContent.style.cssText = "padding:10px; color:#000; background:#fff; font-family:Arial; direction:rtl; line-height:1.4;";
+        // أضفنا هنا unicode-bidi و letter-spacing لعلاج تداخل الإنجليزية
+        pdfContent.style.cssText = "padding:10px; color:#000; background:#fff; font-family:Arial; direction:rtl; line-height:1.4; unicode-bidi: plaintext;";
+
+        // حقن تنسيق الجداول والخطوط مباشرة
+        const styleFix = `
+            <style>
+                table { width: 100%; border-collapse: collapse; margin-bottom: 20px; border: 1px solid #000; }
+                th, td { border: 1px solid #000; padding: 8px; text-align: right; font-size: 12px; }
+                /* فك اشتباك المصطلحات الإنجليزية الطويلة */
+                p, span, td, div { letter-spacing: 0.2px !important; word-spacing: 1px !important; }
+            </style>
+        `;
 
         const messages = chatWindow.querySelectorAll('.council-message');
-        let discussionBody = "";
+        let discussionBody = styleFix; 
 
         messages.forEach(msg => {
-            // استخراج المحتوى الهيكلي (النصوص، الجداول، النقاط) كما هي في الموقع
             const messageHTML = msg.querySelector('.message-text')?.innerHTML || msg.innerHTML;
-
-            // إضافة المحتوى في أقسام بسيطة مفصولة بمسافة فقط
             discussionBody += `
                 <div style="margin-bottom: 25px; page-break-inside: avoid;">
                     <div style="font-size: 13px; text-align: justify; color: #000;">
@@ -248,7 +256,7 @@ async function exportCouncilPDF() {
 
         pdfContent.innerHTML = discussionBody;
         
-        // تنفيذ التصدير من الحاوية التي تحتوي على "البيانات" فقط
+        // تنفيذ التصدير المباشر كما كنت تفعل
         await html2pdf().set(options).from(pdfContent).save();
 
     } catch (error) {
@@ -256,14 +264,5 @@ async function exportCouncilPDF() {
     } finally {
         exportBtn.innerHTML = originalBtnContent;
     }
-    
-    printWin.document.close();
-
-    // ... داخل دالة الطباعة بعد printWin.document.close() ...
-setTimeout(() => {
-    printWin.focus(); // تأكيد التركيز على النافذة الجديدة
-    printWin.print();
-    printWin.close();
-}, 1000); // زدنا الوقت قليلاً لضمان التحميل
 }
 document.getElementById('full-export-btn').onclick = exportCouncilPDF;
