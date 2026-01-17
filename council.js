@@ -208,46 +208,64 @@ setInterval(spawnThought, 1500);
 
 // --- كود تصدير المحادثة الملكي (PDF) ---
 // --- وظيفة تصدير المحادثة إلى PDF بلمسات AAIO الملكية ---
-function exportToNotionMarkdown() {
+function exportCouncilPDF() {
     const chatWindow = document.getElementById('chat-window');
+    if (!chatWindow || chatWindow.children.length === 0) return alert("المجلس صامت!");
+
+    // 1. فتح نافذة جديدة للطباعة
+    const printWindow = window.open('', '_blank', 'height=600,width=800');
+
+    // 2. تجهيز المحتوى بتنسيق "نوتيون" نظيف
+    let content = "";
     const messages = chatWindow.querySelectorAll('.council-message');
     
-    if (messages.length === 0) return alert("المجلس صامت!");
-
-    let markdownContent = "# تقرير مجلس AAIO الاستشاري\n\n";
-    markdownContent += `تاريخ التقرير: ${new Date().toLocaleDateString('ar-SA')}\n\n---\n\n`;
-
     messages.forEach(msg => {
-        const isUser = msg.classList.contains('user-message');
-        const textContainer = msg.querySelector('.message-text');
-        if (!textContainer) return;
-
-        // استخراج الاسم
-        const senderName = msg.querySelector('strong')?.innerText.replace(':', '') || (isUser ? "المستخدم" : "مستشار");
-
-        if (isUser) {
-            markdownContent += `## ❓ السؤال المطروح\n> ${textContainer.innerText}\n\n`;
-        } else {
-            markdownContent += `### ⚖️ ${senderName}\n\n`;
-            
-            // تحويل المحتوى البسيط (نقاط وجداول)
-            // ملاحظة: نستخدم innerText هنا لأن نوتيون سيتعرف على الترتيب تلقائياً
-            markdownContent += `${textContainer.innerText}\n\n`;
-            markdownContent += `---\n\n`;
-        }
+        const textHTML = msg.querySelector('.message-text')?.innerHTML || "";
+        content += `<div class="message-block">${textHTML}</div><hr>`;
     });
 
-    // إنشاء رابط تحميل للملف
-    const blob = new Blob([markdownContent], { type: 'text/markdown' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `AAIO_Report_${new Date().getTime()}.md`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    // 3. كتابة محتوى النافذة مع CSS ذكي للطباعة
+    printWindow.document.write(`
+        <html dir="rtl">
+        <head>
+            <title>تقرير مجلس AAIO الاستشاري</title>
+            <style>
+                body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 40px; color: #000; background: #fff; line-height: 1.6; }
+                .message-block { margin-bottom: 20px; text-align: justify; }
+                hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
+                
+                /* تنسيق الجداول لتبدو مثل نوتيون */
+                table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+                th, td { border: 1px solid #ddd; padding: 12px; text-align: right; }
+                th { background-color: #f9f9f9; }
+
+                /* حل مشكلة تداخل الإنجليزية */
+                span, p, td { unicode-bidi: plaintext; }
+                
+                @media print {
+                    body { padding: 0; }
+                    button { display: none; }
+                }
+            </style>
+        </head>
+        <body>
+            <h1 style="text-align:center; color:#1a1a2e;">تقرير مداولات مجلس AAIO</h1>
+            <p style="text-align:center; color:#666;">بتاريخ: ${new Date().toLocaleDateString('ar-SA')}</p>
+            <hr style="border-top: 2px solid #000;">
+            ${content}
+            <script>
+                // انتظر قليلاً لضمان تحميل النصوص ثم افتح نافذة الطباعة
+                setTimeout(() => {
+                    window.print();
+                    window.close();
+                }, 500);
+            </script>
+        </body>
+        </html>
+    `);
+
+    printWindow.document.close();
 }
 
-// ربط الزر بالدالة الجديدة للتجربة
-document.getElementById('full-export-btn').onclick = exportToNotionMarkdown;
+// ربط الزر بالدالة
+document.getElementById('full-export-btn').onclick = exportCouncilPDF;
