@@ -227,12 +227,12 @@ async function exportCouncilPDF() {
         };
 
         const pdfContent = document.createElement('div');
-        pdfContent.style.cssText = "padding:10px; color:#000; background:#fff; font-family:Arial; direction:rtl; line-height:1.8;";
+        pdfContent.style.cssText = "padding:10px; color:#000; background:#fff; font-family:Arial, sans-serif; direction:rtl; line-height:1.5;";
 
         let htmlHeader = `
-            <div style="border-right: 5px solid #d4af37; padding: 10px; margin-bottom: 40px;">
-                <h1 style="margin:0; color:#1a1a2e; font-size:24px;">AAIO ADVISORY COUNCIL</h1>
-                <p style="margin:5px 0; color:#666; font-size:12px;">تقرير مفرغ للمداولات الاستشارية - ${new Date().toLocaleDateString('ar-SA')}</p>
+            <div style="border-right: 5px solid #d4af37; padding: 10px; margin-bottom: 25px;">
+                <h1 style="margin:0; color:#1a1a2e; font-size:22px;">AAIO ADVISORY COUNCIL</h1>
+                <p style="margin:5px 0; color:#666; font-size:11px;">وثيقة رسمية مفرغة للمداولات - ${new Date().toLocaleDateString('ar-SA')}</p>
             </div>
         `;
 
@@ -241,24 +241,34 @@ async function exportCouncilPDF() {
 
         messages.forEach(msg => {
             const isUser = msg.classList.contains('user-message');
-            // استخراج اسم المستشار الفعلي فقط من الـ attributes أو الـ strong الأولي
-            const senderName = msg.querySelector('strong')?.innerText.split(':')[0] || "المستشار";
-            // استخراج المحتوى مع الحفاظ على التنسيق (النقاط، الفقرات)
-            const messageHTML = msg.querySelector('.message-text')?.innerHTML || msg.innerHTML;
+            
+            // 1. استخراج اسم المستشار بدقة (أول وسم strong فقط)
+            const firstStrong = msg.querySelector('.message-text strong');
+            let senderName = firstStrong ? firstStrong.innerText.replace(':', '') : "المستشار";
+            
+            // 2. الحصول على المحتوى الكامل للرسالة
+            let messageHTML = msg.querySelector('.message-text')?.innerHTML || "";
 
             if (isUser) {
+                // تنسيق السؤال (أسود عريض ومحدد)
                 discussionBody += `
-                    <div style="margin-bottom: 30px; background: #f9f9f9; padding: 15px; border-radius: 5px;">
-                        <p style="font-weight: bold; color: #333; margin-bottom: 10px;">الموضوع / السؤال المطروح:</p>
-                        <div style="font-size: 16px; font-weight: bold; color: #000;">${messageHTML}</div>
+                    <div style="margin-bottom: 20px; background: #f2f2f2; padding: 12px; border-radius: 4px; border: 1px solid #ddd;">
+                        <p style="font-weight: bold; color: #1a1a2e; margin-bottom: 5px; font-size: 14px;">السؤال المطروح:</p>
+                        <div style="font-size: 14px; font-weight: bold; line-height: 1.4;">${messageHTML}</div>
                     </div>`;
             } else {
+                // 3. تنظيف الرد: حذف اسم المستشار من داخل المحتوى لكي لا يتكرر كعنوان
+                if (firstStrong) {
+                    messageHTML = messageHTML.replace(firstStrong.outerHTML, '').trim();
+                }
+
+                // 4. بناء هيكل الرد (الاسم كعنوان ذهبي متبوعاً بالرد المنظم)
                 discussionBody += `
-                    <div style="margin-bottom: 35px; page-break-inside: avoid;">
-                        <div style="color: #d4af37; font-weight: bold; font-size: 16px; border-bottom: 1px solid #d4af37; padding-bottom: 5px; margin-bottom: 15px;">
+                    <div style="margin-bottom: 25px; page-break-inside: avoid;">
+                        <div style="color: #d4af37; font-weight: bold; font-size: 15px; border-bottom: 1px solid #eee; padding-bottom: 4px; margin-bottom: 10px;">
                             ${senderName}
                         </div>
-                        <div style="font-size: 13px; text-align: justify; padding-right: 10px; color: #222;">
+                        <div style="font-size: 12.5px; text-align: justify; color: #111; padding-right: 5px;">
                             ${messageHTML}
                         </div>
                     </div>`;
