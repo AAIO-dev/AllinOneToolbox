@@ -222,17 +222,18 @@ async function exportCouncilPDF() {
             margin: [15, 15, 15, 15],
             filename: `AAIO_Official_Report.pdf`,
             html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff" },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
         };
 
         const pdfContent = document.createElement('div');
-        // تقليل line-height لضبط المسافات التي كانت متباعدة
+        // تم تقليل المسافة بين الأسطر لتماسك النص
         pdfContent.style.cssText = "padding:10px; color:#000; background:#fff; font-family:Arial, sans-serif; direction:rtl; line-height:1.4;";
 
         let htmlHeader = `
-            <div style="border-right: 5px solid #d4af37; padding: 10px; margin-bottom: 20px;">
-                <h1 style="margin:0; color:#1a1a2e; font-size:20px;">AAIO ADVISORY COUNCIL</h1>
-                <p style="margin:5px 0; color:#666; font-size:11px;">وثيقة رسمية مفرغة - ${new Date().toLocaleDateString('ar-SA')}</p>
+            <div style="border-right: 5px solid #d4af37; padding: 10px; margin-bottom: 25px;">
+                <h1 style="margin:0; color:#1a1a2e; font-size:22px;">AAIO ADVISORY COUNCIL</h1>
+                <p style="margin:5px 0; color:#666; font-size:11px;">تقرير مفرغ للمداولات الاستشارية - ${new Date().toLocaleDateString('ar-SA')}</p>
             </div>
         `;
 
@@ -241,32 +242,29 @@ async function exportCouncilPDF() {
 
         messages.forEach(msg => {
             const isUser = msg.classList.contains('user-message');
-            const messageTextContent = msg.querySelector('.message-text');
+            const messageContainer = msg.querySelector('.message-text');
             
-            if (!messageTextContent) return;
+            if (!messageContainer) return;
 
             if (isUser) {
-                // تنسيق السؤال (خلفية رمادية خفيفة)
+                // تنسيق سؤال المستخدم
                 discussionBody += `
-                    <div style="margin-bottom: 15px; background: #f5f5f5; padding: 10px; border: 1px solid #eee;">
-                        <strong style="display:block; margin-bottom:5px;">الموضوع المطروح:</strong>
-                        <div style="font-size: 13px;">${messageTextContent.innerHTML}</div>
+                    <div style="margin-bottom: 20px; background: #f9f9f9; padding: 12px; border-radius: 5px; border: 1px solid #eee;">
+                        <p style="font-weight: bold; color: #333; margin-bottom: 5px; font-size: 14px;">الموضوع / السؤال المطروح:</p>
+                        <div style="font-size: 14px; font-weight: bold;">${messageContainer.innerHTML}</div>
                     </div>`;
             } else {
-                // استخراج اسم المستشار (أول نص عريض يظهر)
-                const nameTag = messageTextContent.querySelector('strong');
-                const name = nameTag ? nameTag.innerText : "مستشار AAIO";
+                // استخراج اسم المستشار من أول strong فقط لضمان عدم الخلط
+                const firstStrong = messageContainer.querySelector('strong');
+                const senderName = firstStrong ? firstStrong.innerText.replace(':', '') : "مستشار AAIO";
                 
-                // أخذ المحتوى بالكامل كما هو (للحفاظ على النقاط والترتيب)
-                const fullContent = messageTextContent.innerHTML;
-
                 discussionBody += `
-                    <div style="margin-bottom: 20px; page-break-inside: avoid;">
-                        <div style="color: #d4af37; font-weight: bold; font-size: 14px; border-bottom: 1px solid #f0f0f0; margin-bottom: 8px; padding-bottom: 3px;">
-                            ${name}
+                    <div style="margin-bottom: 25px; page-break-inside: avoid;">
+                        <div style="color: #d4af37; font-weight: bold; font-size: 15px; border-bottom: 1px solid #d4af37; padding-bottom: 3px; margin-bottom: 10px;">
+                            ${senderName}
                         </div>
-                        <div style="font-size: 12px; text-align: justify;">
-                            ${fullContent}
+                        <div style="font-size: 12.5px; text-align: justify; color: #111;">
+                            ${messageContainer.innerHTML}
                         </div>
                     </div>`;
             }
