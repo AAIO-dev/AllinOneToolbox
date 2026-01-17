@@ -254,5 +254,12 @@ function exportCouncilPDF() {
     `);
     
     printWin.document.close();
+
+    // ... داخل دالة الطباعة بعد printWin.document.close() ...
+setTimeout(() => {
+    printWin.focus(); // تأكيد التركيز على النافذة الجديدة
+    printWin.print();
+    printWin.close();
+}, 1000); // زدنا الوقت قليلاً لضمان التحميل
 }
 document.getElementById('full-export-btn').onclick = exportCouncilPDF;
