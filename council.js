@@ -208,68 +208,46 @@ setInterval(spawnThought, 1500);
 
 // --- كود تصدير المحادثة الملكي (PDF) ---
 // --- وظيفة تصدير المحادثة إلى PDF بلمسات AAIO الملكية ---
-async function exportCouncilPDF() {
+function exportToNotionMarkdown() {
     const chatWindow = document.getElementById('chat-window');
-    const exportBtn = document.getElementById('full-export-btn');
+    const messages = chatWindow.querySelectorAll('.council-message');
+    
+    if (messages.length === 0) return alert("المجلس صامت!");
 
-    if (!chatWindow || chatWindow.children.length === 0) return alert("المجلس صامت!");
+    let markdownContent = "# تقرير مجلس AAIO الاستشاري\n\n";
+    markdownContent += `تاريخ التقرير: ${new Date().toLocaleDateString('ar-SA')}\n\n---\n\n`;
 
-    const originalBtnContent = exportBtn.innerHTML;
-    exportBtn.innerHTML = "⏳";
+    messages.forEach(msg => {
+        const isUser = msg.classList.contains('user-message');
+        const textContainer = msg.querySelector('.message-text');
+        if (!textContainer) return;
 
-    try {
-        const options = {
-            margin: [15, 15, 15, 15],
-            filename: `AAIO_Official_Report.pdf`,
-            html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff" },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-        };
+        // استخراج الاسم
+        const senderName = msg.querySelector('strong')?.innerText.replace(':', '') || (isUser ? "المستخدم" : "مستشار");
 
-        const pdfContent = document.createElement('div');
-        
-        // إضافة تنسيقات "ذكاء نوتيون" لضمان سلامة الجداول والنصوص المختلطة
-        const style = document.createElement('style');
-        style.innerHTML = `
-            .pdf-body { font-family: Arial, sans-serif; direction: rtl; line-height: 1.5; color: #000; }
-            .pdf-body table { width: 100%; border-collapse: collapse; margin: 10px 0; }
-            .pdf-body th, .pdf-body td { border: 1px solid #ccc; padding: 8px; text-align: right; }
-            .pdf-body p, .pdf-body li { unicode-bidi: embed; } /* لفصل تداخل اللغات */
-            .pdf-body code, .pdf-body span[lang="en"] { direction: ltr; display: inline-block; }
-        `;
-        document.head.appendChild(style);
+        if (isUser) {
+            markdownContent += `## ❓ السؤال المطروح\n> ${textContainer.innerText}\n\n`;
+        } else {
+            markdownContent += `### ⚖️ ${senderName}\n\n`;
+            
+            // تحويل المحتوى البسيط (نقاط وجداول)
+            // ملاحظة: نستخدم innerText هنا لأن نوتيون سيتعرف على الترتيب تلقائياً
+            markdownContent += `${textContainer.innerText}\n\n`;
+            markdownContent += `---\n\n`;
+        }
+    });
 
-        pdfContent.className = "pdf-body";
-        pdfContent.style.cssText = "padding:10px; background:#fff;";
-
-        const messages = chatWindow.querySelectorAll('.council-message');
-        let discussionBody = "";
-
-        messages.forEach(msg => {
-            const messageContainer = msg.querySelector('.message-text');
-            if (!messageContainer) return;
-
-            // نأخذ الـ HTML كاملاً للحفاظ على الجداول والنقاط
-            const contentHTML = messageContainer.innerHTML;
-
-            discussionBody += `
-                <div style="margin-bottom: 30px; page-break-inside: avoid;">
-                    <div style="font-size: 13px; text-align: justify;">
-                        ${contentHTML}
-                    </div>
-                </div>`;
-        });
-
-        pdfContent.innerHTML = discussionBody;
-        await html2pdf().set(options).from(pdfContent).save();
-        
-        // تنظيف الاستايل بعد الانتهاء
-        style.remove();
-
-    } catch (error) {
-        console.error("PDF Error:", error);
-    } finally {
-        exportBtn.innerHTML = originalBtnContent;
-    }
+    // إنشاء رابط تحميل للملف
+    const blob = new Blob([markdownContent], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `AAIO_Report_${new Date().getTime()}.md`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 }
-document.getElementById('full-export-btn').onclick = exportCouncilPDF;
+
+// ربط الزر بالدالة الجديدة للتجربة
+document.getElementById('full-export-btn').onclick = exportToNotionMarkdown;
