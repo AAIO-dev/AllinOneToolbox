@@ -219,53 +219,53 @@ async function exportCouncilPDF() {
 
     try {
         const options = {
-            margin: [20, 15, 20, 15],
-            filename: `AAIO_Official_Transcript.pdf`,
-            image: { type: 'jpeg', quality: 0.98 },
+            margin: [15, 15, 15, 15],
+            filename: `AAIO_Official_Report.pdf`,
             html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff" },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
             pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
         };
 
-        // بناء قالب الوثيقة الرسمية (خلفية بيضاء ونصوص سوداء)
         const pdfContent = document.createElement('div');
-        pdfContent.style.cssText = "padding:20px; color:#000000; background:#ffffff; font-family:Arial, sans-serif; direction:rtl; line-height:1.6;";
+        pdfContent.style.cssText = "padding:10px; color:#000; background:#fff; font-family:Arial; direction:rtl; line-height:1.8;";
 
-        // الهوية الرسمية في الأعلى
         let htmlHeader = `
-            <div style="border-right: 5px solid #d4af37; border-left: 2px solid #a29bfe; padding: 10px; margin-bottom: 30px;">
-                <h1 style="margin:0; color:#1a1a2e; font-size:22px;">AAIO ADVISORY COUNCIL</h1>
-                <p style="margin:5px 0; color:#666; font-size:12px;">وثيقة رسمية مفرغة - ${new Date().toLocaleDateString('ar-SA')}</p>
+            <div style="border-right: 5px solid #d4af37; padding: 10px; margin-bottom: 40px;">
+                <h1 style="margin:0; color:#1a1a2e; font-size:24px;">AAIO ADVISORY COUNCIL</h1>
+                <p style="margin:5px 0; color:#666; font-size:12px;">تقرير مفرغ للمداولات الاستشارية - ${new Date().toLocaleDateString('ar-SA')}</p>
             </div>
-            <div style="position: fixed; top: 40%; left: 15%; font-size: 150px; color: rgba(0,0,0,0.03); transform: rotate(-45deg); pointer-events: none; z-index: -1;">AAIO</div>
         `;
 
-        // استخراج السؤال ومعالجته (أسود وعريض)
         const messages = chatWindow.querySelectorAll('.council-message');
         let discussionBody = "";
 
         messages.forEach(msg => {
             const isUser = msg.classList.contains('user-message');
-            const senderName = msg.querySelector('strong')?.innerText || "المستشار";
-            const messageText = msg.querySelector('.message-text')?.innerText || msg.innerText;
+            // استخراج اسم المستشار الفعلي فقط من الـ attributes أو الـ strong الأولي
+            const senderName = msg.querySelector('strong')?.innerText.split(':')[0] || "المستشار";
+            // استخراج المحتوى مع الحفاظ على التنسيق (النقاط، الفقرات)
+            const messageHTML = msg.querySelector('.message-text')?.innerHTML || msg.innerHTML;
 
             if (isUser) {
-                // تنسيق السؤال
-                discussionBody += `<div style="margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
-                                    <p><strong>السؤال:</strong></p>
-                                    <p style="font-size: 16px; font-weight: bold;">${messageText}</p>
-                                   </div>`;
+                discussionBody += `
+                    <div style="margin-bottom: 30px; background: #f9f9f9; padding: 15px; border-radius: 5px;">
+                        <p style="font-weight: bold; color: #333; margin-bottom: 10px;">الموضوع / السؤال المطروح:</p>
+                        <div style="font-size: 16px; font-weight: bold; color: #000;">${messageHTML}</div>
+                    </div>`;
             } else {
-                // تفريغ رد المستشار (نص تحت اسم)
-                discussionBody += `<div style="margin-bottom: 20px;">
-                                    <p style="color: #d4af37; font-weight: bold; margin-bottom: 5px; font-size: 14px; border-right: 3px solid #d4af37; padding-right: 8px;">${senderName}</p>
-                                    <p style="font-size: 13px; text-align: justify;">${messageText}</p>
-                                   </div>`;
+                discussionBody += `
+                    <div style="margin-bottom: 35px; page-break-inside: avoid;">
+                        <div style="color: #d4af37; font-weight: bold; font-size: 16px; border-bottom: 1px solid #d4af37; padding-bottom: 5px; margin-bottom: 15px;">
+                            ${senderName}
+                        </div>
+                        <div style="font-size: 13px; text-align: justify; padding-right: 10px; color: #222;">
+                            ${messageHTML}
+                        </div>
+                    </div>`;
             }
         });
 
         pdfContent.innerHTML = htmlHeader + discussionBody;
-
         await html2pdf().set(options).from(pdfContent).save();
 
     } catch (error) {
