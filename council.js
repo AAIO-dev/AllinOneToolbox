@@ -208,68 +208,51 @@ setInterval(spawnThought, 1500);
 
 // --- كود تصدير المحادثة الملكي (PDF) ---
 // --- وظيفة تصدير المحادثة إلى PDF بلمسات AAIO الملكية ---
-async function exportCouncilPDF() {
+function exportCouncilPDF() {
     const chatWindow = document.getElementById('chat-window');
-    const exportBtn = document.getElementById('full-export-btn');
+    if (!chatWindow || chatWindow.children.length === 0) return alert("المجلس صامت!");
 
-    if (chatWindow.children.length === 0) return alert("المجلس صامت!");
+    // 1. استخراج المحتوى
+    const messages = chatWindow.querySelectorAll('.council-message');
+    let reportHTML = "";
+    
+    messages.forEach(msg => {
+        const text = msg.querySelector('.message-text')?.innerHTML || "";
+        reportHTML += `<div class="msg-box">${text}</div><hr>`;
+    });
 
-    const originalBtnContent = exportBtn.innerHTML;
-    exportBtn.innerHTML = "⏳";
-
-    try {
-        const options = {
-            margin: [15, 15, 15, 15],
-            filename: `AAIO_Official_Report.pdf`,
-            // إضافة سطر التنسيق الدقيق للحروف
-            html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff", letterRendering: true },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-        };
-
-        const pdfContent = document.createElement('div');
-        // هنا السر يا بو فلاح: أضفنا unicode-bidi و letter-spacing
-        pdfContent.style.cssText = "padding:20px; color:#000; background:#fff; font-family:Arial; direction:rtl; line-height:1.6; unicode-bidi: plaintext;";
-
-        // إضافة تنسيق داخلي للجداول والحروف الإنجليزية
-        const styleFix = `
+    // 2. فتح نافذة طباعة جديدة (تخطي مشاكل الـ Canvas والبياض)
+    const printWin = window.open('', '', 'width=900,height=700');
+    
+    printWin.document.write(`
+        <html dir="rtl">
+        <head>
+            <title>تقرير AAIO الاستشاري</title>
             <style>
-                table { width: 100%; border-collapse: collapse; margin-bottom: 20px; border: 1px solid #000; }
-                th, td { border: 1px solid #000; padding: 8px; text-align: right; }
-                /* فك تداخل الإنجليزية */
-                p, span, td { letter-spacing: 0.1px !important; }
+                body { font-family: 'Arial', sans-serif; padding: 30px; line-height: 1.6; color: #000; background: #fff; }
+                .msg-box { margin-bottom: 20px; text-align: justify; }
+                table { width: 100%; border-collapse: collapse; margin: 15px 0; border: 2px solid #000; }
+                th, td { border: 1px solid #000; padding: 10px; text-align: right; }
+                /* حل مشكلة الإنجليزية */
+                p, span, td { unicode-bidi: plaintext; letter-spacing: 0.5px; }
+                @media print { hr { page-break-after: always; visibility: hidden; } }
             </style>
-        `;
-
-        const messages = chatWindow.querySelectorAll('.council-message');
-        let discussionBody = styleFix; // نبدأ بالتنسيق أولاً
-
-        messages.forEach(msg => {
-            const messageHTML = msg.querySelector('.message-text')?.innerHTML || msg.innerHTML;
-            discussionBody += `
-                <div style="margin-bottom: 25px; page-break-inside: avoid;">
-                    <div style="font-size: 13px; text-align: justify; color: #000;">
-                        ${messageHTML}
-                    </div>
-                </div>`;
-        });
-
-        pdfContent.innerHTML = discussionBody;
-        
-        // إلحاق مؤقت بالصفحة لضمان القراءة الصحيحة
-        document.body.appendChild(pdfContent);
-        pdfContent.style.position = "fixed";
-        pdfContent.style.left = "-10000px";
-
-        await html2pdf().set(options).from(pdfContent).save();
-        
-        document.body.removeChild(pdfContent);
-
-    } catch (error) {
-        console.error("PDF Error:", error);
-    } finally {
-        exportBtn.innerHTML = originalBtnContent;
-    }
+        </head>
+        <body>
+            <h1 style="text-align:center;">تقرير مجلس AAIO الاستشاري</h1>
+            <p style="text-align:center;">بتاريخ: ${new Date().toLocaleDateString('ar-SA')}</p>
+            <hr>
+            ${reportHTML}
+            <script>
+                setTimeout(() => {
+                    window.print();
+                    window.close();
+                }, 500);
+            </script>
+        </body>
+        </html>
+    `);
+    
+    printWin.document.close();
 }
-
 document.getElementById('full-export-btn').onclick = exportCouncilPDF;
