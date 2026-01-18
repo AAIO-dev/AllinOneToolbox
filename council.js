@@ -215,128 +215,92 @@ async function exportCouncilPDF() {
     if (!chatWindow || chatWindow.children.length === 0) return alert("The Council is silent!");
 
     const originalBtnContent = exportBtn.innerHTML;
-    exportBtn.innerHTML = "⏳ Processing...";
+    exportBtn.innerHTML = "⏳ Exporting...";
     exportBtn.disabled = true;
 
     try {
-        // 1. Create temporary container
-        const pdfContainer = document.createElement('div');
+        // 1. إنشاء الحاوية
+        const pdfContent = document.createElement('div');
+        pdfContent.id = "temp-pdf-export";
         
-        // Style to make it invisible but rendered by the browser
-        pdfContainer.style.position = 'fixed';
-        pdfContainer.style.left = '-10000px';
-        pdfContainer.style.top = '0';
-        pdfContainer.style.width = '210mm'; 
-        pdfContainer.style.zIndex = '-100';
-        pdfContainer.style.background = '#ffffff';
-
-        // 2. Prepare Style and Content
-        // Note: Using standard system fonts to avoid loading delays
-        const styleContent = `
-            <style>
-                .pdf-wrapper {
-                    font-family: "Times New Roman", Times, serif !important;
-                    padding: 30px;
-                    color: #000;
-                    background: #fff;
-                    direction: rtl;
-                }
-                
-                .message-block {
-                    margin-bottom: 25px;
-                    border-bottom: 1px solid #ddd;
-                    padding-bottom: 15px;
-                    page-break-inside: avoid;
-                }
-
-                .message-content {
-                    font-size: 14px;
-                    line-height: 1.6;
-                    text-align: justify;
-                    unicode-bidi: embed;
-                }
-
-                /* Fix for Tables */
-                table { width: 100%; border-collapse: collapse; margin: 15px 0; border: 1px solid #000; direction: ltr; }
-                th, td { border: 1px solid #000; padding: 8px; font-size: 12px; text-align: left; }
-
-                /* Fix for Lists */
-                ul, ol { margin-right: 30px; }
-                
-                /* Code Blocks */
-                pre, code {
-                    direction: ltr;
-                    text-align: left;
-                    background: #f0f0f0;
-                    padding: 8px;
-                    font-family: monospace;
-                }
-
-                .advisor-name {
-                    color: #1a1a1a;
-                    font-weight: bold;
-                    font-size: 16px;
-                    margin-bottom: 8px;
-                    display: block;
-                }
-            </style>
-            <div class="pdf-wrapper">
-                <h1 style="text-align:center; color: #333;">AAIO Council Report</h1>
-                <hr style="margin-bottom: 30px;">
+        // التنسيق: جعلناه مرئياً ولكن في أسفل الصفحة تماماً لكي لا يربكك
+        pdfContent.style.cssText = `
+            padding: 40px; 
+            background: #fff; 
+            color: #000; 
+            width: 800px; 
+            position: absolute; 
+            left: 0; 
+            top: 100%; 
+            z-index: -999;
+            font-family: "Arial", sans-serif;
+            direction: rtl;
         `;
 
-        let bodyContent = '';
+        // 2. بناء المحتوى
+        let discussionBody = `
+            <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 30px;">
+                <h1 style="margin: 0;">AAIO Council Report</h1>
+                <p style="margin: 5px 0;">Official AI Strategy Document</p>
+            </div>
+            <style>
+                table { width: 100%; border-collapse: collapse; margin-bottom: 20px; border: 1px solid #000; direction: ltr; }
+                th, td { border: 1px solid #000; padding: 8px; text-align: left; font-size: 12px; }
+                .msg-container { margin-bottom: 25px; page-break-inside: avoid; }
+                .advisor-label { font-weight: bold; font-size: 16px; color: #333; display: block; margin-bottom: 5px; text-align: right; }
+                .text-body { text-align: justify; line-height: 1.5; font-size: 14px; }
+            </style>
+        `;
+
         const messages = chatWindow.querySelectorAll('.council-message');
-        
         messages.forEach(msg => {
             const senderName = msg.querySelector('.sender-name')?.innerText || 'Advisor'; 
             const messageHTML = msg.querySelector('.message-text')?.innerHTML || msg.innerHTML;
 
-            bodyContent += `
-                <div class="message-block">
-                    <span class="advisor-name">${senderName}:</span>
-                    <div class="message-content" dir="auto">
+            discussionBody += `
+                <div class="msg-container">
+                    <span class="advisor-label">${senderName}:</span>
+                    <div class="text-body" dir="auto">
                         ${messageHTML}
                     </div>
                 </div>`;
         });
 
-        pdfContainer.innerHTML = styleContent + bodyContent + '</div>';
-        
-        // Critical step: Attach to DOM for correct character rendering
-        document.body.appendChild(pdfContainer);
+        pdfContent.innerHTML = discussionBody;
+        document.body.appendChild(pdfContent);
 
-        // 3. Configuration
+        // 3. خيارات التصدير
         const options = {
             margin: [10, 10, 10, 10],
-            filename: `AAIO_Export_${Date.now()}.pdf`,
-            image: { type: 'jpeg', quality: 0.98 },
+            filename: `AAIO_Report_${Date.now()}.pdf`,
             html2canvas: { 
                 scale: 2, 
                 useCORS: true, 
-                logging: false,
-                letterRendering: true
+                scrollX: 0, 
+                scrollY: 0,
+                // إجبار المكتبة على الانتظار قليلاً لضمان الرسم
+                logging: false 
             },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
 
-        // 4. Execution
-        await html2pdf().set(options).from(pdfContainer).save();
+        // انتظر 300 مللي ثانية للتأكد من أن المتصفح رسم العناصر
+        await new Promise(r => setTimeout(r, 300));
 
-        // 5. Cleanup
-        document.body.removeChild(pdfContainer);
+        // 4. التصدير
+        await html2pdf().set(options).from(pdfContent).save();
+
+        // 5. التنظيف
+        document.body.removeChild(pdfContent);
 
     } catch (error) {
-        console.error("PDF Export Error:", error);
-        alert("An error occurred during export. Check console.");
+        console.error("Export Error:", error);
+        alert("Export failed. Please check console.");
     } finally {
         exportBtn.innerHTML = originalBtnContent;
         exportBtn.disabled = false;
     }
 }
-
-// Bind to your button
-document.getElementById('full-export-btn').onclick = exportCouncilPDF;
 
 // ربط الزر (تأكد أن الـ ID صحيح في ملف HTML لديك)
 document.getElementById('full-export-btn').onclick = exportCouncilPDF;
