@@ -209,35 +209,68 @@ setInterval(spawnThought, 1500);
 // --- كود تصدير المحادثة الملكي (PDF) ---
 // --- وظيفة تصدير المحادثة إلى PDF بلمسات AAIO الملكية ---
 async function exportCouncilPDF() {
-    const chatWindow = document.getElementById('chat-window'); // سنصدر النافذة مباشرة
+    const chatWindow = document.getElementById('chat-window');
     const exportBtn = document.getElementById('full-export-btn');
 
-    if (!chatWindow) return alert("Chat window not found!");
+    if (chatWindow.children.length === 0) return alert("The Council is silent!");
 
     const originalBtnContent = exportBtn.innerHTML;
-    exportBtn.innerHTML = "⏳ Exporting...";
-    
+    exportBtn.innerHTML = "⏳";
+
     try {
-        // إعدادات التصدير
         const options = {
-            margin: [10, 10, 10, 10],
-            filename: `AAIO_Direct_Export.pdf`,
-            image: { type: 'jpeg', quality: 0.98 },
+            margin: [15, 15, 15, 15],
+            filename: `AAIO_Official_Report.pdf`,
+            // إضافة letterRendering: true هي المشرط الذي يمنع تقطع الحروف العربية
             html2canvas: { 
                 scale: 2, 
-                useCORS: true,
-                logging: false,
-                letterRendering: true // مهم جداً لربط الحروف العربية
+                useCORS: true, 
+                backgroundColor: "#ffffff",
+                letterRendering: true 
             },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
         };
 
-        // التنفيذ مباشرة من عنصر النافذة الموجود فعلياً في الصفحة
-        // هذا يحل مشكلة الصفحة البيضاء تماماً
-        await html2pdf().set(options).from(chatWindow).save();
+        const pdfContent = document.createElement('div');
+        
+        // تعديل جراحي: أضفنا unicode-bidi و "Times New Roman" لأنه أفضل خط نظام يربط العربية
+        pdfContent.style.cssText = "padding:10px; color:#000; background:#fff; font-family:'Times New Roman', serif; direction:rtl; line-height:1.4; unicode-bidi: embed;";
+
+        // إضافة تنسيق داخلي بسيط جداً لإصلاح الجداول والنقاط الإنجليزية
+        const styleFix = `
+            <style>
+                table { width: 100%; border-collapse: collapse; margin-bottom: 20px; border: 1px solid #000; direction: ltr; }
+                th, td { border: 1px solid #000; padding: 8px; text-align: left; font-size: 12px; }
+                /* الملقط: إجبار القوائم الإنجليزية على اتجاه اليسار بذكاء */
+                [dir="auto"] { text-align: initial; }
+            </style>
+        `;
+
+        const messages = chatWindow.querySelectorAll('.council-message');
+        let discussionBody = styleFix; 
+
+        messages.forEach(msg => {
+            const messageHTML = msg.querySelector('.message-text')?.innerHTML || msg.innerHTML;
+
+            // الملقط: أضفنا dir="auto" هنا لكي يعرف المتصفح تلقائياً إذا كان السطر إنجليزي أو عربي
+            discussionBody += `
+                <div style="margin-bottom: 25px; page-break-inside: avoid;">
+                    <div style="font-size: 13px; text-align: justify; color: #000;" dir="auto">
+                        ${messageHTML}
+                    </div>
+                </div>`;
+        });
+
+        pdfContent.innerHTML = discussionBody;
+
+        // الخطوة الأهم: إلحاق العنصر بالصفحة "لحظياً" ليراه المتصفح ويربط الحروف ثم حذفه
+        document.body.appendChild(pdfContent); 
+        await html2pdf().set(options).from(pdfContent).save();
+        document.body.removeChild(pdfContent);
 
     } catch (error) {
-        console.error("Export Error:", error);
+        console.error("PDF Error:", error);
     } finally {
         exportBtn.innerHTML = originalBtnContent;
     }
