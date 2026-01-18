@@ -235,55 +235,32 @@ async function exportCouncilPDF() {
         const pdfContent = document.createElement('div');
         
         // تعديل جراحي: أضفنا unicode-bidi و "Times New Roman" لأنه أفضل خط نظام يربط العربية
-        pdfContent.style.cssText = `
-    padding:15px; 
-    color:#000; 
-    background:#fff; 
-    font-family: 'Arial', sans-serif; 
-    direction:rtl; 
-    line-height: 1.5; 
-    unicode-bidi: isolate;
-`;
+        pdfContent.style.cssText = "padding:10px; color:#000; background:#fff; font-family:'Times New Roman', serif; direction:rtl; line-height:1.4; unicode-bidi: embed;";
 
-// 2. في منطقة الـ styleFix
-// سنضيف خاصية تجبر المتصفح على معالجة كل فقرة حسب لغتها الأصلية بدقة
-const styleFix = `
-    <style>
-        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; border: 1px solid #000; direction: ltr; }
-        th, td { border: 1px solid #000; padding: 8px; text-align: left; font-size: 12px; }
-        
-        /* المشرط هنا: منع تداخل الإنجليزي وضبط المسافات */
-        .message-section { 
-            display: block;
-            width: 100%;
-            margin-bottom: 20px;
-            page-break-inside: avoid;
-            text-align: right; /* إرجاع النص لليمين بدلاً من justify */
-        }
-        
-        /* الشعيرة الدموية الأهم: معالجة الفقرات المختلطة */
-        .content-wrap {
-            direction: inherit;
-            unicode-bidi: plaintext; /* هذه الخاصية ستجعل الإنجليزي يسار والعربي يمين تلقائياً في نفس الملف */
-            white-space: pre-wrap;
-            word-break: keep-all;
-        }
-    </style>
-`;
+        // إضافة تنسيق داخلي بسيط جداً لإصلاح الجداول والنقاط الإنجليزية
+        const styleFix = `
+            <style>
+                table { width: 100%; border-collapse: collapse; margin-bottom: 20px; border: 1px solid #000; direction: ltr; }
+                th, td { border: 1px solid #000; padding: 8px; text-align: left; font-size: 12px; }
+                /* الملقط: إجبار القوائم الإنجليزية على اتجاه اليسار بذكاء */
+                [dir="auto"] { text-align: initial; }
+            </style>
+        `;
 
         const messages = chatWindow.querySelectorAll('.council-message');
         let discussionBody = styleFix; 
 
         messages.forEach(msg => {
-    const messageHTML = msg.querySelector('.message-text')?.innerHTML || msg.innerHTML;
+            const messageHTML = msg.querySelector('.message-text')?.innerHTML || msg.innerHTML;
 
-    discussionBody += `
-        <div class="message-section">
-            <div class="content-wrap">
-                ${messageHTML}
-            </div>
-        </div>`;
-});
+            // الملقط: أضفنا dir="auto" هنا لكي يعرف المتصفح تلقائياً إذا كان السطر إنجليزي أو عربي
+            discussionBody += `
+                <div style="margin-bottom: 25px; page-break-inside: avoid;">
+                    <div style="font-size: 13px; text-align: justify; color: #000;" dir="auto">
+                        ${messageHTML}
+                    </div>
+                </div>`;
+        });
 
         pdfContent.innerHTML = discussionBody;
 
