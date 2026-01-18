@@ -212,57 +212,129 @@ async function exportCouncilPDF() {
     const chatWindow = document.getElementById('chat-window');
     const exportBtn = document.getElementById('full-export-btn');
 
-    if (chatWindow.children.length === 0) return alert("المجلس صامت!");
+    if (!chatWindow || chatWindow.children.length === 0) return alert("المجلس صامت!");
 
     const originalBtnContent = exportBtn.innerHTML;
-    exportBtn.innerHTML = "⏳";
+    exportBtn.innerHTML = "⏳ جاري المعالجة...";
+    exportBtn.disabled = true;
 
     try {
-        const options = {
-            margin: [15, 15, 15, 15],
-            filename: `AAIO_Official_Report.pdf`,
-            // إضافة ميزة تحسين رسم الحروف (letterRendering)
-            html2canvas: { scale: 2, useCORS: true, backgroundColor: "#ffffff", letterRendering: true },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-        };
-
-        const pdfContent = document.createElement('div');
-        // أضفنا هنا unicode-bidi و letter-spacing لعلاج تداخل الإنجليزية
-        pdfContent.style.cssText = "padding:10px; color:#000; background:#fff; font-family:Arial; direction:rtl; line-height:1.4; unicode-bidi: plaintext;";
-
-        // حقن تنسيق الجداول والخطوط مباشرة
-        const styleFix = `
+        // 1. إنشاء حاوية مؤقتة وإضافتها للصفحة (مهم جداً لحل مشكلة الحروف المقطعة)
+        const pdfContainer = document.createElement('div');
+        
+        // نجعلها مخفية عن عين المستخدم لكن "موجودة" تقنياً ليتمكن المتصفح من رسمها
+        pdfContainer.style.position = 'fixed';
+        pdfContainer.style.left = '-10000px';
+        pdfContainer.style.top = '0';
+        pdfContainer.style.width = '210mm'; // عرض A4 لضمان تطابق التنسيق
+        pdfContainer.style.zIndex = '-100';
+        
+        // 2. إعداد الترويسة واستيراد خط Cairo لدعم العربية والإنجليزية بوضوح
+        const headerContent = `
             <style>
-                table { width: 100%; border-collapse: collapse; margin-bottom: 20px; border: 1px solid #000; }
-                th, td { border: 1px solid #000; padding: 8px; text-align: right; font-size: 12px; }
-                /* فك اشتباك المصطلحات الإنجليزية الطويلة */
-                p, span, td, div { letter-spacing: 0.2px !important; word-spacing: 1px !important; }
+                @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+                
+                .pdf-wrapper {
+                    font-family: 'Cairo', sans-serif !important;
+                    padding: 20px;
+                    color: #000;
+                    background: #fff;
+                    direction: rtl; /* الاتجاه العام عربي */
+                }
+                
+                .message-block {
+                    margin-bottom: 20px;
+                    border-bottom: 1px solid #eee;
+                    padding-bottom: 15px;
+                    page-break-inside: avoid; /* منع قص الرسالة بين صفحتين */
+                }
+
+                /* معالجة النصوص المختلطة (عربي/إنجليزي) */
+                .message-content {
+                    font-size: 14px;
+                    line-height: 1.6;
+                    text-align: justify;
+                    white-space: pre-wrap; /* الحفاظ على الأسطر */
+                    unicode-bidi: embed; 
+                }
+
+                /* إصلاح الجداول */
+                table { width: 100%; border-collapse: collapse; margin: 15px 0; border: 1px solid #333; direction: ltr; } /* الجداول غالباً إنجليزية أو أرقام */
+                th, td { border: 1px solid #333; padding: 6px; font-size: 12px; text-align: left; }
+
+                /* إصلاح القوائم الإنجليزية داخل المحتوى العربي */
+                ul, ol { margin-right: 20px; direction: inherit; }
+                
+                /* تحسين مظهر الأكواد */
+                pre, code {
+                    direction: ltr;
+                    text-align: left;
+                    background: #f4f4f4;
+                    padding: 5px;
+                    border-radius: 4px;
+                    font-family: 'Courier New', monospace;
+                }
             </style>
+            <div class="pdf-wrapper">
+                <h2 style="text-align:center; margin-bottom: 20px;">AAIO Council Report</h2>
         `;
 
+        let bodyContent = '';
+        
+        // تجميع الرسائل
         const messages = chatWindow.querySelectorAll('.council-message');
-        let discussionBody = styleFix; 
-
         messages.forEach(msg => {
+            // نحاول سحب اسم المستشار إذا كان موجوداً في عنصر منفصل، وإلا نستخدم نصاً افتراضياً
+            const senderName = msg.querySelector('.sender-name')?.innerText || 'Advisor'; 
             const messageHTML = msg.querySelector('.message-text')?.innerHTML || msg.innerHTML;
-            discussionBody += `
-                <div style="margin-bottom: 25px; page-break-inside: avoid;">
-                    <div style="font-size: 13px; text-align: justify; color: #000;">
+
+            // نضع dir="auto" لكل فقرة بذكاء ليحدد المتصفح اتجاهها حسب لغتها
+            bodyContent += `
+                <div class="message-block">
+                    <strong style="color: #2c3e50; display:block; margin-bottom:5px;">${senderName}:</strong>
+                    <div class="message-content" dir="auto">
                         ${messageHTML}
                     </div>
                 </div>`;
         });
 
-        pdfContent.innerHTML = discussionBody;
+        pdfContainer.innerHTML = headerContent + bodyContent + '</div>';
         
-        // تنفيذ التصدير المباشر كما كنت تفعل
-        await html2pdf().set(options).from(pdfContent).save();
+        // إضافة العنصر للـ Body (هنا يكمن سر إصلاح الحروف)
+        document.body.appendChild(pdfContainer);
+
+        // 3. إعدادات html2pdf
+        const options = {
+            margin: [10, 10, 10, 10], // هوامش بالـ mm
+            filename: `AAIO_Report_${new Date().toISOString().slice(0,10)}.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { 
+                scale: 2, 
+                useCORS: true, 
+                logging: false,
+                // هذه الخاصية مهمة جداً للرسم
+                windowWidth: pdfContainer.scrollWidth 
+            },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        // 4. التنفيذ والانتظار قليلاً لضمان تحميل الخطوط
+        // ملاحظة: نستخدم Promise بسيط لضمان أن المتصفح قام بعمل Render للخطوط
+        await new Promise(resolve => setTimeout(resolve, 500)); 
+        
+        await html2pdf().set(options).from(pdfContainer).save();
+
+        // 5. تنظيف (حذف العنصر المؤقت)
+        document.body.removeChild(pdfContainer);
 
     } catch (error) {
-        console.error("PDF Error:", error);
+        console.error("PDF Export Error:", error);
+        alert("حدث خطأ أثناء التصدير، راجع الكونسول.");
     } finally {
         exportBtn.innerHTML = originalBtnContent;
+        exportBtn.disabled = false;
     }
 }
+
+// ربط الزر (تأكد أن الـ ID صحيح في ملف HTML لديك)
 document.getElementById('full-export-btn').onclick = exportCouncilPDF;
