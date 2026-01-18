@@ -209,96 +209,37 @@ setInterval(spawnThought, 1500);
 // --- كود تصدير المحادثة الملكي (PDF) ---
 // --- وظيفة تصدير المحادثة إلى PDF بلمسات AAIO الملكية ---
 async function exportCouncilPDF() {
-    const chatWindow = document.getElementById('chat-window');
+    const chatWindow = document.getElementById('chat-window'); // سنصدر النافذة مباشرة
     const exportBtn = document.getElementById('full-export-btn');
 
-    if (!chatWindow || chatWindow.children.length === 0) return alert("The Council is silent!");
+    if (!chatWindow) return alert("Chat window not found!");
 
     const originalBtnContent = exportBtn.innerHTML;
     exportBtn.innerHTML = "⏳ Exporting...";
-    exportBtn.disabled = true;
-
+    
     try {
-        // 1. إنشاء الحاوية
-        const pdfContent = document.createElement('div');
-        pdfContent.id = "temp-pdf-export";
-        
-        // التنسيق: جعلناه مرئياً ولكن في أسفل الصفحة تماماً لكي لا يربكك
-        pdfContent.style.cssText = `
-            padding: 40px; 
-            background: #fff; 
-            color: #000; 
-            width: 800px; 
-            position: absolute; 
-            left: 0; 
-            top: 100%; 
-            z-index: -999;
-            font-family: "Arial", sans-serif;
-            direction: rtl;
-        `;
-
-        // 2. بناء المحتوى
-        let discussionBody = `
-            <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 30px;">
-                <h1 style="margin: 0;">AAIO Council Report</h1>
-                <p style="margin: 5px 0;">Official AI Strategy Document</p>
-            </div>
-            <style>
-                table { width: 100%; border-collapse: collapse; margin-bottom: 20px; border: 1px solid #000; direction: ltr; }
-                th, td { border: 1px solid #000; padding: 8px; text-align: left; font-size: 12px; }
-                .msg-container { margin-bottom: 25px; page-break-inside: avoid; }
-                .advisor-label { font-weight: bold; font-size: 16px; color: #333; display: block; margin-bottom: 5px; text-align: right; }
-                .text-body { text-align: justify; line-height: 1.5; font-size: 14px; }
-            </style>
-        `;
-
-        const messages = chatWindow.querySelectorAll('.council-message');
-        messages.forEach(msg => {
-            const senderName = msg.querySelector('.sender-name')?.innerText || 'Advisor'; 
-            const messageHTML = msg.querySelector('.message-text')?.innerHTML || msg.innerHTML;
-
-            discussionBody += `
-                <div class="msg-container">
-                    <span class="advisor-label">${senderName}:</span>
-                    <div class="text-body" dir="auto">
-                        ${messageHTML}
-                    </div>
-                </div>`;
-        });
-
-        pdfContent.innerHTML = discussionBody;
-        document.body.appendChild(pdfContent);
-
-        // 3. خيارات التصدير
+        // إعدادات التصدير
         const options = {
             margin: [10, 10, 10, 10],
-            filename: `AAIO_Report_${Date.now()}.pdf`,
+            filename: `AAIO_Direct_Export.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { 
                 scale: 2, 
-                useCORS: true, 
-                scrollX: 0, 
-                scrollY: 0,
-                // إجبار المكتبة على الانتظار قليلاً لضمان الرسم
-                logging: false 
+                useCORS: true,
+                logging: false,
+                letterRendering: true // مهم جداً لربط الحروف العربية
             },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
 
-        // انتظر 300 مللي ثانية للتأكد من أن المتصفح رسم العناصر
-        await new Promise(r => setTimeout(r, 300));
-
-        // 4. التصدير
-        await html2pdf().set(options).from(pdfContent).save();
-
-        // 5. التنظيف
-        document.body.removeChild(pdfContent);
+        // التنفيذ مباشرة من عنصر النافذة الموجود فعلياً في الصفحة
+        // هذا يحل مشكلة الصفحة البيضاء تماماً
+        await html2pdf().set(options).from(chatWindow).save();
 
     } catch (error) {
         console.error("Export Error:", error);
-        alert("Export failed. Please check console.");
     } finally {
         exportBtn.innerHTML = originalBtnContent;
-        exportBtn.disabled = false;
     }
 }
 
