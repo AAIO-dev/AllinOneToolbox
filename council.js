@@ -86,15 +86,18 @@ async function startCouncilDiscussion() {
         chatWindow.appendChild(messageDiv);
 
         // ============================================================
-        // ➕ حقنة الرياضيات: تفعيل KaTeX فوراً بعد إضافة الرسالة ➕
+        // ➕ حقنة الرياضيات المطورة (KaTeX) ➕
         // ============================================================
         if (window.renderMathInElement) {
             renderMathInElement(messageDiv, {
                 delimiters: [
-                    {left: '$$', right: '$$', display: true},  // معادلة في سطر منفصل
-                    {left: '$', right: '$', display: false},   // معادلة داخل النص
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false},
+                    {left: '\\[', right: '\\]', display: true}, // نمط اللاتكس القياسي
                     {left: '\\(', right: '\\)', display: false},
-                    {left: '\\[', right: '\\]', display: true}
+                    // إضافة لدعم النمط الذي أرسلته أنت في النص:
+                    {left: '[ ', right: ' ]', display: true}, 
+                    {left: '(', right: ')', display: false} 
                 ],
                 throwOnError: false
             });
