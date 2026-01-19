@@ -229,19 +229,17 @@ setInterval(spawnThought, 1500);
 
 // --- كود تصدير المحادثة الملكي (PDF) ---
 // --- وظيفة تصدير المحادثة إلى PDF بلمسات AAIO الملكية ---
-// --- وظيفة تصدير المحادثة إلى PDF (إصلاح الحروف المقطعة + حيلة النقاط) ---
+// --- وظيفة تصدير المحادثة إلى PDF (إصلاح الخط العربي والنقاط) ---
 async function exportCouncilPDF() {
     const chatWindow = document.getElementById('chat-window');
     const exportBtn = document.getElementById('full-export-btn');
 
-    if (!chatWindow || chatWindow.children.length === 0) return alert("The Council is silent!");
+    if (chatWindow.children.length === 0) return alert("The Council is silent!");
 
     const originalBtnContent = exportBtn.innerHTML;
     exportBtn.innerHTML = "⏳";
 
     try {
-        const isArabicContent = (text) => /[\u0600-\u06FF]/.test(text);
-
         const options = {
             margin: [15, 15, 15, 15],
             filename: `AAIO_Official_Report.pdf`,
@@ -249,89 +247,58 @@ async function exportCouncilPDF() {
                 scale: 2, 
                 useCORS: true, 
                 backgroundColor: "#ffffff"
+                // letterRendering محذوف كما اتفقنا
             },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
             pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
         };
 
-        const fullText = chatWindow.innerText || "";
-        const isGlobalArabic = isArabicContent(fullText);
-
         const pdfContent = document.createElement('div');
         
-        // 1. العودة للأمان: الحاوية LTR دائماً لمنع تقطيع الحروف
-        pdfContent.style.cssText = `
-            padding: 20px; 
-            color: #000; 
-            background: #fff; 
-            font-family: 'Arial', sans-serif; 
-            line-height: 1.6; 
-            direction: ltr; 
-            text-align: ${isGlobalArabic ? 'right' : 'left'};
-        `;
+        // التغيير الجوهري 1: استبدال Times New Roman بـ Arial لحل مشكلة الالتصاق
+        pdfContent.style.cssText = "padding:20px; color:#000; background:#fff; font-family:'Arial', sans-serif; line-height:1.6;";
 
-        // 2. حيلة Flexbox لعكس النقاط دون كسر اللغة
         const styleFix = `
             <style>
-                table { width: 100%; border-collapse: collapse; margin-bottom: 20px; border: 1px solid #000; }
-                th, td { border: 1px solid #000; padding: 8px; font-size: 12px; text-align: left; }
-
-                /* حيلة النقاط للعربية */
-                ${isGlobalArabic ? `
-                ul, ol {
-                    padding: 0;
-                    margin: 0 10px 0 0;
-                    list-style: none; /* نخفي النقاط التقليدية */
-                }
-                li {
-                    display: flex;
-                    flex-direction: row-reverse; /* نعكس الترتيب: النقطة يمين، النص يسار */
-                    align-items: flex-start;
-                    margin-bottom: 5px;
-                }
-                li::before {
-                    content: "•"; /* نرسم النقطة يدوياً */
-                    font-weight: bold;
-                    margin-left: 10px; /* مسافة بين النقطة والنص */
-                    font-size: 16px;
-                }
-                /* للأرقام (ol) سنحتاج لتعديل بسيط لظهور الرقم */
-                ol { counter-reset: item; }
-                ol li::before {
-                    content: counter(item) "."; 
-                    counter-increment: item;
-                    font-size: 13px;
-                }
-                ` : `
-                /* الإنجليزية تبقى طبيعية */
-                ul, ol { margin-left: 20px; }
-                li { list-style-position: outside; }
-                `}
+                table { width: 100%; border-collapse: collapse; margin-bottom: 20px; border: 1px solid #000; direction: ltr; }
+                th, td { border: 1px solid #000; padding: 8px; text-align: left; font-size: 12px; }
                 
-                /* منع التصادم */
-                p, div, span, li {
-                    word-wrap: break-word;
+                /* التغيير الجوهري 2: إجبار النقاط للعربية */
+                ul, ol { 
+                    direction: rtl !important; 
+                    text-align: right !important; 
+                    margin-right: 20px !important; 
+                    padding-right: 0 !important;
                 }
+                li { list-style-position: inside !important; margin-bottom: 5px; }
+
+                /* ضمان عدم تداخل الحروف */
+                p, div, span, li {
+                    letter-spacing: normal !important;
+                    word-spacing: normal !important;
+                }
+                
+                /* الحفاظ على المعادلات والإنجليزية يساراً */
+                [dir="auto"] { text-align: initial; }
             </style>
         `;
 
         const messages = chatWindow.querySelectorAll('.council-message');
         let discussionBody = styleFix; 
         
+        // العنوان
         discussionBody += `<h1 style="text-align:center; color:#333; margin-bottom:30px;">AAIO Council Report</h1>`;
 
         messages.forEach(msg => {
-            const nameEl = msg.querySelector('.bot-name');
-            const name = nameEl ? nameEl.innerText : 'Advisor';
-            
+            const name = msg.querySelector('.bot-name').innerText;
+            // استخدام innerHTML للحفاظ على التنسيق الداخلي (Bold/Italic)
             const messageElement = msg.querySelector('.message-text') || msg.querySelector('div:last-child');
-            if (!messageElement) return;
             const messageHTML = messageElement.innerHTML;
 
             discussionBody += `
                 <div style="margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px; page-break-inside: avoid;">
                     <div style="font-weight:bold; color:#6f42c1; margin-bottom:10px; font-size:14px;">${name}:</div>
-                    <div style="font-size: 13px; text-align: ${isGlobalArabic ? 'right' : 'left'};">
+                    <div style="font-size: 13px; text-align: justify;" dir="auto">
                         ${messageHTML}
                     </div>
                 </div>`;
