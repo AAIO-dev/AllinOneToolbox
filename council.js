@@ -229,92 +229,55 @@ setInterval(spawnThought, 1500);
 
 // --- كود تصدير المحادثة الملكي (PDF) ---
 // --- وظيفة تصدير المحادثة إلى PDF بلمسات AAIO الملكية ---
-// --- وظيفة تصدير المحادثة إلى PDF (الإصلاح الجذري: خط Arial + إلغاء Justify) ---
 async function exportCouncilPDF() {
     const chatWindow = document.getElementById('chat-window');
     const exportBtn = document.getElementById('full-export-btn');
 
-    if (!chatWindow || chatWindow.children.length === 0) return alert("The Council is silent!");
+    if (chatWindow.children.length === 0) return alert("The Council is silent!");
 
     const originalBtnContent = exportBtn.innerHTML;
     exportBtn.innerHTML = "⏳";
 
     try {
-        // دالة مساعدة لتحديد هل النص الغالب عربي أم إنجليزي
-        const isArabicContent = (text) => /[\u0600-\u06FF]/.test(text);
-
         const options = {
             margin: [15, 15, 15, 15],
             filename: `AAIO_Official_Report.pdf`,
+            // إضافة letterRendering: true هي المشرط الذي يمنع تقطع الحروف العربية
             html2canvas: { 
                 scale: 2, 
                 useCORS: true, 
-                backgroundColor: "#ffffff"
+                backgroundColor: "#ffffff",
+                letterRendering: true 
             },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
             pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
         };
 
-        const fullText = chatWindow.innerText || "";
-        const isGlobalArabic = isArabicContent(fullText);
-
         const pdfContent = document.createElement('div');
         
-        // 1. استخدام خط Arial إجباري لحل مشكلة الالتصاق
-        // 2. إلغاء justify واستخدام right/left لحل مشكلة التداخل
-        pdfContent.style.cssText = `
-            padding: 20px; 
-            color: #000; 
-            background: #fff; 
-            font-family: 'Arial', sans-serif; 
-            line-height: 1.6; 
-            direction: ${isGlobalArabic ? 'rtl' : 'ltr'}; 
-            text-align: ${isGlobalArabic ? 'right' : 'left'};
-        `;
+        // تعديل جراحي: أضفنا unicode-bidi و "Times New Roman" لأنه أفضل خط نظام يربط العربية
+        pdfContent.style.cssText = "padding:10px; color:#000; background:#fff; font-family:'Times New Roman', serif; direction:rtl; line-height:1.4; unicode-bidi: embed;";
 
+        // إضافة تنسيق داخلي بسيط جداً لإصلاح الجداول والنقاط الإنجليزية
         const styleFix = `
             <style>
-                /* ضمان ظهور الجداول بحدود واضحة */
-                table { width: 100%; border-collapse: collapse; margin-bottom: 20px; border: 1px solid #000; }
-                th, td { border: 1px solid #000; padding: 8px; font-size: 12px; }
-                
-                /* تنسيق القوائم لضمان ظهور النقاط في الجهة الصحيحة */
-                ul, ol { 
-                    margin-${isGlobalArabic ? 'right' : 'left'}: 20px; 
-                    padding-${isGlobalArabic ? 'right' : 'left'}: 0;
-                }
-                
-                /* منع الكلمات الطويلة من الخروج عن الصفحة */
-                p, div, span, li {
-                    word-wrap: break-word;
-                }
-
-                /* حل مشكلة التصاق الكلمات المائلة والرموز الرياضية */
-                em, i, .math, .katex {
-                    font-style: normal !important; /* إلغاء الميلان في التصدير لأنه يسبب الالتصاق */
-                    letter-spacing: 0.5px; /* إضافة تنفس بسيط للحروف */
-                }
+                table { width: 100%; border-collapse: collapse; margin-bottom: 20px; border: 1px solid #000; direction: ltr; }
+                th, td { border: 1px solid #000; padding: 8px; text-align: left; font-size: 12px; }
+                /* الملقط: إجبار القوائم الإنجليزية على اتجاه اليسار بذكاء */
+                [dir="auto"] { text-align: initial; }
             </style>
         `;
 
         const messages = chatWindow.querySelectorAll('.council-message');
         let discussionBody = styleFix; 
-        
-        discussionBody += `<h1 style="text-align:center; color:#333; margin-bottom:30px;">AAIO Council Report</h1>`;
 
         messages.forEach(msg => {
-            const nameEl = msg.querySelector('.bot-name');
-            const name = nameEl ? nameEl.innerText : 'Advisor';
-            
-            const messageElement = msg.querySelector('.message-text') || msg.querySelector('div:last-child');
-            if (!messageElement) return;
+            const messageHTML = msg.querySelector('.message-text')?.innerHTML || msg.innerHTML;
 
-            const messageHTML = messageElement.innerHTML;
-
+            // الملقط: أضفنا dir="auto" هنا لكي يعرف المتصفح تلقائياً إذا كان السطر إنجليزي أو عربي
             discussionBody += `
-                <div style="margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px; page-break-inside: avoid;">
-                    <div style="font-weight:bold; color:#6f42c1; margin-bottom:10px; font-size:14px;">${name}:</div>
-                    <div style="font-size: 13px;">
+                <div style="margin-bottom: 25px; page-break-inside: avoid;">
+                    <div style="font-size: 13px; text-align: justify; color: #000;" dir="auto">
                         ${messageHTML}
                     </div>
                 </div>`;
@@ -322,13 +285,13 @@ async function exportCouncilPDF() {
 
         pdfContent.innerHTML = discussionBody;
 
+        // الخطوة الأهم: إلحاق العنصر بالصفحة "لحظياً" ليراه المتصفح ويربط الحروف ثم حذفه
         document.body.appendChild(pdfContent); 
         await html2pdf().set(options).from(pdfContent).save();
         document.body.removeChild(pdfContent);
 
     } catch (error) {
         console.error("PDF Error:", error);
-        alert("Export failed.");
     } finally {
         exportBtn.innerHTML = originalBtnContent;
     }
