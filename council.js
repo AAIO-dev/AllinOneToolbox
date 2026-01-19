@@ -229,142 +229,115 @@ setInterval(spawnThought, 1500);
 
 // --- كود تصدير المحادثة الملكي (PDF) ---
 // --- وظيفة تصدير المحادثة إلى PDF بلمسات AAIO الملكية ---
-// --- وظيفة تصدير المحادثة إلى PDF (نظام الفصل بين الجبهات) ---
+// --- وظيفة تصدير المحادثة إلى PDF (إصلاح مشكلة الصفحة البيضاء) ---
 async function exportCouncilPDF() {
     const chatWindow = document.getElementById('chat-window');
     const exportBtn = document.getElementById('full-export-btn');
 
     if (!chatWindow || chatWindow.children.length === 0) return alert("The Council is silent!");
 
-    // حفظ نص الزر الأصلي وإظهار مؤشر الانتظار
     const originalBtnContent = exportBtn.innerHTML;
     exportBtn.innerHTML = "⏳ Processing...";
 
     try {
-        // 1. إعدادات مكتبة التصدير
         const options = {
-            margin: [15, 15, 15, 15], // هوامش الصفحة (ملم)
+            margin: [10, 10, 10, 10], 
             filename: `AAIO_Council_Report.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { 
-                scale: 2, // دقة عالية
+                scale: 2, 
                 useCORS: true, 
                 backgroundColor: "#ffffff",
-                logging: false
+                scrollY: 0 // مهم جداً: يبدأ التصوير من الأعلى
             },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
             pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
         };
 
-        // 2. دالة الفحص: هل النص يحتوي على عربي؟
-        // إذا وجدنا حرفاً عربياً واحداً، نعتبر الرسالة "جبهة يمين"
         const isArabicText = (text) => /[\u0600-\u06FF]/.test(text);
 
-        // 3. بناء محتوى الـ PDF (وعاء جديد نظيف)
         let pdfContentHTML = `
             <style>
-                /* تنسيقات عامة للصفحة */
                 body { font-family: sans-serif; background: #fff; color: #000; }
                 
-                /* --- جبهة اليمين (للمحتوى العربي والمختلط) --- */
                 .rtl-message {
-                    font-family: 'Arial', sans-serif; /* Arial هو الملك للعربي */
+                    font-family: 'Arial', sans-serif;
                     direction: rtl;
                     text-align: right;
-                    margin-bottom: 25px;
-                    border-right: 4px solid #6f42c1; /* زخرفة بسيطة لليمين */
-                    padding-right: 10px;
+                    margin-bottom: 20px;
+                    border-right: 4px solid #6f42c1;
+                    padding-right: 15px;
                 }
 
-                /* --- جبهة اليسار (للمحتوى الإنجليزي الصرف) --- */
                 .ltr-message {
-                    font-family: 'Segoe UI', 'Helvetica', 'Arial', sans-serif; /* خطوط ممتازة للرياضيات */
+                    font-family: 'Segoe UI', 'Helvetica', sans-serif;
                     direction: ltr;
                     text-align: left;
-                    margin-bottom: 25px;
-                    border-left: 4px solid #28a745; /* زخرفة بسيطة لليسار */
-                    padding-left: 10px;
+                    margin-bottom: 20px;
+                    border-left: 4px solid #28a745;
+                    padding-left: 15px;
                 }
 
-                /* --- إصلاح مشكلة التصاق المائل (Italic Fix) --- */
-                /* يطبق فقط داخل الرسائل الإنجليزية */
+                /* إصلاح الالتصاق: إلغاء الميلان وإضافة مسافة */
                 .ltr-message em, .ltr-message i, .ltr-message .katex {
-                    font-style: normal !important; /* نلغي الميلان في الطباعة لتجنب الالتصاق */
-                    font-weight: 500; /* نميزه بوزن أثقل قليلاً */
-                    letter-spacing: 0.3px; /* تنفس بسيط للحروف */
-                    background-color: transparent !important;
+                    font-style: normal !important;
+                    font-weight: 500;
+                    letter-spacing: 0.2px; 
                 }
 
-                /* تنسيق اسم المستشار */
-                .advisor-name {
-                    font-weight: bold;
-                    font-size: 14px;
-                    margin-bottom: 5px;
-                    color: #555;
-                    text-transform: uppercase;
-                }
-
-                /* تنسيق نص الرسالة */
-                .message-body {
-                    font-size: 13px;
-                    line-height: 1.6;
-                }
-
-                /* تحسين الجداول داخل الـ PDF */
-                table { width: 100%; border-collapse: collapse; margin: 10px 0; }
-                th, td { border: 1px solid #ccc; padding: 6px; }
+                .advisor-name { font-weight: bold; font-size: 14px; margin-bottom: 5px; color: #555; text-transform: uppercase; }
+                .message-body { font-size: 13px; line-height: 1.6; }
+                table { width: 100%; border-collapse: collapse; margin: 10px 0; border: 1px solid #ddd; }
+                th, td { border: 1px solid #ddd; padding: 8px; }
             </style>
             
-            <h1 style="text-align:center; color:#333; font-family:'Arial'; margin-bottom:40px;">AAIO Council Report</h1>
+            <h1 style="text-align:center; color:#333; font-family:'Arial'; margin-bottom:30px;">AAIO Council Report</h1>
         `;
 
-        // 4. الدوران على الرسائل وفرزها
         const messages = chatWindow.querySelectorAll('.council-message');
 
         messages.forEach(msg => {
-            // استخراج اسم المستشار
             const nameEl = msg.querySelector('.bot-name');
             const name = nameEl ? nameEl.innerText.trim() : 'Advisor';
-            
-            // استخراج نص الرسالة (HTML)
             const contentEl = msg.querySelector('.message-text') || msg.querySelector('div:last-child');
             if (!contentEl) return;
             
-            // فحص اللغة بناءً على النص الخام
             const rawText = contentEl.innerText || "";
             const isRightFront = isArabicText(rawText);
-
-            // تحديد الكلاس المناسب بناءً على الجبهة
             const containerClass = isRightFront ? 'rtl-message' : 'ltr-message';
             
-            // إضافة الكتلة إلى المحتوى النهائي
             pdfContentHTML += `
                 <div class="${containerClass}" style="page-break-inside: avoid;">
                     <div class="advisor-name">${name}</div>
-                    <div class="message-body">
-                        ${contentEl.innerHTML}
-                    </div>
+                    <div class="message-body">${contentEl.innerHTML}</div>
                 </div>
             `;
         });
 
-        // 5. إنشاء عنصر مؤقت وتوليد الملف
         const elementToPrint = document.createElement('div');
         elementToPrint.innerHTML = pdfContentHTML;
         
-        // إضافة العنصر للصفحة (مخفي) ليتمكن html2pdf من رؤيته
-        elementToPrint.style.position = 'fixed';
-        elementToPrint.style.left = '-9999px';
+        // --- التغيير الجذري هنا لإصلاح الصفحة البيضاء ---
+        // بدلاً من إخفائه بعيداً، نضعه في الخلفية بحجم A4 ثابت
+        elementToPrint.style.position = 'absolute';
+        elementToPrint.style.top = '0';
+        elementToPrint.style.left = '0';
+        elementToPrint.style.width = '210mm'; // عرض ورقة A4
+        elementToPrint.style.zIndex = '-9999'; // خلف الموقع الحالي
+        elementToPrint.style.background = '#ffffff'; // خلفية بيضاء لضمان التصوير
+        
         document.body.appendChild(elementToPrint);
+
+        // انتظار لحظي لضمان الرسم
+        await new Promise(r => setTimeout(r, 500)); 
 
         await html2pdf().set(options).from(elementToPrint).save();
 
-        // تنظيف
         document.body.removeChild(elementToPrint);
 
     } catch (error) {
-        console.error("PDF Export Error:", error);
-        alert("Export failed due to a technical error.");
+        console.error("PDF Error:", error);
+        alert("Export failed.");
     } finally {
         exportBtn.innerHTML = originalBtnContent;
     }
