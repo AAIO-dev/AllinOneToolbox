@@ -229,115 +229,69 @@ setInterval(spawnThought, 1500);
 
 // --- كود تصدير المحادثة الملكي (PDF) ---
 // --- وظيفة تصدير المحادثة إلى PDF بلمسات AAIO الملكية ---
-// --- وظيفة تصدير المحادثة إلى PDF (إصلاح مشكلة الصفحة البيضاء) ---
 async function exportCouncilPDF() {
     const chatWindow = document.getElementById('chat-window');
     const exportBtn = document.getElementById('full-export-btn');
 
-    if (!chatWindow || chatWindow.children.length === 0) return alert("The Council is silent!");
+    if (chatWindow.children.length === 0) return alert("The Council is silent!");
 
     const originalBtnContent = exportBtn.innerHTML;
-    exportBtn.innerHTML = "⏳ Processing...";
+    exportBtn.innerHTML = "⏳";
 
     try {
         const options = {
-            margin: [10, 10, 10, 10], 
-            filename: `AAIO_Council_Report.pdf`,
-            image: { type: 'jpeg', quality: 0.98 },
+            margin: [15, 15, 15, 15],
+            filename: `AAIO_Official_Report.pdf`,
+            // إضافة letterRendering: true هي المشرط الذي يمنع تقطع الحروف العربية
             html2canvas: { 
                 scale: 2, 
                 useCORS: true, 
                 backgroundColor: "#ffffff",
-                scrollY: 0 // مهم جداً: يبدأ التصوير من الأعلى
+                letterRendering: true 
             },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
             pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
         };
 
-        const isArabicText = (text) => /[\u0600-\u06FF]/.test(text);
+        const pdfContent = document.createElement('div');
+        
+        // تعديل جراحي: أضفنا unicode-bidi و "Times New Roman" لأنه أفضل خط نظام يربط العربية
+        pdfContent.style.cssText = "padding:10px; color:#000; background:#fff; font-family:'Times New Roman', serif; direction:rtl; line-height:1.4; unicode-bidi: embed;";
 
-        let pdfContentHTML = `
+        // إضافة تنسيق داخلي بسيط جداً لإصلاح الجداول والنقاط الإنجليزية
+        const styleFix = `
             <style>
-                body { font-family: sans-serif; background: #fff; color: #000; }
-                
-                .rtl-message {
-                    font-family: 'Arial', sans-serif;
-                    direction: rtl;
-                    text-align: right;
-                    margin-bottom: 20px;
-                    border-right: 4px solid #6f42c1;
-                    padding-right: 15px;
-                }
-
-                .ltr-message {
-                    font-family: 'Segoe UI', 'Helvetica', sans-serif;
-                    direction: ltr;
-                    text-align: left;
-                    margin-bottom: 20px;
-                    border-left: 4px solid #28a745;
-                    padding-left: 15px;
-                }
-
-                /* إصلاح الالتصاق: إلغاء الميلان وإضافة مسافة */
-                .ltr-message em, .ltr-message i, .ltr-message .katex {
-                    font-style: normal !important;
-                    font-weight: 500;
-                    letter-spacing: 0.2px; 
-                }
-
-                .advisor-name { font-weight: bold; font-size: 14px; margin-bottom: 5px; color: #555; text-transform: uppercase; }
-                .message-body { font-size: 13px; line-height: 1.6; }
-                table { width: 100%; border-collapse: collapse; margin: 10px 0; border: 1px solid #ddd; }
-                th, td { border: 1px solid #ddd; padding: 8px; }
+                table { width: 100%; border-collapse: collapse; margin-bottom: 20px; border: 1px solid #000; direction: ltr; }
+                th, td { border: 1px solid #000; padding: 8px; text-align: left; font-size: 12px; }
+                /* الملقط: إجبار القوائم الإنجليزية على اتجاه اليسار بذكاء */
+                [dir="auto"] { text-align: initial; }
             </style>
-            
-            <h1 style="text-align:center; color:#333; font-family:'Arial'; margin-bottom:30px;">AAIO Council Report</h1>
         `;
 
         const messages = chatWindow.querySelectorAll('.council-message');
+        let discussionBody = styleFix; 
 
         messages.forEach(msg => {
-            const nameEl = msg.querySelector('.bot-name');
-            const name = nameEl ? nameEl.innerText.trim() : 'Advisor';
-            const contentEl = msg.querySelector('.message-text') || msg.querySelector('div:last-child');
-            if (!contentEl) return;
-            
-            const rawText = contentEl.innerText || "";
-            const isRightFront = isArabicText(rawText);
-            const containerClass = isRightFront ? 'rtl-message' : 'ltr-message';
-            
-            pdfContentHTML += `
-                <div class="${containerClass}" style="page-break-inside: avoid;">
-                    <div class="advisor-name">${name}</div>
-                    <div class="message-body">${contentEl.innerHTML}</div>
-                </div>
-            `;
+            const messageHTML = msg.querySelector('.message-text')?.innerHTML || msg.innerHTML;
+
+            // الملقط: أضفنا dir="auto" هنا لكي يعرف المتصفح تلقائياً إذا كان السطر إنجليزي أو عربي
+            discussionBody += `
+                <div style="margin-bottom: 25px; page-break-inside: avoid;">
+                    <div style="font-size: 13px; text-align: justify; color: #000;" dir="auto">
+                        ${messageHTML}
+                    </div>
+                </div>`;
         });
 
-        const elementToPrint = document.createElement('div');
-        elementToPrint.innerHTML = pdfContentHTML;
-        
-        // --- التغيير الجذري هنا لإصلاح الصفحة البيضاء ---
-        // بدلاً من إخفائه بعيداً، نضعه في الخلفية بحجم A4 ثابت
-        elementToPrint.style.position = 'absolute';
-        elementToPrint.style.top = '0';
-        elementToPrint.style.left = '0';
-        elementToPrint.style.width = '210mm'; // عرض ورقة A4
-        elementToPrint.style.zIndex = '-9999'; // خلف الموقع الحالي
-        elementToPrint.style.background = '#ffffff'; // خلفية بيضاء لضمان التصوير
-        
-        document.body.appendChild(elementToPrint);
+        pdfContent.innerHTML = discussionBody;
 
-        // انتظار لحظي لضمان الرسم
-        await new Promise(r => setTimeout(r, 500)); 
-
-        await html2pdf().set(options).from(elementToPrint).save();
-
-        document.body.removeChild(elementToPrint);
+        // الخطوة الأهم: إلحاق العنصر بالصفحة "لحظياً" ليراه المتصفح ويربط الحروف ثم حذفه
+        document.body.appendChild(pdfContent); 
+        await html2pdf().set(options).from(pdfContent).save();
+        document.body.removeChild(pdfContent);
 
     } catch (error) {
         console.error("PDF Error:", error);
-        alert("Export failed.");
     } finally {
         exportBtn.innerHTML = originalBtnContent;
     }
