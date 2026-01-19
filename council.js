@@ -247,6 +247,7 @@ async function exportCouncilPDF() {
                 scale: 2, 
                 useCORS: true, 
                 backgroundColor: "#ffffff",
+                letterRendering: true 
             },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
             pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
@@ -264,10 +265,6 @@ async function exportCouncilPDF() {
                 th, td { border: 1px solid #000; padding: 8px; text-align: left; font-size: 12px; }
                 /* الملقط: إجبار القوائم الإنجليزية على اتجاه اليسار بذكاء */
                 [dir="auto"] { text-align: initial; }
-
-                /* ➕ هذا هو السطر الجديد الذي ستضيفه بالمشرط هنا: */
-        ul, ol { direction: rtl; text-align: right; margin-right: 20px; }
-        li { list-style-position: inside; }
             </style>
         `;
 
