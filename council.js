@@ -327,11 +327,12 @@ function getArabicTemplate(name, content) {
 }
 
 // ==========================================
-// 3. القالب الإنجليزي (خام - بدون حدود + إصلاح الالتصاق)
+// 3. المتخصص الإنجليزي (جبهة اليسار - نسخة التوسعة الشاملة)
 // ==========================================
 function getEnglishTemplate(name, content) {
-    // الحفاظ على إصلاح الالتصاق
-    let safeContent = content.replace(/<(em|i)>/g, '<span style="font-style: normal; font-weight: 500; letter-spacing: 0.3px; word-spacing: 3px; color: #000; display: inline-block;">');
+    // 1. تنظيف المحتوى:
+    // نستبدل المائل بتنسيق عادي ومريح للقراءة
+    let safeContent = content.replace(/<(em|i)>/g, '<span style="font-style: normal; font-weight: 500; color: #000;">');
     safeContent = safeContent.replace(/<\/(em|i)>/g, '</span>');
 
     return `
@@ -340,12 +341,18 @@ function getEnglishTemplate(name, content) {
             text-align: left; 
             font-family: 'Segoe UI', 'Helvetica', sans-serif; 
             font-size: 13px; 
-            line-height: 1.6;
+            line-height: 1.8; /* زدنا ارتفاع السطر قليلاً */
             margin-bottom: 25px;
-            /* تم حذف الحدود والزينة */
+            
+            /* --- العلاج الشامل للالتصاق --- */
+            word-spacing: 2px;       /* مسافة إجبارية بين الكلمات */
+            letter-spacing: 0.3px;   /* مسافة بسيطة بين الحروف */
+            font-variant-ligatures: none; /* منع دمج الحروف ببعضها */
+            text-rendering: optimizeLegibility; /* تحسين وضوح النص */
+            
             page-break-inside: avoid;
         ">
-            <div style="font-weight:bold; color:#000; margin-bottom:5px; text-transform: uppercase;">${name}</div>
+            <div style="font-weight:bold; color:#000; margin-bottom:5px; text-transform: uppercase; letter-spacing: 1px;">${name}</div>
             <div style="color:#000;">
                 ${safeContent}
             </div>
