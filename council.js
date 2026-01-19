@@ -325,11 +325,12 @@ function getArabicTemplate(name, content) {
 }
 
 // ==========================================
-// 3. القالب الإنجليزي (جبهة اليسار - Segoe UI + إصلاح الالتصاق)
+// 3. المتخصص الإنجليزي (جبهة اليسار - تعديل تباعد الكلمات)
 // ==========================================
 function getEnglishTemplate(name, content) {
-    // إصلاح الالتصاق: إلغاء الميلان وزيادة المسافات في النصوص الإنجليزية فقط
-    let safeContent = content.replace(/<(em|i)>/g, '<span style="font-style: normal; font-weight: 500; letter-spacing: 0.3px; color: #333;">');
+    // 1. تنظيف المحتوى: إصلاح الالتصاق عبر إلغاء الميلان وزيادة المسافات
+    // التعديل الجديد: أضفنا word-spacing: 2px لإجبار الكلمات على التباعد
+    let safeContent = content.replace(/<(em|i)>/g, '<span style="font-style: normal; font-weight: 500; letter-spacing: 0.3px; word-spacing: 3px; color: #333; display: inline-block;">');
     safeContent = safeContent.replace(/<\/(em|i)>/g, '</span>');
 
     return `
