@@ -73,16 +73,34 @@ async function startCouncilDiscussion() {
         conversationHistory.push({ role: "assistant", name: member.name, content: responseText });
 
         // 4. إنشاء الفقاعة وإضافتها (الطريقة الجديدة والآمنة)
+        // 4. إنشاء الفقاعة وإضافتها (الطريقة الجديدة والآمنة)
         const messageDiv = document.createElement('div');
         messageDiv.className = `council-message ${member.style}`;
         messageDiv.innerHTML = `
             <img src="${member.logo}" class="council-logo">
             <div>
                 <span class="bot-name">${member.name}</span>
-                <div>${marked.parse(responseText)}</div>
+                <div class="message-text">${marked.parse(responseText)}</div>
             </div>
         `;
         chatWindow.appendChild(messageDiv);
+
+        // ============================================================
+        // ➕ حقنة الرياضيات: تفعيل KaTeX فوراً بعد إضافة الرسالة ➕
+        // ============================================================
+        if (window.renderMathInElement) {
+            renderMathInElement(messageDiv, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},  // معادلة في سطر منفصل
+                    {left: '$', right: '$', display: false},   // معادلة داخل النص
+                    {left: '\\(', right: '\\)', display: false},
+                    {left: '\\[', right: '\\]', display: true}
+                ],
+                throwOnError: false
+            });
+        }
+        // ============================================================
+
         chatWindow.scrollTop = chatWindow.scrollHeight;
 
     } catch (error) {
