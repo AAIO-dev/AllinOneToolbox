@@ -229,7 +229,7 @@ setInterval(spawnThought, 1500);
 
 // --- كود تصدير المحادثة الملكي (PDF) ---
 // --- وظيفة تصدير المحادثة إلى PDF بلمسات AAIO الملكية ---
-// --- وظيفة تصدير المحادثة إلى PDF (إصلاح الخط العربي والنقاط) ---
+// --- وظيفة تصدير المحادثة إلى PDF (النسخة النهائية لإصلاح التداخل) ---
 async function exportCouncilPDF() {
     const chatWindow = document.getElementById('chat-window');
     const exportBtn = document.getElementById('full-export-btn');
@@ -247,58 +247,63 @@ async function exportCouncilPDF() {
                 scale: 2, 
                 useCORS: true, 
                 backgroundColor: "#ffffff"
-                // letterRendering محذوف كما اتفقنا
             },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
             pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
         };
 
+        // 1. فحص المحتوى العام
+        const fullText = chatWindow.innerText;
+        const isGlobalArabic = isArabicContent(fullText);
+
         const pdfContent = document.createElement('div');
         
-        // التغيير الجوهري 1: استبدال Times New Roman بـ Arial لحل مشكلة الالتصاق
-        pdfContent.style.cssText = "padding:20px; color:#000; background:#fff; font-family:'Arial', sans-serif; line-height:1.6;";
+        // حذفنا letter-spacing لأنه مع justify كان يسبب الكوارث
+        pdfContent.style.cssText = `
+            padding: 20px; 
+            color: #000; 
+            background: #fff; 
+            font-family: 'Arial', sans-serif; 
+            line-height: 1.6;
+            direction: ${isGlobalArabic ? 'rtl' : 'ltr'}; 
+            text-align: ${isGlobalArabic ? 'right' : 'left'};
+        `;
 
         const styleFix = `
             <style>
-                table { width: 100%; border-collapse: collapse; margin-bottom: 20px; border: 1px solid #000; direction: ltr; }
-                th, td { border: 1px solid #000; padding: 8px; text-align: left; font-size: 12px; }
+                table { width: 100%; border-collapse: collapse; margin-bottom: 20px; border: 1px solid #000; }
+                th, td { border: 1px solid #000; padding: 8px; font-size: 12px; }
                 
-                /* التغيير الجوهري 2: إجبار النقاط للعربية */
+                /* القوائم تتبع اتجاه الصفحة */
                 ul, ol { 
-                    direction: rtl !important; 
-                    text-align: right !important; 
-                    margin-right: 20px !important; 
-                    padding-right: 0 !important;
-                }
-                li { list-style-position: inside !important; margin-bottom: 5px; }
-
-                /* ضمان عدم تداخل الحروف */
-                p, div, span, li {
-                    letter-spacing: normal !important;
-                    word-spacing: normal !important;
+                    margin-${isGlobalArabic ? 'right' : 'left'}: 20px; 
+                    padding-${isGlobalArabic ? 'right' : 'left'}: 0;
                 }
                 
-                /* الحفاظ على المعادلات والإنجليزية يساراً */
-                [dir="auto"] { text-align: initial; }
+                /* تحسين التفاف الكلمات */
+                p, div, span, li {
+                    word-wrap: break-word;
+                }
+                
+                /* حماية خاصة للكلمات الإنجليزية داخل العربي */
+                span[lang="en"] { unicode-bidi: isolate; }
             </style>
         `;
 
         const messages = chatWindow.querySelectorAll('.council-message');
         let discussionBody = styleFix; 
         
-        // العنوان
         discussionBody += `<h1 style="text-align:center; color:#333; margin-bottom:30px;">AAIO Council Report</h1>`;
 
         messages.forEach(msg => {
             const name = msg.querySelector('.bot-name').innerText;
-            // استخدام innerHTML للحفاظ على التنسيق الداخلي (Bold/Italic)
             const messageElement = msg.querySelector('.message-text') || msg.querySelector('div:last-child');
             const messageHTML = messageElement.innerHTML;
 
             discussionBody += `
                 <div style="margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px; page-break-inside: avoid;">
                     <div style="font-weight:bold; color:#6f42c1; margin-bottom:10px; font-size:14px;">${name}:</div>
-                    <div style="font-size: 13px; text-align: justify;" dir="auto">
+                    <div style="font-size: 13px; text-align: ${isGlobalArabic ? 'right' : 'left'};">
                         ${messageHTML}
                     </div>
                 </div>`;
