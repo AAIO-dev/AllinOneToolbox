@@ -230,7 +230,7 @@ setInterval(spawnThought, 1500);
 // --- كود تصدير المحادثة الملكي (PDF) ---
 
 // ==========================================
-// 1. المايسترو: الوظيفة الرئيسية لإدارة التصدير (النظام المفصول)
+// 1. المايسترو: الوظيفة الرئيسية (نسخة "المحتوى الخام" + إصلاح التكرار)
 // ==========================================
 async function exportCouncilPDF() {
     const chatWindow = document.getElementById('chat-window');
@@ -242,7 +242,6 @@ async function exportCouncilPDF() {
     exportBtn.innerHTML = "⏳ Processing...";
 
     try {
-        // إعدادات التصدير
         const options = {
             margin: [15, 15, 15, 15],
             filename: `AAIO_Official_Report.pdf`,
@@ -256,12 +255,20 @@ async function exportCouncilPDF() {
             pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
         };
 
-        // الوعاء الرئيسي
         const pdfContainer = document.createElement('div');
+        // إعدادات الحاوية العامة
         pdfContainer.style.cssText = "padding: 20px; background: #fff; width: 210mm; box-sizing: border-box;";
         
-        // العنوان
-        pdfContainer.innerHTML = `<h1 style="text-align:center; font-family:'Segoe UI', sans-serif; color:#333; margin-bottom:30px;">AAIO Council Report</h1>`;
+        // --- (الحل الجذري) ---
+        // نضيف ستايل خاص لإخفاء النسخة المخفية من المعادلات
+        pdfContainer.innerHTML = `
+            <style>
+                .katex-mathml { display: none !important; } /* هذا السطر يقتل الأشباح */
+                .katex-html { display: inline-block !important; } /* وهذا يظهر المعادلة الأصلية */
+            </style>
+        `;
+
+        // حذفنا العنوان (الترويسة) بناءً على طلبك
 
         const messages = chatWindow.querySelectorAll('.council-message');
         
@@ -275,19 +282,15 @@ async function exportCouncilPDF() {
             const rawText = contentEl.innerText || "";
             const htmlContent = contentEl.innerHTML;
 
-            // كشاف اللغة: هل النص يحتوي على حروف عربية؟
             const isArabic = /[\u0600-\u06FF]/.test(rawText);
 
             if (isArabic) {
-                // استدعاء المتخصص العربي (جبهة اليمين)
                 pdfContainer.innerHTML += getArabicTemplate(name, htmlContent);
             } else {
-                // استدعاء المتخصص الإنجليزي (جبهة اليسار)
                 pdfContainer.innerHTML += getEnglishTemplate(name, htmlContent);
             }
         });
 
-        // التصدير
         document.body.appendChild(pdfContainer);
         await html2pdf().set(options).from(pdfContainer).save();
         document.body.removeChild(pdfContainer);
@@ -301,7 +304,7 @@ async function exportCouncilPDF() {
 }
 
 // ==========================================
-// 2. القالب العربي (جبهة اليمين - Times New Roman)
+// 2. القالب العربي (خام - بدون حدود)
 // ==========================================
 function getArabicTemplate(name, content) {
     return `
@@ -312,11 +315,10 @@ function getArabicTemplate(name, content) {
             font-size: 14px; 
             line-height: 1.6;
             margin-bottom: 25px;
-            border-right: 4px solid #6f42c1;
-            padding-right: 12px;
+            /* تم حذف الحدود والزينة */
             page-break-inside: avoid;
         ">
-            <div style="font-weight:bold; color:#444; margin-bottom:5px;">${name}</div>
+            <div style="font-weight:bold; color:#000; margin-bottom:5px;">${name}</div>
             <div style="color:#000;">
                 ${content}
             </div>
@@ -325,12 +327,11 @@ function getArabicTemplate(name, content) {
 }
 
 // ==========================================
-// 3. المتخصص الإنجليزي (جبهة اليسار - تعديل تباعد الكلمات)
+// 3. القالب الإنجليزي (خام - بدون حدود + إصلاح الالتصاق)
 // ==========================================
 function getEnglishTemplate(name, content) {
-    // 1. تنظيف المحتوى: إصلاح الالتصاق عبر إلغاء الميلان وزيادة المسافات
-    // التعديل الجديد: أضفنا word-spacing: 2px لإجبار الكلمات على التباعد
-    let safeContent = content.replace(/<(em|i)>/g, '<span style="font-style: normal; font-weight: 500; letter-spacing: 0.3px; word-spacing: 3px; color: #333; display: inline-block;">');
+    // الحفاظ على إصلاح الالتصاق
+    let safeContent = content.replace(/<(em|i)>/g, '<span style="font-style: normal; font-weight: 500; letter-spacing: 0.3px; word-spacing: 3px; color: #000; display: inline-block;">');
     safeContent = safeContent.replace(/<\/(em|i)>/g, '</span>');
 
     return `
@@ -341,11 +342,10 @@ function getEnglishTemplate(name, content) {
             font-size: 13px; 
             line-height: 1.6;
             margin-bottom: 25px;
-            border-left: 4px solid #28a745;
-            padding-left: 12px;
+            /* تم حذف الحدود والزينة */
             page-break-inside: avoid;
         ">
-            <div style="font-weight:bold; color:#444; margin-bottom:5px; text-transform: uppercase;">${name}</div>
+            <div style="font-weight:bold; color:#000; margin-bottom:5px; text-transform: uppercase;">${name}</div>
             <div style="color:#000;">
                 ${safeContent}
             </div>
