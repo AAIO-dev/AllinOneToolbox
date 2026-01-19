@@ -228,22 +228,24 @@ function spawnThought() {
 setInterval(spawnThought, 1500);
 
 // --- كود تصدير المحادثة الملكي (PDF) ---
-// --- وظيفة تصدير المحادثة إلى PDF بلمسات AAIO الملكية ---
-// --- وظيفة تصدير المحادثة إلى PDF (نسخة الاستقرار - العودة للأصل) ---
+
+// ==========================================
+// 1. المايسترو: الوظيفة الرئيسية لإدارة التصدير (النظام المفصول)
+// ==========================================
 async function exportCouncilPDF() {
     const chatWindow = document.getElementById('chat-window');
     const exportBtn = document.getElementById('full-export-btn');
 
-    if (chatWindow.children.length === 0) return alert("The Council is silent!");
+    if (!chatWindow || chatWindow.children.length === 0) return alert("The Council is silent!");
 
     const originalBtnContent = exportBtn.innerHTML;
-    exportBtn.innerHTML = "⏳";
+    exportBtn.innerHTML = "⏳ Processing...";
 
     try {
+        // إعدادات التصدير
         const options = {
             margin: [15, 15, 15, 15],
             filename: `AAIO_Official_Report.pdf`,
-            // إضافة letterRendering: true هي المشرط الذي يمنع تقطع الحروف العربية
             html2canvas: { 
                 scale: 2, 
                 useCORS: true, 
@@ -254,48 +256,100 @@ async function exportCouncilPDF() {
             pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
         };
 
-        const pdfContent = document.createElement('div');
+        // الوعاء الرئيسي
+        const pdfContainer = document.createElement('div');
+        pdfContainer.style.cssText = "padding: 20px; background: #fff; width: 210mm; box-sizing: border-box;";
         
-        // تعديل جراحي: أضفنا unicode-bidi و "Times New Roman" لأنه أفضل خط نظام يربط العربية
-        pdfContent.style.cssText = "padding:10px; color:#000; background:#fff; font-family:'Times New Roman', serif; direction:rtl; line-height:1.4; unicode-bidi: embed;";
-
-        // إضافة تنسيق داخلي بسيط جداً لإصلاح الجداول والنقاط الإنجليزية
-        const styleFix = `
-            <style>
-                table { width: 100%; border-collapse: collapse; margin-bottom: 20px; border: 1px solid #000; direction: ltr; }
-                th, td { border: 1px solid #000; padding: 8px; text-align: left; font-size: 12px; }
-                /* الملقط: إجبار القوائم الإنجليزية على اتجاه اليسار بذكاء */
-                [dir="auto"] { text-align: initial; }
-            </style>
-        `;
+        // العنوان
+        pdfContainer.innerHTML = `<h1 style="text-align:center; font-family:'Segoe UI', sans-serif; color:#333; margin-bottom:30px;">AAIO Council Report</h1>`;
 
         const messages = chatWindow.querySelectorAll('.council-message');
-        let discussionBody = styleFix; 
-
+        
         messages.forEach(msg => {
-            const messageHTML = msg.querySelector('.message-text')?.innerHTML || msg.innerHTML;
+            const nameEl = msg.querySelector('.bot-name');
+            const name = nameEl ? nameEl.innerText.trim() : 'Advisor';
+            
+            const contentEl = msg.querySelector('.message-text') || msg.querySelector('div:last-child');
+            if (!contentEl) return;
+            
+            const rawText = contentEl.innerText || "";
+            const htmlContent = contentEl.innerHTML;
 
-            // الملقط: أضفنا dir="auto" هنا لكي يعرف المتصفح تلقائياً إذا كان السطر إنجليزي أو عربي
-            discussionBody += `
-                <div style="margin-bottom: 25px; page-break-inside: avoid;">
-                    <div style="font-size: 13px; text-align: justify; color: #000;" dir="auto">
-                        ${messageHTML}
-                    </div>
-                </div>`;
+            // كشاف اللغة: هل النص يحتوي على حروف عربية؟
+            const isArabic = /[\u0600-\u06FF]/.test(rawText);
+
+            if (isArabic) {
+                // استدعاء المتخصص العربي (جبهة اليمين)
+                pdfContainer.innerHTML += getArabicTemplate(name, htmlContent);
+            } else {
+                // استدعاء المتخصص الإنجليزي (جبهة اليسار)
+                pdfContainer.innerHTML += getEnglishTemplate(name, htmlContent);
+            }
         });
 
-        pdfContent.innerHTML = discussionBody;
-
-        // الخطوة الأهم: إلحاق العنصر بالصفحة "لحظياً" ليراه المتصفح ويربط الحروف ثم حذفه
-        document.body.appendChild(pdfContent); 
-        await html2pdf().set(options).from(pdfContent).save();
-        document.body.removeChild(pdfContent);
+        // التصدير
+        document.body.appendChild(pdfContainer);
+        await html2pdf().set(options).from(pdfContainer).save();
+        document.body.removeChild(pdfContainer);
 
     } catch (error) {
         console.error("PDF Error:", error);
+        alert("Export failed.");
     } finally {
         exportBtn.innerHTML = originalBtnContent;
     }
+}
+
+// ==========================================
+// 2. القالب العربي (جبهة اليمين - Times New Roman)
+// ==========================================
+function getArabicTemplate(name, content) {
+    return `
+        <div style="
+            direction: rtl; 
+            text-align: right; 
+            font-family: 'Times New Roman', serif; 
+            font-size: 14px; 
+            line-height: 1.6;
+            margin-bottom: 25px;
+            border-right: 4px solid #6f42c1;
+            padding-right: 12px;
+            page-break-inside: avoid;
+        ">
+            <div style="font-weight:bold; color:#444; margin-bottom:5px;">${name}</div>
+            <div style="color:#000;">
+                ${content}
+            </div>
+        </div>
+    `;
+}
+
+// ==========================================
+// 3. القالب الإنجليزي (جبهة اليسار - Segoe UI + إصلاح الالتصاق)
+// ==========================================
+function getEnglishTemplate(name, content) {
+    // إصلاح الالتصاق: إلغاء الميلان وزيادة المسافات في النصوص الإنجليزية فقط
+    let safeContent = content.replace(/<(em|i)>/g, '<span style="font-style: normal; font-weight: 500; letter-spacing: 0.3px; color: #333;">');
+    safeContent = safeContent.replace(/<\/(em|i)>/g, '</span>');
+
+    return `
+        <div style="
+            direction: ltr; 
+            text-align: left; 
+            font-family: 'Segoe UI', 'Helvetica', sans-serif; 
+            font-size: 13px; 
+            line-height: 1.6;
+            margin-bottom: 25px;
+            border-left: 4px solid #28a745;
+            padding-left: 12px;
+            page-break-inside: avoid;
+        ">
+            <div style="font-weight:bold; color:#444; margin-bottom:5px; text-transform: uppercase;">${name}</div>
+            <div style="color:#000;">
+                ${safeContent}
+            </div>
+        </div>
+    `;
 }
 
 // ربط الزر (تأكد أن الـ ID صحيح في ملف HTML لديك)
