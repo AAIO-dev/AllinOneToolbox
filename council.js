@@ -229,17 +229,20 @@ setInterval(spawnThought, 1500);
 
 // --- كود تصدير المحادثة الملكي (PDF) ---
 // --- وظيفة تصدير المحادثة إلى PDF بلمسات AAIO الملكية ---
-// --- وظيفة تصدير المحادثة إلى PDF (النسخة النهائية لإصلاح التداخل) ---
+// --- وظيفة تصدير المحادثة إلى PDF (النسخة المدمجة والمبسطة) ---
 async function exportCouncilPDF() {
     const chatWindow = document.getElementById('chat-window');
     const exportBtn = document.getElementById('full-export-btn');
 
-    if (chatWindow.children.length === 0) return alert("The Council is silent!");
+    if (!chatWindow || chatWindow.children.length === 0) return alert("The Council is silent!");
 
     const originalBtnContent = exportBtn.innerHTML;
     exportBtn.innerHTML = "⏳";
 
     try {
+        // تعريف دالة الفحص داخلياً لمنع أي مشاكل في النطاق (Scope)
+        const isArabicContent = (text) => /[\u0600-\u06FF]/.test(text);
+
         const options = {
             margin: [15, 15, 15, 15],
             filename: `AAIO_Official_Report.pdf`,
@@ -252,41 +255,43 @@ async function exportCouncilPDF() {
             pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
         };
 
-        // 1. فحص المحتوى العام
-        const fullText = chatWindow.innerText;
+        // فحص النص وتحديد الاتجاه
+        const fullText = chatWindow.innerText || "";
         const isGlobalArabic = isArabicContent(fullText);
+        
+        // تحديد القيم بناءً على اللغة
+        const dir = isGlobalArabic ? 'rtl' : 'ltr';
+        const align = isGlobalArabic ? 'right' : 'left';
+        const marginSide = isGlobalArabic ? 'margin-right' : 'margin-left';
 
         const pdfContent = document.createElement('div');
         
-        // حذفنا letter-spacing لأنه مع justify كان يسبب الكوارث
+        // تنسيق الحاوية الأم
         pdfContent.style.cssText = `
             padding: 20px; 
             color: #000; 
             background: #fff; 
             font-family: 'Arial', sans-serif; 
-            line-height: 1.6;
-            direction: ${isGlobalArabic ? 'rtl' : 'ltr'}; 
-            text-align: ${isGlobalArabic ? 'right' : 'left'};
+            line-height: 1.6; 
+            direction: ${dir}; 
+            text-align: ${align};
         `;
 
         const styleFix = `
             <style>
-                table { width: 100%; border-collapse: collapse; margin-bottom: 20px; border: 1px solid #000; }
-                th, td { border: 1px solid #000; padding: 8px; font-size: 12px; }
+                table { width: 100%; border-collapse: collapse; margin-bottom: 20px; border: 1px solid #000; direction: ltr; }
+                th, td { border: 1px solid #000; padding: 8px; font-size: 12px; text-align: left; }
                 
-                /* القوائم تتبع اتجاه الصفحة */
+                /* تنسيق القوائم والنقاط */
                 ul, ol { 
-                    margin-${isGlobalArabic ? 'right' : 'left'}: 20px; 
+                    ${marginSide}: 20px; 
                     padding-${isGlobalArabic ? 'right' : 'left'}: 0;
                 }
                 
-                /* تحسين التفاف الكلمات */
+                /* منع التصادم */
                 p, div, span, li {
                     word-wrap: break-word;
                 }
-                
-                /* حماية خاصة للكلمات الإنجليزية داخل العربي */
-                span[lang="en"] { unicode-bidi: isolate; }
             </style>
         `;
 
@@ -296,14 +301,19 @@ async function exportCouncilPDF() {
         discussionBody += `<h1 style="text-align:center; color:#333; margin-bottom:30px;">AAIO Council Report</h1>`;
 
         messages.forEach(msg => {
-            const name = msg.querySelector('.bot-name').innerText;
+            const nameEl = msg.querySelector('.bot-name');
+            const name = nameEl ? nameEl.innerText : 'Advisor';
+            
             const messageElement = msg.querySelector('.message-text') || msg.querySelector('div:last-child');
+            // حماية إضافية في حال لم يجد العنصر
+            if (!messageElement) return;
+
             const messageHTML = messageElement.innerHTML;
 
             discussionBody += `
                 <div style="margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px; page-break-inside: avoid;">
                     <div style="font-weight:bold; color:#6f42c1; margin-bottom:10px; font-size:14px;">${name}:</div>
-                    <div style="font-size: 13px; text-align: ${isGlobalArabic ? 'right' : 'left'};">
+                    <div style="font-size: 13px; text-align: ${align};">
                         ${messageHTML}
                     </div>
                 </div>`;
@@ -317,7 +327,7 @@ async function exportCouncilPDF() {
 
     } catch (error) {
         console.error("PDF Error:", error);
-        alert("Export failed. Check console.");
+        alert("Export failed again. Please check console for details.");
     } finally {
         exportBtn.innerHTML = originalBtnContent;
     }
