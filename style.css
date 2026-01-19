@@ -1293,6 +1293,40 @@ body .council-message .bot-name {
     box-shadow: 0 8px 25px rgba(106, 17, 203, 0.5) !important;
 }
 
+/* تنسيق زر تبديل اللغة */
+.lang-btn {
+    position: fixed;
+    top: 20px;
+    right: 30px; /* مكان مناسب في الزاوية العلوية */
+    z-index: 999999;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #a29bfe; /* لون متناسق مع الثيم */
+    padding: 8px 16px;
+    border-radius: 30px;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Cairo', sans-serif; /* خط مناسب للعربية والإنجليزية */
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.lang-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(162, 155, 254, 0.3);
+    color: #fff;
+}
+
+.lang-btn:active {
+    transform: translateY(0);
+}
+
 /* 8. تنسيق الشعارات والعناوين */
 .council-logo {
     position: sticky !important; /* تجعله ثابتاً أثناء السكرول */
@@ -1405,6 +1439,68 @@ text-shadow: 0 0 10px rgba(255, 215, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.2) !i
 /* موازنة عرض صندوق النص */
 #user-input {
     flex: 1; /* يجعل الصندوق يأخذ كل المساحة المتبقية */
+}
+/* =========================================
+   RTL MODE OVERRIDES (الوضع العربي)
+   ========================================= */
+
+/* 1. قلب الاتجاه العام */
+body.rtl-mode {
+    direction: rtl;
+    text-align: right;
+}
+
+/* 2. قلب الفقاعات (الزوايا والمحاذاة) */
+body.rtl-mode .council-message {
+    margin-left: auto !important;
+    margin-right: 0 !important; /* إلصاق لليمين */
+    
+    /* عكس الزاوية الحادة لتصبح في الأسفل-يمين */
+    border-radius: 15px 15px 0 15px !important; 
+    
+    direction: rtl !important;
+    text-align: right !important;
+}
+
+/* 3. قلب الخطوط الملونة (من اليسار لليمين) */
+body.rtl-mode .council-message {
+    border-left: none !important; /* إلغاء الخط الأيسر */
+    border-right-width: 5px !important;
+    border-right-style: solid !important;
+}
+
+/* إعادة تعيين الألوان للجهة اليمنى */
+body.rtl-mode .gemini-msg { border-right-color: #8a2be2 !important; }
+body.rtl-mode .chatgpt-msg { border-right-color: #10a37f !important; }
+body.rtl-mode .claude-msg { border-right-color: #d97757 !important; }
+body.rtl-mode .deepseek-msg { border-right-color: #4d6cfa !important; }
+body.rtl-mode .perplexity-msg { border-right-color: #b0b0b0 !important; }
+body.rtl-mode .llama-msg { border-right-color: #4285F4 !important; } /* أو لون لاما الخاص */
+body.rtl-mode .mistral-msg { border-right-color: #FD6F00 !important; } /* أو لون ميسترال */
+
+/* 4. إصلاح القوائم والنقاط (Bullet Points) - هذا سيصلح الـ PDF! */
+body.rtl-mode ul, body.rtl-mode ol {
+    margin-right: 25px !important;
+    margin-left: 0 !important;
+    padding-right: 0 !important;
+    text-align: right !important;
+}
+
+/* 5. شريط الإدخال والشعار */
+body.rtl-mode #user-input {
+    text-align: right !important;
+    direction: rtl !important;
+}
+
+body.rtl-mode .council-logo {
+    /* ضمان بقاء اللوجو في مكانه الصحيح بالنسبة للنص */
+    margin-left: 10px !important;
+    margin-right: 0 !important;
+}
+
+/* عكس أيقونة الإرسال لتبدو منطقية (اختياري) */
+body.rtl-mode #send-btn {
+    transform: scaleX(-1); /* يعكس الطائرة لليمين */
 }
 
 /* --- الأنميشن --- */

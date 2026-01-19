@@ -264,7 +264,7 @@ async function exportCouncilPDF() {
                 th, td { border: 1px solid #000; padding: 8px; text-align: left; font-size: 12px; }
                 /* الملقط: إجبار القوائم الإنجليزية على اتجاه اليسار بذكاء */
                 [dir="auto"] { text-align: initial; }
-                
+
                 /* ➕ هذا هو السطر الجديد الذي ستضيفه بالمشرط هنا: */
         ul, ol { direction: rtl; text-align: right; margin-right: 20px; }
         li { list-style-position: inside; }
@@ -302,3 +302,32 @@ async function exportCouncilPDF() {
 
 // ربط الزر (تأكد أن الـ ID صحيح في ملف HTML لديك)
 document.getElementById('full-export-btn').onclick = exportCouncilPDF;
+
+// --- منطق تبديل اللغة والاتجاه ---
+const langBtn = document.getElementById('lang-toggle');
+const body = document.body;
+
+// التحقق من الوضع المحفوظ سابقاً
+if (localStorage.getItem('council_dir') === 'rtl') {
+    enableRTL();
+}
+
+langBtn.addEventListener('click', () => {
+    if (body.classList.contains('rtl-mode')) {
+        disableRTL();
+    } else {
+        enableRTL();
+    }
+});
+
+function enableRTL() {
+    body.classList.add('rtl-mode');
+    langBtn.querySelector('span').innerText = "ع/En"; // تبديل النص
+    localStorage.setItem('council_dir', 'rtl'); // حفظ التفضيل
+}
+
+function disableRTL() {
+    body.classList.remove('rtl-mode');
+    langBtn.querySelector('span').innerText = "En/ع";
+    localStorage.setItem('council_dir', 'ltr');
+}
