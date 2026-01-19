@@ -234,82 +234,65 @@ async function exportCouncilPDF() {
     const chatWindow = document.getElementById('chat-window');
     const exportBtn = document.getElementById('full-export-btn');
 
-    // التأكد من وجود محتوى
-    if (!chatWindow || chatWindow.children.length === 0) return alert("The Council is silent!");
+    if (chatWindow.children.length === 0) return alert("The Council is silent!");
 
-    // تغيير أيقونة الزر للتحميل
     const originalBtnContent = exportBtn.innerHTML;
-    exportBtn.innerHTML = "⏳ Generating...";
+    exportBtn.innerHTML = "⏳";
 
     try {
-        // إعدادات التصدير القياسية (التي كانت تعمل بنجاح مع الإنجليزي)
         const options = {
-            margin: [10, 10, 10, 10], // هوامش متوازنة
-            filename: `AAIO_Council_Session.pdf`,
-            image: { type: 'jpeg', quality: 0.98 }, // جودة صورة عالية
+            margin: [15, 15, 15, 15],
+            filename: `AAIO_Official_Report.pdf`,
+            // إضافة letterRendering: true هي المشرط الذي يمنع تقطع الحروف العربية
             html2canvas: { 
-                scale: 2, // دقة عالية للنص والمعادلات
-                useCORS: true, // للسماح بتحميل الصور الخارجية إن وجدت
-                scrollY: 0, // لضمان البدء من الأعلى
-                logging: false
+                scale: 2, 
+                useCORS: true, 
+                backgroundColor: "#ffffff",
+                letterRendering: true 
             },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] } // لمنع قص الرسائل في المنتصف
+            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
         };
 
-        // تجهيز نسخة نظيفة للطباعة
-        // نستخدم "نسخة" من المحتوى لنطبق عليها تنسيقات الطباعة دون التأثير على الشاشة
-        const contentClone = chatWindow.cloneNode(true);
+        const pdfContent = document.createElement('div');
         
-        // تنسيق الحاوية للطباعة (تنسيق بسيط ونظيف)
-        // نستخدم الخطوط الافتراضية للنظام لأنها الأفضل للمعادلات والرموز
-        contentClone.style.width = '100%';
-        contentClone.style.padding = '20px';
-        contentClone.style.background = '#ffffff';
-        contentClone.style.color = '#000000';
-        contentClone.style.fontFamily = 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
-        
-        // إضافة عنوان للتقرير
-        const header = document.createElement('div');
-        header.innerHTML = `<h1 style="text-align:center; margin-bottom:30px; color:#333;">AAIO Council Report</h1>`;
-        contentClone.insertBefore(header, contentClone.firstChild);
+        // تعديل جراحي: أضفنا unicode-bidi و "Times New Roman" لأنه أفضل خط نظام يربط العربية
+        pdfContent.style.cssText = "padding:10px; color:#000; background:#fff; font-family:'Times New Roman', serif; direction:rtl; line-height:1.4; unicode-bidi: embed;";
 
-        // ضبط اتجاه النصوص داخل النسخة المطبوعة (تحسين طفيف دون تعقيد)
-        const messages = contentClone.querySelectorAll('.council-message');
+        // إضافة تنسيق داخلي بسيط جداً لإصلاح الجداول والنقاط الإنجليزية
+        const styleFix = `
+            <style>
+                table { width: 100%; border-collapse: collapse; margin-bottom: 20px; border: 1px solid #000; direction: ltr; }
+                th, td { border: 1px solid #000; padding: 8px; text-align: left; font-size: 12px; }
+                /* الملقط: إجبار القوائم الإنجليزية على اتجاه اليسار بذكاء */
+                [dir="auto"] { text-align: initial; }
+            </style>
+        `;
+
+        const messages = chatWindow.querySelectorAll('.council-message');
+        let discussionBody = styleFix; 
+
         messages.forEach(msg => {
-            msg.style.marginBottom = '20px';
-            msg.style.pageBreakInside = 'avoid'; // منع انقسام الرسالة بين صفحتين
-            
-            // تحسين ظهور الأكواد والجداول
-            const tables = msg.querySelectorAll('table');
-            tables.forEach(t => t.style.width = '100%');
-            
-            const pres = msg.querySelectorAll('pre');
-            pres.forEach(p => {
-                p.style.whiteSpace = 'pre-wrap';
-                p.style.wordBreak = 'break-word';
-            });
+            const messageHTML = msg.querySelector('.message-text')?.innerHTML || msg.innerHTML;
+
+            // الملقط: أضفنا dir="auto" هنا لكي يعرف المتصفح تلقائياً إذا كان السطر إنجليزي أو عربي
+            discussionBody += `
+                <div style="margin-bottom: 25px; page-break-inside: avoid;">
+                    <div style="font-size: 13px; text-align: justify; color: #000;" dir="auto">
+                        ${messageHTML}
+                    </div>
+                </div>`;
         });
 
-        // إنشاء حاوية مؤقتة مخفية للتصدير
-        const container = document.createElement('div');
-        container.style.position = 'absolute';
-        container.style.left = '-9999px';
-        container.style.top = '0';
-        container.style.width = '210mm'; // عرض A4 ثابت
-        container.appendChild(contentClone);
-        
-        document.body.appendChild(container);
+        pdfContent.innerHTML = discussionBody;
 
-        // التصدير
-        await html2pdf().set(options).from(contentClone).save();
-
-        // تنظيف
-        document.body.removeChild(container);
+        // الخطوة الأهم: إلحاق العنصر بالصفحة "لحظياً" ليراه المتصفح ويربط الحروف ثم حذفه
+        document.body.appendChild(pdfContent); 
+        await html2pdf().set(options).from(pdfContent).save();
+        document.body.removeChild(pdfContent);
 
     } catch (error) {
-        console.error("PDF Export Error:", error);
-        alert("Export failed. Please try again.");
+        console.error("PDF Error:", error);
     } finally {
         exportBtn.innerHTML = originalBtnContent;
     }
