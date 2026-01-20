@@ -327,33 +327,34 @@ function getArabicTemplate(name, content) {
 }
 
 // ==========================================
-// 3. المتخصص الإنجليزي (جبهة اليسار - نسخة التوسعة الشاملة)
+// 3. المتخصص الإنجليزي (جبهة اليسار - نسخة فك الالتصاق الإجباري)
 // ==========================================
 function getEnglishTemplate(name, content) {
-    // 1. تنظيف المحتوى:
-    // نستبدل المائل بتنسيق عادي ومريح للقراءة
-    let safeContent = content.replace(/<(em|i)>/g, '<span style="font-style: normal; font-weight: 500; color: #000;">');
+    // تنظيف بسيط
+    let safeContent = content.replace(/<(em|i)>/g, '<span style="font-style: normal; font-weight: 500;">');
     safeContent = safeContent.replace(/<\/(em|i)>/g, '</span>');
 
     return `
         <div style="
             direction: ltr; 
             text-align: left; 
-            font-family: 'Segoe UI', 'Helvetica', sans-serif; 
+            font-family: Arial, sans-serif; 
             font-size: 13px; 
-            line-height: 1.8; /* زدنا ارتفاع السطر قليلاً */
+            line-height: 1.6;
             margin-bottom: 25px;
+            color: #000;
             
-            /* --- العلاج الشامل للالتصاق --- */
-            word-spacing: 2px;       /* مسافة إجبارية بين الكلمات */
-            letter-spacing: 0.3px;   /* مسافة بسيطة بين الحروف */
-            font-variant-ligatures: none; /* منع دمج الحروف ببعضها */
-            text-rendering: optimizeLegibility; /* تحسين وضوح النص */
+            /* الحل الجذري: إجبار المتصفح على وضع مسافة 3 بكسل بين الكلمات */
+            word-spacing: 3px; 
+            
+            /* تحسينات إضافية */
+            letter-spacing: 0.2px;
+            overflow-wrap: break-word;
             
             page-break-inside: avoid;
         ">
-            <div style="font-weight:bold; color:#000; margin-bottom:5px; text-transform: uppercase; letter-spacing: 1px;">${name}</div>
-            <div style="color:#000;">
+            <div style="font-weight:bold; margin-bottom:5px; text-transform: uppercase;">${name}</div>
+            <div>
                 ${safeContent}
             </div>
         </div>
