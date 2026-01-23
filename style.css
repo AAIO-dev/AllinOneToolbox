@@ -1557,3 +1557,277 @@ body.rtl-mode #send-btn {
 .close-modal:hover {
     color: #fff; /* يتغير اللون عند تمرير الماوس */
 }
+/* =========================================
+   تصميم قسم الهيرو - النسخة النهائية (توسيط + نص فضي + بحث حديث)
+   ========================================= */
+
+.hero-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    padding: 80px 20px 40px;
+    position: relative;
+    z-index: 10;
+}
+
+.hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.hero-logo {
+    max-width: 320px;
+    width: 100%;
+    height: auto;
+    margin: 0 auto 25px auto;
+    display: block;
+    filter: drop-shadow(0 0 25px rgba(0, 170, 255, 0.4));
+}
+
+.main-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 3.5rem;
+    line-height: 1.2;
+    margin-bottom: 15px;
+    background: linear-gradient(90deg, #fff, #00aaff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+    width: 100%;
+    text-shadow: 0 0 30px rgba(0, 170, 255, 0.4);
+}
+
+.highlight {
+    color: #ffaa00;
+    -webkit-text-fill-color: #ffaa00;
+}
+
+/* التعديل الجديد: نص فضي ولامع */
+.hero-subtitle {
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: #e0e0e0;          /* فضي ساطع */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8); /* ظل لبروز النص */
+    letter-spacing: 1px;
+    margin-bottom: 45px;
+    opacity: 1;
+    max-width: 700px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+}
+
+/* التعديل الجديد: شريط بحث أعرض وأفخم */
+.search-container {
+    position: relative;
+    width: 100%;
+    max-width: 650px;       /* تعريض الشريط */
+    margin: 0 auto;
+}
+
+#toolSearch {
+    width: 100%;
+    padding: 22px 60px 22px 30px;
+    border-radius: 16px;    /* زوايا عصرية */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(12px);
+    color: var(--text-color);
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    box-sizing: border-box;
+}
+
+#toolSearch:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.12);
+    border-color: #a29bfe;   /* لون التفاعل */
+    box-shadow: 0 0 30px rgba(162, 155, 254, 0.3);
+    transform: translateY(-2px);
+}
+
+.search-icon {
+    position: absolute;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #a29bfe;
+    pointer-events: none;
+}
+
+/* للجوال */
+@media (max-width: 768px) {
+    .hero-logo { max-width: 220px; }
+    .main-title { font-size: 2.2rem; }
+    #toolSearch { padding: 18px 50px 18px 20px; font-size: 1rem; }
+}
+/* =========================================
+   تأثير السهرة: اللمعة المتحركة للنص (Shimmer Effect)
+   ========================================= */
+
+/* 1. تعريف الحركة (الضوء يمر من اليسار لليمين) */
+@keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+}
+
+/* 2. تطبيق اللمعة على العنوان الفرعي */
+.hero-subtitle {
+    /* إعدادات الخط */
+    font-size: 1.3rem;
+    font-weight: 600; /* سمك أكبر قليلاً للوضوح */
+    letter-spacing: 1.5px;
+    margin-bottom: 45px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    line-height: 1.6;
+
+    /* خدعة اللمعان */
+    background: linear-gradient(
+        90deg, 
+        #888888 0%,    /* رمادي غامق */
+        #ffffff 50%,   /* أبيض ساطع في المنتصف */
+        #888888 100%   /* رمادي غامق */
+    );
+    background-size: 200% auto; /* تكبير الخلفية لتسمح بالحركة */
+    
+    /* قص الخلفية لتظهر داخل النص فقط */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    
+    /* تشغيل الحركة: لا نهائية وتستغرق 3 ثوان */
+    animation: shimmer 3s linear infinite;
+}
+/* =========================================
+   تأثيرات الجنون: الجاذبية الصفرية والنبض (Madness Effects)
+   ========================================= */
+
+/* 1. تعريف حركة الطفو (للشعار والنصوص) */
+@keyframes floatUpDn {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); } /* يرتفع للأعلى قليلاً */
+    100% { transform: translateY(0px); }
+}
+
+/* 2. تعريف حركة النبض (لشريط البحث) */
+@keyframes glowingPulse {
+    0% { box-shadow: 0 0 20px rgba(162, 155, 254, 0.2); border-color: rgba(255,255,255,0.2); }
+    50% { box-shadow: 0 0 40px rgba(0, 170, 255, 0.6); border-color: #00aaff; } /* توهج أزرق قوي */
+    100% { box-shadow: 0 0 20px rgba(162, 155, 254, 0.2); border-color: rgba(255,255,255,0.2); }
+}
+
+/* 3. تطبيق الطفو على الشعار (حركة بطيئة وثقيلة) */
+.hero-logo {
+    animation: floatUpDn 6s ease-in-out infinite;
+}
+
+/* 4. تطبيق الطفو على العنوان (بتوقيت مختلف قليلاً ليبدو انسيابياً) */
+.main-title {
+    animation: floatUpDn 7s ease-in-out infinite;
+    animation-delay: 0.5s; /* يتأخر قليلاً عن الشعار */
+}
+
+/* 5. تطبيق النبض المجنون على شريط البحث */
+#toolSearch {
+    animation: glowingPulse 3s infinite; /* ينبض كل 3 ثوان */
+}
+
+/* 6. تأثير إضافي عند تمرير الماوس على البحث (يكبر بجنون) */
+#toolSearch:hover {
+    transform: scale(1.05) translateY(-5px); /* تكبير + ارتفاع */
+    box-shadow: 0 0 50px rgba(0, 170, 255, 0.8) !important;
+    cursor: text;
+}
+/* =========================================
+   تأثير الشهب الرقمية (يعمل الآن لأن الاسم مطابق)
+   ========================================= */
+
+/* =========================================
+   إصلاح الهيدر: (أزرار في الزاوية + مطر متحرك)
+   ========================================= */
+
+/* 1. إعداد الهيدر ليكون "المسرح" */
+.hero-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;    /* يبقي الشعار والنص في الوسط */
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    padding: 100px 20px 40px; /* زدنا المساحة العلوية لكي لا تغطي الأزرار الشعار */
+    position: relative;     /* ضروري جداً لكي تعمل الأزرار الجانبية */
+    overflow: hidden;
+    background-color: #0b0d17;
+    z-index: 1;
+}
+
+/* 2. إصلاح مكان الأزرار (اللغة والوضع) */
+/* نخرجها من التوسيط ونلصقها في الأعلى */
+.theme-switch-wrapper {
+    position: absolute !important; /* خروج من طابور الوسط */
+    top: 20px;
+    right: 20px;  /* وضعناها في الزاوية اليمنى العليا */
+    width: auto !important; /* لا تأخذ عرض الشاشة */
+    z-index: 20; /* فوق كل شيء */
+    background: transparent !important; /* إزالة أي خلفية تعيق الرؤية */
+    gap: 15px;
+}
+
+
+/* 3. طبقة الشهب (المطر الرقمي المتحرك) */
+.hero-section::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 200%;    /* عرض مضاعف للحركة */
+    height: 200%;   /* طول مضاعف */
+    
+    /* الطبقة 0 (فوق الخلفية وتحت النص) */
+    z-index: 0;
+    opacity: 0.6;
+    
+    /* رسم الشهب (تم تعديل المسافات لتكون واضحة) */
+    background: repeating-linear-gradient(
+        -45deg, /* زاوية السقوط */
+        transparent,
+        transparent 50px,
+        rgba(0, 170, 255, 0.2) 50px, /* لون الشهاب الأزرق */
+        rgba(0, 170, 255, 0.2) 52px, /* سمك الخط 2 بكسل */
+        transparent 52px,
+        transparent 100px,
+        rgba(162, 155, 254, 0.2) 100px, /* لون الشهاب البنفسجي */
+        rgba(162, 155, 254, 0.2) 102px
+    );
+    
+    /* تحديد حجم الخلفية لتفعيل الحركة */
+    background-size: 200px 200px; 
+    
+    /* تشغيل المحرك */
+    animation: rainMove 4s linear infinite; 
+    pointer-events: none;
+}
+
+/* 4. محرك الحركة (يعتمد على تحريك الخلفية نفسها) */
+@keyframes rainMove {
+    0% { background-position: 0 0; }
+    100% { background-position: -200px 200px; } /* تحريك بمقدار حجم الباترن لضمان الاستمرار */
+}
+
+/* 5. ضمان أن النصوص قابلة للنقر وفوق المطر */
+.hero-content {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+}

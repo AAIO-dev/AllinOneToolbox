@@ -15,56 +15,67 @@
 
 </head>
 <body ontouchstart="">
-    <div class="theme-switch-wrapper">
-        <div class="language-picker-container">
-            <select id="language-picker">
-    <option value="en">English</option>
-    <option value="ar">العربية</option>
-    <option value="es">Español</option>
-    <option value="pt">Português</option>
-    <option value="fr">Français</option>
-    <option value="de">Deutsch</option>
-    <option value="it">Italiano</option>
-    <option value="ru">Русский</option>
-    <option value="el">Ελληνικά</option>
-    <option value="nl">Nederlands</option>
-    <option value="pl">Polski</option>
-    <option value="sv">Svenska</option>
-    <option value="zh">中文</option>
-    <option value="ja">日本語</option>
-    <option value="ko">한국어</option>
-    <option value="hi">हिन्दी (Hindi)</option>
-    <option value="tr">Türkçe</option>
-    <option value="fa">فارسی</option>
-    <option value="id">Bahasa Indonesia</option>
-    <option value="vi">Tiếng Việt</option>
-    <option value="sw">Kiswahili</option>
-    <option value="am">አማርኛ (Amharic)</option>
-    <option value="zu">isiZulu</option>
-    <option value="ha">Hausa</option>
-</select>
+
+    <div class="hero-section">
+
+        <div class="theme-switch-wrapper">
+            <div class="language-picker-container">
+                <select id="language-picker">
+                    <option value="en">English</option>
+                    <option value="ar">العربية</option>
+                    <option value="es">Español</option>
+                    <option value="pt">Português</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                    <option value="it">Italiano</option>
+                    <option value="ru">Русский</option>
+                    <option value="el">Ελληνικά</option>
+                    <option value="nl">Nederlands</option>
+                    <option value="pl">Polski</option>
+                    <option value="sv">Svenska</option>
+                    <option value="zh">中文</option>
+                    <option value="ja">日本語</option>
+                    <option value="ko">한국어</option>
+                    <option value="hi">हिन्दी (Hindi)</option>
+                    <option value="tr">Türkçe</option>
+                    <option value="fa">فارسی</option>
+                    <option value="id">Bahasa Indonesia</option>
+                    <option value="vi">Tiếng Việt</option>
+                    <option value="sw">Kiswahili</option>
+                    <option value="am">አማርኛ (Amharic)</option>
+                    <option value="zu">isiZulu</option>
+                    <option value="ha">Hausa</option>
+                </select>
+            </div>
+
+            <label class="theme-switch" for="checkbox">
+                <input type="checkbox" id="checkbox" />
+                <div class="slider round">
+                    <span class="icon sun">☀️</span>
+                    <span class="icon moon">🌙</span>
+                </div>
+            </label>
+            <span class="mode-text">Light Mode</span>
         </div>
 
-        <label class="theme-switch" for="checkbox">
-            <input type="checkbox" id="checkbox" />
-            <div class="slider round">
-                <span class="icon sun">☀️</span>
-                <span class="icon moon">🌙</span>
+        <div class="hero-content">
+            <img src="logo1.png" alt="AAIO Logo" class="hero-logo">
+            
+            <h1 class="main-title">AI All in One <span class="highlight">Toolbox</span></h1>
+            <p class="hero-subtitle" data-key="hero_subtitle">The ultimate directory for AI tools to boost your productivity</p>
+            
+            <div class="search-container">
+                <input type="text" id="toolSearch" placeholder="Search for tools (e.g., Logo, Writing, Video)..." onkeyup="filterTools()">
+                <div class="search-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
             </div>
-        </label>
-        <span class="mode-text">Light Mode</span>
-    </div>
-    <div class="header">
-        <img src="logo1.png" alt="Logo" style="height: 80px; margin-bottom: 15px;">
-        <h1>Welcome to AI All in One Toolbox</h1>
-       <p class="subtitle">
-    Your <span class="ai-highlight">AI</span> services,<br>
-    All in one place
-        </p>
-    <div class="header-pulse"></div>
-    </div>
-</div>
+        </div>
 
+    </div>
     <div class="main-container">
 
         <div class="column" id="creative-container">
