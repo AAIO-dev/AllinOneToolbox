@@ -2041,23 +2041,19 @@ body.rtl-mode #send-btn {
 }
 
 /* 2. تحويل اللوجو إلى كوكب 3D (الكرة) */
+/* تعديل الأيقونة: إعادة الألوان الطبيعية فوراً */
 .tool-logo {
-    width: 90px !important;
-    height: 90px !important;
-    border-radius: 50% !important; /* دائرة كاملة */
-    object-fit: cover !important;
-    margin-bottom: 15px !important;
-    background: #1a0b2e !important; /* لون خلفية الكوكب في حال كانت الصورة شفافة */
+    width: 65px !important;
+    height: 65px !important;
+    object-fit: contain !important;
+    margin: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
     
-    /* سحر الـ 3D: تلاعب بالظلال لتبدو ككرة بارزة */
-    box-shadow: 
-        inset 10px 10px 20px rgba(255, 255, 255, 0.1), /* إضاءة علوية */
-        inset -10px -10px 20px rgba(0, 0, 0, 0.8), /* ظل سفلي داخلي للعمق */
-        0 0 25px rgba(111, 66, 193, 0.4), /* توهج خارجي بنفسجي */
-        0 10px 15px rgba(0,0,0,0.5) !important; /* ظل سقوط الكرة */
-        
-    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-    border: 2px solid rgba(255, 255, 255, 0.1) !important;
+    /* حذفنا الفلتر لتعود الألوان زاهية وجميلة */
+    opacity: 1; 
+    transition: transform 0.5s ease;
 }
 
 /* 3. تأثير الطفو عند مرور الماوس */
