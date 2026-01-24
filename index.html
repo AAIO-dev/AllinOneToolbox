@@ -822,27 +822,27 @@ window.onload = loadTools;
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const container = document.querySelector('.hero-section');
-        const meteorCount = 20; // عدد الشهب
+        
+        // 1. زيادة العدد (كان 20 أصبح 50)
+        const meteorCount = 50; 
 
-        // دالة إنشاء الشهب
         for (let i = 0; i < meteorCount; i++) {
             const meteor = document.createElement('div');
             meteor.classList.add('meteor');
             
-            // 50% من الشهب زرقاء و 50% بنفسجية
             if (Math.random() > 0.5) {
                 meteor.classList.add('purple');
             }
 
-            // موقع عشوائي (عرض الصفحة)
             meteor.style.left = Math.random() * 100 + '%';
             
-            // سرعة عشوائية (بين 2 و 5 ثواني)
-            const duration = Math.random() * 3 + 2;
+            // 2. تبطئة السرعة (كلما زاد الرقم، أصبحت الحركة أبطأ)
+            // كانت (بين 2 و 5) والآن أصبحت (بين 5 و 9 ثواني) لحركة هادئة جداً
+            const duration = Math.random() * 4 + 5; 
             meteor.style.animationDuration = duration + 's';
             
-            // تأخير عشوائي (لكي لا ينزلوا دفعة واحدة)
-            const delay = Math.random() * 5;
+            // توزيع الظهور (تأخير عشوائي يصل لـ 15 ثانية لضمان استمرار العرض)
+            const delay = Math.random() * 15;
             meteor.style.animationDelay = delay + 's';
 
             if(container) {
