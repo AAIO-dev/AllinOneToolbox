@@ -2021,3 +2021,65 @@ body.rtl-mode #send-btn {
     color: #ffffff !important;
     text-shadow: 0 0 10px rgba(0, 0, 0, 0.5) !important;
 }
+/* ==================== نظام المجرة: الكواكب العائمة (Galaxy Grid) ==================== */
+
+/* 1. إخفاء الصندوق المربع تماماً (الجاذبية فقط) */
+.tool-card {
+    background: transparent !important; /* خلفية شفافة بالكامل */
+    background-image: none !important;
+    border: none !important; /* بدون حدود */
+    box-shadow: none !important; /* بدون ظل للصندوق */
+    backdrop-filter: none !important; /* إلغاء التمويه الخلفي */
+    
+    /* ترتيب العناصر عمودياً */
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    margin-bottom: 40px !important; /* مسافة بين الكواكب */
+    padding: 10px !important;
+    overflow: visible !important;
+}
+
+/* 2. تحويل اللوجو إلى كوكب 3D (الكرة) */
+.tool-logo {
+    width: 90px !important;
+    height: 90px !important;
+    border-radius: 50% !important; /* دائرة كاملة */
+    object-fit: cover !important;
+    margin-bottom: 15px !important;
+    background: #1a0b2e !important; /* لون خلفية الكوكب في حال كانت الصورة شفافة */
+    
+    /* سحر الـ 3D: تلاعب بالظلال لتبدو ككرة بارزة */
+    box-shadow: 
+        inset 10px 10px 20px rgba(255, 255, 255, 0.1), /* إضاءة علوية */
+        inset -10px -10px 20px rgba(0, 0, 0, 0.8), /* ظل سفلي داخلي للعمق */
+        0 0 25px rgba(111, 66, 193, 0.4), /* توهج خارجي بنفسجي */
+        0 10px 15px rgba(0,0,0,0.5) !important; /* ظل سقوط الكرة */
+        
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    border: 2px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 3. تأثير الطفو عند مرور الماوس */
+.tool-card:hover .tool-logo {
+    transform: translateY(-15px) rotate(15deg) scale(1.1) !important; /* يرتفع ويدور */
+    box-shadow: 
+        inset 5px 5px 10px rgba(255, 255, 255, 0.3),
+        inset -5px -5px 15px rgba(0, 0, 0, 0.9),
+        0 0 50px rgba(0, 170, 255, 0.8), /* توهج أزرق قوي عند التحويم */
+        0 20px 30px rgba(0,0,0,0.6) !important;
+    border-color: rgba(0, 170, 255, 0.5) !important;
+}
+
+/* 4. تنسيق العناوين (تطفو تحت الكوكب) */
+.tool-info h3 {
+    color: #ffffff !important;
+    font-size: 1.1rem !important;
+    font-weight: 700 !important;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.8) !important; /* ظل للنص ليظهر بوضوح فوق الشهب */
+    margin-top: 5px !important;
+    background: rgba(0,0,0,0.3); /* خلفية خفيفة جداً خلف النص للقراءة */
+    padding: 5px 15px;
+    border-radius: 20px;
+    backdrop-filter: blur(5px);
+}
