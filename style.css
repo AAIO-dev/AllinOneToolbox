@@ -1996,3 +1996,28 @@ body.rtl-mode #send-btn {
     font-size: 1.2rem !important;
     color: #fff !important;
 }
+/* ==================== إصلاح الزجاج النهائي ==================== */
+
+/* 1. إزالة الخلفية الداكنة القديمة تماماً وتطبيق الزجاج */
+.tool-card {
+    background: rgba(255, 255, 255, 0.02) !important; /* شفافية عالية جداً */
+    background-image: none !important; /* إيقاف أي تدرج لوني قديم */
+    backdrop-filter: blur(20px) !important; /* تفعيل التمويه الزجاجي */
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important; /* حدود بيضاء خفيفة */
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1) !important; /* ظل ناعم */
+}
+
+/* 2. تحسين شكل الأيقونة (جعلها تشع ضوءاً) */
+.tool-logo {
+    background: rgba(0, 0, 0, 0.3) !important; /* خلفية خفيفة خلف الأيقونة */
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    padding: 10px !important; /* مسافة لكي لا تلتصق الحواف */
+    box-shadow: 0 0 20px rgba(0, 170, 255, 0.2) !important; /* توهج أزرق */
+}
+
+/* 3. جعل النصوص تبرز فوق الزجاج */
+.tool-info h3 {
+    color: #ffffff !important;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5) !important;
+}
