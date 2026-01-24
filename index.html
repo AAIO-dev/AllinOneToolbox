@@ -837,9 +837,9 @@ window.onload = loadTools;
             // التوزيع المتوازن (من -40% يساراً إلى 100% يميناً)
             meteor.style.left = (Math.random() * 140 - 40) + '%';
             
-            // السرعة الهادئة (5 إلى 9 ثواني)
-            const duration = Math.random() * 4 + 5; 
-            meteor.style.animationDuration = duration + 's';
+            // السرعة مريحة جداً للعين (بين 12 و 22 ثانية بدلاً من 5)
+const duration = Math.random() * 10 + 12; 
+meteor.style.animationDuration = duration + 's';
             
             // تأخير أطول قليلاً لاستيعاب العدد الزائد (توزيع على 20 ثانية)
             const delay = Math.random() * 20;
