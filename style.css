@@ -1785,37 +1785,50 @@ body.rtl-mode #send-btn {
 }
 
 
-/* 3. طبقة الشهب (المطر الرقمي المتحرك) */
-.hero-section::before {
-    content: "";
+/* ==================== نظام الشهب الذكي (Meteor Shower) ==================== */
+.hero-section {
+    position: relative;
+    overflow: hidden; /* ضروري جداً لكي لا تخرج الشهب خارج الهيدر */
+}
+
+/* شكل الشهاب الواحد */
+.meteor {
     position: absolute;
-    top: 0; left: 0;
-    width: 200%;    /* عرض مضاعف للحركة */
-    height: 200%;   /* طول مضاعف */
-    
-    /* الطبقة 0 (فوق الخلفية وتحت النص) */
-    z-index: 0;
-    opacity: 0.6;
-    
-    /* رسم الشهب (تم تعديل المسافات لتكون واضحة) */
-    background: repeating-linear-gradient(
-        -45deg, /* زاوية السقوط */
-        transparent,
-        transparent 50px,
-        rgba(0, 170, 255, 0.2) 50px, /* لون الشهاب الأزرق */
-        rgba(0, 170, 255, 0.2) 52px, /* سمك الخط 2 بكسل */
-        transparent 52px,
-        transparent 100px,
-        rgba(162, 155, 254, 0.2) 100px, /* لون الشهاب البنفسجي */
-        rgba(162, 155, 254, 0.2) 102px
-    );
-    
-    /* تحديد حجم الخلفية لتفعيل الحركة */
-    background-size: 200px 200px; 
-    
-    /* تشغيل المحرك */
-    animation: rainMove 4s linear infinite; 
-    pointer-events: none;
+    top: -100px; /* يبدأ من خارج الشاشة */
+    width: 2px; /* عرض ذيل الشهاب */
+    height: 120px; /* طول الشهاب */
+    background: linear-gradient(to bottom, transparent, #00aaff); /* ذيل أزرق سماوي */
+    opacity: 0;
+    filter: drop-shadow(0 0 5px rgba(0, 170, 255, 0.8)); /* توهج حول الشهاب */
+    animation: meteor-fall linear infinite; /* الحركة */
+    pointer-events: none; /* لكي لا يمنع الضغط على الأزرار */
+    z-index: 1; /* خلف النصوص */
+    border-radius: 50px;
+}
+
+/* حركة السقوط المائل والاختفاء */
+@keyframes meteor-fall {
+    0% {
+        transform: translateY(0) translateX(0) rotate(25deg); /* البداية */
+        opacity: 0;
+    }
+    10% {
+        opacity: 1; /* يظهر فجأة */
+    }
+    80% {
+        opacity: 1; /* يظل ظاهراً */
+    }
+    100% {
+        /* يسقط لأسفل ويمين الشاشة */
+        transform: translateY(120vh) translateX(200px) rotate(25deg); 
+        opacity: 0; /* يختفي قبل النهاية */
+    }
+}
+
+/* تنويع ألوان الشهب (بعضها بنفسجي) */
+.meteor.purple {
+    background: linear-gradient(to bottom, transparent, #a29bfe);
+    filter: drop-shadow(0 0 5px rgba(162, 155, 254, 0.8));
 }
 
 /* 4. محرك الحركة (يعتمد على تحريك الخلفية نفسها) */

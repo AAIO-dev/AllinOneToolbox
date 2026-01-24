@@ -819,5 +819,39 @@ if (currentLang !== 'en') {
 window.onload = loadTools;
 </script>
 
+<script>
+    // دالة صناعة الشهب
+    function createMeteors() {
+        const container = document.querySelector('.hero-section');
+        const meteorCount = 20; // عدد الشهب في الشاشة (يمكنك زيادته)
+
+        for (let i = 0; i < meteorCount; i++) {
+            const meteor = document.createElement('div');
+            meteor.classList.add('meteor');
+            
+            // تنويع الألوان (50% أزرق و 50% بنفسجي)
+            if (Math.random() > 0.5) {
+                meteor.classList.add('purple');
+            }
+
+            // عشوائية المكان (من اليسار لليمين)
+            meteor.style.left = Math.random() * 100 + '%';
+            
+            // عشوائية مدة السقوط (بين 2 ثانية و 5 ثواني)
+            const duration = Math.random() * 3 + 2;
+            meteor.style.animationDuration = duration + 's';
+            
+            // عشوائية التأخير (لكي لا ينزلوا دفعة واحدة)
+            const delay = Math.random() * 5;
+            meteor.style.animationDelay = delay + 's';
+
+            container.appendChild(meteor);
+        }
+    }
+
+    // تشغيل المطر عند تحميل الصفحة
+    document.addEventListener('DOMContentLoaded', createMeteors);
+</script>
+
 </body>
 </html>
