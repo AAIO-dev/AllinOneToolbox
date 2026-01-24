@@ -198,8 +198,9 @@ body {
 }
 /* 1. البطاقة الزجاجية المدمجة (Glassmorphism) */
 /* 1. البطاقة الزجاجية المدمجة مع التدرج الموازن */
+
+/* =================== تم تعطيل هذا الجزء ===================
 .tool-card {
-    /* قمنا باستبدال السطر القديم بهذا التدرج ليعطي لمسة ضوء خفيفة */
     background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.2) 100%);
     backdrop-filter: blur(12px); 
     padding: 35px 25px;
@@ -212,10 +213,10 @@ body {
     position: relative;
     overflow: hidden;
 
-    /* السطرين السحريين للآيفون */
     cursor: pointer; 
     -webkit-tap-highlight-color: transparent;
 }
+========================================================= */
 
 /* 2. تأثير الحوم الجريء (Glow Effect) */
 .tool-card:hover {
@@ -1834,83 +1835,80 @@ body.rtl-mode #send-btn {
    تحديث: نظام الكواكب العائمة (Galaxy Grid) 🪐
    ========================================= */
 
-/* 1. إخفاء الصندوق القديم (تحرير البطاقة) */
-.tool-card {
-    background: transparent !important; /* إلغاء الخلفية الزجاجية */
-    border: none !important;            /* إلغاء الحدود */
-    box-shadow: none !important;        /* إلغاء الظل القديم */
-    padding: 20px 10px;
-    text-align: center;                 /* توسيط كل شيء */
-    transition: transform 0.3s ease;
-    overflow: visible !important;       /* السماح للتوهج بالخروج */
-}
-
-/* 2. إعادة هيكلة الرأس (كان جانبي، سنجعله عمودي) */
-.tool-header {
-    display: flex !important;
-    flex-direction: column !important; /* الصورة فوق والنص تحت */
-    align-items: center !important;
-    gap: 15px;
-    border-bottom: none !important;    /* إزالة الخط الفاصل القديم */
-    padding-bottom: 10px;
-}
-
-/* 3. صناعة "الكوكب" (تحويل الشعار لكرة 3D) */
+/* 1. الكوكب (تحويل الشعار لكرة 3D) */
 .tool-logo {
-    width: 90px !important;       /* تكبير الحجم */
-    height: 90px !important;
-    border-radius: 50% !important; /* شكل دائري كامل */
+    width: 100px !important;       
+    height: 100px !important;
+    border-radius: 50% !important; /* دائرة كاملة */
     object-fit: cover;
+    margin: 0 auto 15px auto !important; /* توسيط الصورة */
+    display: block;
     
-    /* سحر الـ 3D: ظلال داخلية وخارجية لتبدو ككرة زجاجية */
+    /* سحر الـ 3D: لمعة زجاجية */
     box-shadow: 
-        inset -5px -5px 15px rgba(0,0,0,0.7),   /* ظل داخلي للعمق */
-        inset 5px 5px 15px rgba(255,255,255,0.4), /* لمعة زجاجية علوية */
-        0 10px 20px rgba(0,0,0,0.5);            /* ظل خارجي لتبدو طافية */
+        inset -10px -10px 20px rgba(0,0,0,0.8),   /* عمق داخلي */
+        inset 10px 10px 20px rgba(255,255,255,0.4), /* لمعة علوية */
+        0 15px 30px rgba(0,0,0,0.6);            /* ظل خارجي */
         
-    border: 2px solid rgba(255, 255, 255, 0.1); /* حلقة خفيفة حول الكوكب */
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* حركة نطاطة */
+    border: 1px solid rgba(255, 255, 255, 0.15); 
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+    background-color: #000; /* خلفية سوداء للكوكب */
 }
 
-/* 4. تفاعل الكوكب عند مرور الماوس (Hover) */
+/* 2. حاوية البطاقة (إخفاء الصندوق المربع) */
+.tool-card {
+    background: transparent !important; /* شفاف تماماً */
+    border: none !important;            
+    box-shadow: none !important;        
+    padding: 20px 10px;
+    text-align: center !important;      /* توسيط كل المحتويات */
+    position: relative;
+    overflow: visible !important;
+}
+
+/* 3. تفاعل الكوكب عند المرور */
 .tool-card:hover .tool-logo {
-    transform: translateY(-15px) scale(1.1) rotate(5deg); /* ترتفع وتكبر وتدور قليلاً */
-    border-color: #6f42c1; /* إطار بنفسجي مشع */
+    transform: translateY(-20px) scale(1.1) rotate(10deg); 
+    border-color: #6f42c1; 
     box-shadow: 
         inset -5px -5px 20px rgba(0,0,0,0.8),
         inset 5px 5px 20px rgba(255,255,255,0.6),
-        0 0 30px rgba(111, 66, 193, 0.6), /* وهج بنفسجي */
-        0 0 60px rgba(0, 170, 255, 0.4);  /* وهج أزرق ثانوي */
+        0 0 40px rgba(111, 66, 193, 0.7), /* توهج قوي */
+        0 0 80px rgba(0, 170, 255, 0.5); 
 }
 
-/* 5. تنسيق النصوص التابعة (الأقمار) */
+/* 4. ترتيب المحتوى (عمودي) */
+.tool-header {
+    display: flex !important;
+    flex-direction: column !important; 
+    align-items: center !important;
+    justify-content: center !important;
+    border: none !important;
+    padding: 0 !important;
+}
+
+/* 5. النصوص (العناوين) */
 .tool-info h3 {
-    font-size: 1.2rem !important;
-    margin-bottom: 5px !important;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.8); /* ظل للنص ليبرز فوق الخلفية */
+    text-align: center !important;
+    font-size: 1.1rem !important;
+    margin-top: 10px !important;
+    color: #fff !important;
+    text-shadow: 0 4px 10px rgba(0,0,0,1); /* ظل للنص ليقرأ فوق الخلفية */
 }
 
-.tool-description {
-    font-size: 0.9rem !important;
-    color: rgba(255, 255, 255, 0.7) !important;
-    margin-bottom: 15px !important;
-}
-
-/* 6. الأزرار (شفافة وعصرية) */
-.tool-links {
-    justify-content: center !important; /* توسيط الأزرار */
-    margin-top: 10px;
-}
-
+/* 6. الأزرار (كبسولات فضائية) */
 .see-more-link {
+    display: inline-block !important;
     background: rgba(255, 255, 255, 0.05) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    border-radius: 20px !important; /* شكل كبسولة */
-    padding: 8px 16px !important;
-    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 50px !important;
+    padding: 6px 20px !important;
+    margin: 5px !important;
+    font-size: 0.85rem !important;
+    backdrop-filter: blur(5px);
 }
 
 .tool-card:hover .see-more-link {
-    background: rgba(111, 66, 193, 0.2) !important; /* تلون خفيف عند تفعيل البطاقة */
+    background: rgba(111, 66, 193, 0.3) !important;
     border-color: #6f42c1 !important;
 }
