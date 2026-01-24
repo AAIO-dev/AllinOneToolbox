@@ -707,7 +707,7 @@ Object.keys(protectedTerms).forEach(term => {
 
 async function loadTools() {
     try {
-       const response = await fetch('https://aiallinone.ai/api/tools');
+      const response = await fetch('/api/tools');
         const tools = await response.json();
 console.log("البيانات وصلت:", tools);
         // تحديد الحاويات الثلاثة التي أضفت لها IDs
