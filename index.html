@@ -763,29 +763,11 @@ async function loadTools() {
 
             if (targetContainer) {
                 
-                // ==========================================================
-                // التعديل هنا: وحدنا جميع الأيقونات لتكون (Outline) غير ملونة
-                // ==========================================================
-                let iconUrl = ''; 
-                
-                if (containerID === 'office-container') {
-                    // أيقونة وثيقة (TXT) - سادة
-                    iconUrl = 'https://cdn-icons-png.flaticon.com/512/2911/2911232.png'; 
-                } else if (containerID === 'transform-container') {
-                    // أيقونة فيديو - سادة
-                    iconUrl = 'https://cdn-icons-png.flaticon.com/512/2859/2859706.png'; 
-                } else {
-                    // (الجديد) أيقونة عصا سحرية - سادة (بدلاً من الملونة)
-                    iconUrl = 'https://cdn-icons-png.flaticon.com/512/864/864685.png'; 
-                }
-
                 const cleanTitle = groupName.replace(/\bAI\b/g, '').replace('PDF Magic', 'PDF Editor').replace('Resume Builder', 'CV Builder').trim();
 
                 const cardHTML = `
     <div class="tool-card" tabindex="0">
-        <div class="planet-container">
-            <img src="${iconUrl}" class="tool-logo" alt="${cleanTitle}">
-        </div>
+        <div class="planet-container"></div>
         
         <div class="tool-info">
             <h3 class="card-title" data-key="${cleanTitle}" data-original="${cleanTitle}">${cleanTitle}</h3>
