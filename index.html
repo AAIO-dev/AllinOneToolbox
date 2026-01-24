@@ -820,37 +820,36 @@ window.onload = loadTools;
 </script>
 
 <script>
-    // دالة صناعة الشهب
-    function createMeteors() {
+    document.addEventListener('DOMContentLoaded', function() {
         const container = document.querySelector('.hero-section');
-        const meteorCount = 20; // عدد الشهب في الشاشة (يمكنك زيادته)
+        const meteorCount = 20; // عدد الشهب
 
+        // دالة إنشاء الشهب
         for (let i = 0; i < meteorCount; i++) {
             const meteor = document.createElement('div');
             meteor.classList.add('meteor');
             
-            // تنويع الألوان (50% أزرق و 50% بنفسجي)
+            // 50% من الشهب زرقاء و 50% بنفسجية
             if (Math.random() > 0.5) {
                 meteor.classList.add('purple');
             }
 
-            // عشوائية المكان (من اليسار لليمين)
+            // موقع عشوائي (عرض الصفحة)
             meteor.style.left = Math.random() * 100 + '%';
             
-            // عشوائية مدة السقوط (بين 2 ثانية و 5 ثواني)
+            // سرعة عشوائية (بين 2 و 5 ثواني)
             const duration = Math.random() * 3 + 2;
             meteor.style.animationDuration = duration + 's';
             
-            // عشوائية التأخير (لكي لا ينزلوا دفعة واحدة)
+            // تأخير عشوائي (لكي لا ينزلوا دفعة واحدة)
             const delay = Math.random() * 5;
             meteor.style.animationDelay = delay + 's';
 
-            container.appendChild(meteor);
+            if(container) {
+                container.appendChild(meteor);
+            }
         }
-    }
-
-    // تشغيل المطر عند تحميل الصفحة
-    document.addEventListener('DOMContentLoaded', createMeteors);
+    });
 </script>
 
 </body>

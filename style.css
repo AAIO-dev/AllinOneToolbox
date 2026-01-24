@@ -1785,47 +1785,49 @@ body.rtl-mode #send-btn {
 }
 
 
-/* ==================== نظام الشهب الذكي (Meteor Shower) ==================== */
+/* ==================== 1. إعدادات الهيدر والشهب (انسخ هذا الكود) ==================== */
+
+/* ضبط الهيدر ليكون "الحاوية" للشهب */
 .hero-section {
     position: relative;
-    overflow: hidden; /* ضروري جداً لكي لا تخرج الشهب خارج الهيدر */
+    overflow: hidden; /* ضروري جداً لكي لا تخرج الشهب وتخرب الصفحة */
+    z-index: 1;
 }
 
-/* شكل الشهاب الواحد */
+/* تصميم الشهاب الواحد */
 .meteor {
     position: absolute;
-    top: -100px; /* يبدأ من خارج الشاشة */
+    top: -150px; /* يبدأ من فوق الشاشة */
     width: 2px; /* عرض ذيل الشهاب */
     height: 120px; /* طول الشهاب */
-    background: linear-gradient(to bottom, transparent, #00aaff); /* ذيل أزرق سماوي */
+    background: linear-gradient(to bottom, transparent, #00aaff); /* لون سماوي */
     opacity: 0;
-    filter: drop-shadow(0 0 5px rgba(0, 170, 255, 0.8)); /* توهج حول الشهاب */
-    animation: meteor-fall linear infinite; /* الحركة */
-    pointer-events: none; /* لكي لا يمنع الضغط على الأزرار */
-    z-index: 1; /* خلف النصوص */
+    filter: drop-shadow(0 0 5px rgba(0, 170, 255, 0.8));
+    animation: meteor-fall linear infinite;
+    pointer-events: none; /* لا يؤثر على الضغط */
+    z-index: -1; /* يظهر خلف النصوص */
     border-radius: 50px;
 }
 
-/* حركة السقوط المائل والاختفاء */
+/* حركة السقوط المائل */
 @keyframes meteor-fall {
     0% {
-        transform: translateY(0) translateX(0) rotate(25deg); /* البداية */
+        transform: translateY(0) translateX(0) rotate(25deg);
         opacity: 0;
     }
     10% {
-        opacity: 1; /* يظهر فجأة */
+        opacity: 1; /* يظهر */
     }
     80% {
         opacity: 1; /* يظل ظاهراً */
     }
     100% {
-        /* يسقط لأسفل ويمين الشاشة */
-        transform: translateY(120vh) translateX(200px) rotate(25deg); 
-        opacity: 0; /* يختفي قبل النهاية */
+        transform: translateY(120vh) translateX(200px) rotate(25deg); /* يسقط لأسفل ويمين */
+        opacity: 0; /* يختفي */
     }
 }
 
-/* تنويع ألوان الشهب (بعضها بنفسجي) */
+/* لون إضافي (بنفسجي) للشهب */
 .meteor.purple {
     background: linear-gradient(to bottom, transparent, #a29bfe);
     filter: drop-shadow(0 0 5px rgba(162, 155, 254, 0.8));
