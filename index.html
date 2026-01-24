@@ -709,23 +709,19 @@ async function loadTools() {
     try {
         const response = await fetch('/api/tools');
         const tools = await response.json();
-        console.log("البيانات وصلت:", tools);
 
-        // تحديد الحاويات
         const containers = {
             'Creative & Tech Tools': document.getElementById('creative-container'),
             'Professional Office Tools': document.getElementById('office-container'),
             'Media Transform Tools': document.getElementById('transform-container')
         };
 
-        // تجميع الأدوات
         const groups = {};
         tools.forEach(tool => {
             if (!groups[tool.category]) groups[tool.category] = [];
             groups[tool.category].push(tool);
         });
 
-        // خريطة التوزيع
         const categoryToContainer = {
             'Image Enhancer': 'Creative & Tech Tools',
             'AI Background Remover': 'Creative & Tech Tools',
@@ -766,22 +762,24 @@ async function loadTools() {
             const targetContainer = document.getElementById(containerID);
 
             if (targetContainer) {
-                // ============================================================
-                // التعديل الجوهري هنا: إضافة صورة الكوكب وتعديل الهيكل
-                // ============================================================
                 
-                // سنحاول جلب صورة من الأداة، وإذا لم توجد نضع صورة كوكب افتراضية أنيقة
-                // ملاحظة: افترضت أن الكائن يحتوي على خاصية .image أو .logo، إذا لم توجد سيستخدم الرابط البديل
-               // إذا وجدت صورة للأداة استخدمها، وإلا استخدم أيقونة الكوكب الزجاجي هذه
-                const planetImage = mainFree?.image || mainFree?.logo || 'https://cdn-icons-png.flaticon.com/512/4645/4645286.png';
+                // هنا التغيير: تحديد أيقونة مناسبة لكل قسم (بدون ألوان كرتونية)
+                let iconUrl = 'https://cdn-icons-png.flaticon.com/512/2921/2921226.png'; // الافتراضي (سحر)
+
+                if (containerID === 'office-container') {
+                    iconUrl = 'https://cdn-icons-png.flaticon.com/512/2911/2911232.png'; // وثيقة/قلم
+                } else if (containerID === 'transform-container') {
+                    iconUrl = 'https://cdn-icons-png.flaticon.com/512/2859/2859706.png'; // فيديو
+                }
 
                 const cleanTitle = groupName.replace(/\bAI\b/g, '').replace('PDF Magic', 'PDF Editor').replace('Resume Builder', 'CV Builder').trim();
 
                 const cardHTML = `
     <div class="tool-card" tabindex="0">
+        <div class="planet-container">
+            <img src="${iconUrl}" class="tool-logo" alt="${cleanTitle}">
+        </div>
         
-        <img src="${planetImage}" class="tool-logo" alt="${cleanTitle}">
-
         <div class="tool-info">
             <h3 class="card-title" data-key="${cleanTitle}" data-original="${cleanTitle}">${cleanTitle}</h3>
         </div>
@@ -798,16 +796,14 @@ async function loadTools() {
         </div>
         
         <div class="see-more-links">
-            <a onclick="toggleBox('free-${groupID}', this)" class="see-more-link" style="color: #00aaff; cursor: pointer;" data-key="see_more_free" data-original="+ See More Free Tools">+ See More Free Tools</a>
+            <a onclick="toggleBox('free-${groupID}', this)" class="see-more-link" style="color: #00aaff; cursor: pointer;">+ See More Free</a>
             <div id="free-${groupID}" class="dropdown-content">
                 ${extraFree.map(t => `<a href="${t.url}" target="_blank">${t.name}</a>`).join('')}
             </div>
 
-            <a onclick="toggleBox('prem-${groupID}', this)" class="see-more-link" style="color: #ffaa00; cursor: pointer;" data-key="see_more_premium" data-original="+ See More Premium Tools">+ See More Premium Tools</a>
+            <a onclick="toggleBox('prem-${groupID}', this)" class="see-more-link" style="color: #ffaa00; cursor: pointer;">+ See More Premium</a>
             <div id="prem-${groupID}" class="dropdown-content">
-                ${extraPrem.length > 0 
-                    ? extraPrem.map(t => `<a href="${t.url}" target="_blank" rel="nofollow">${t.name}</a>`).join('') 
-                    : '<a>Explore More Options</a>'}
+                ${extraPrem.length > 0 ? extraPrem.map(t => `<a href="${t.url}" target="_blank" rel="nofollow">${t.name}</a>`).join('') : '<a>Explore More</a>'}
             </div>
         </div>
     </div>`;
@@ -822,7 +818,7 @@ async function loadTools() {
             updateContent(currentLang);
         }
     } catch (error) {
-        console.error("خطأ في جلب البيانات:", error);
+        console.error("خطأ:", error);
     }
 }
 
