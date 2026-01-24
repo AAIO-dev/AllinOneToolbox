@@ -763,13 +763,20 @@ async function loadTools() {
 
             if (targetContainer) {
                 
-                // هنا التغيير: تحديد أيقونة مناسبة لكل قسم (بدون ألوان كرتونية)
-                let iconUrl = 'https://cdn-icons-png.flaticon.com/512/2921/2921226.png'; // الافتراضي (سحر)
-
+                // ==========================================================
+                // التعديل هنا: وحدنا جميع الأيقونات لتكون (Outline) غير ملونة
+                // ==========================================================
+                let iconUrl = ''; 
+                
                 if (containerID === 'office-container') {
-                    iconUrl = 'https://cdn-icons-png.flaticon.com/512/2911/2911232.png'; // وثيقة/قلم
+                    // أيقونة وثيقة (TXT) - سادة
+                    iconUrl = 'https://cdn-icons-png.flaticon.com/512/2911/2911232.png'; 
                 } else if (containerID === 'transform-container') {
-                    iconUrl = 'https://cdn-icons-png.flaticon.com/512/2859/2859706.png'; // فيديو
+                    // أيقونة فيديو - سادة
+                    iconUrl = 'https://cdn-icons-png.flaticon.com/512/2859/2859706.png'; 
+                } else {
+                    // (الجديد) أيقونة عصا سحرية - سادة (بدلاً من الملونة)
+                    iconUrl = 'https://cdn-icons-png.flaticon.com/512/864/864685.png'; 
                 }
 
                 const cleanTitle = groupName.replace(/\bAI\b/g, '').replace('PDF Magic', 'PDF Editor').replace('Resume Builder', 'CV Builder').trim();
