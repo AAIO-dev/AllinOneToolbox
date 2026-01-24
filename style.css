@@ -1568,7 +1568,7 @@ body.rtl-mode #send-btn {
     justify-content: center;
     text-align: center;
     width: 100%;
-    padding: 80px 20px 40px;
+    padding: 40px 20px 30px; /* (أعلى - يمين/يسار - أسفل) */
     position: relative;
     z-index: 10;
 }
