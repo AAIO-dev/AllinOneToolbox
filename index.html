@@ -772,7 +772,8 @@ async function loadTools() {
                 
                 // سنحاول جلب صورة من الأداة، وإذا لم توجد نضع صورة كوكب افتراضية أنيقة
                 // ملاحظة: افترضت أن الكائن يحتوي على خاصية .image أو .logo، إذا لم توجد سيستخدم الرابط البديل
-                const planetImage = mainFree?.image || mainFree?.logo || 'https://cdn-icons-png.flaticon.com/512/2103/2103633.png';
+               // إذا وجدت صورة للأداة استخدمها، وإلا استخدم أيقونة الكوكب الزجاجي هذه
+                const planetImage = mainFree?.image || mainFree?.logo || 'https://cdn-icons-png.flaticon.com/512/4645/4645286.png';
 
                 const cleanTitle = groupName.replace(/\bAI\b/g, '').replace('PDF Magic', 'PDF Editor').replace('Resume Builder', 'CV Builder').trim();
 
