@@ -1913,3 +1913,86 @@ body.rtl-mode #send-btn {
         0 0 0 6px rgba(255, 255, 255, 0.1),
         0 0 40px rgba(0, 170, 255, 0.6); /* التوهج يشتعل */
 }
+/* =======================================================
+   تصميم الكواكب العائمة (يجب وضعه في نهاية الملف)
+   هذا الكود يفرض التصميم الجديد فوق أي تصميم قديم
+   ======================================================= */
+
+/* 1. هيكل البطاقة (تحويلها لزجاجة عائمة) */
+.tool-card {
+    /* إلغاء أي تنسيق قديم للأبعاد */
+    display: flex !important;
+    flex-direction: column !important; /* العناصر فوق بعضها */
+    align-items: center !important;
+    justify-content: center !important;
+    
+    /* التصميم الزجاجي */
+    background: rgba(255, 255, 255, 0.03) !important; 
+    backdrop-filter: blur(15px) !important;
+    -webkit-backdrop-filter: blur(15px) !important;
+    
+    /* الحدود والزوايا */
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 24px !important;
+    
+    /* مسافات وأبعاد */
+    padding: 30px 20px !important;
+    margin-bottom: 30px !important;
+    text-align: center !important;
+    
+    /* الظلال والحركة */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    
+    /* إعدادات إضافية */
+    position: relative;
+    overflow: visible !important; /* مهم جداً لظهور توهج الكوكب */
+    cursor: pointer;
+}
+
+/* 2. اللوجو (تحويله لكوكب دائري) */
+.tool-card img, .tool-logo {
+    width: 80px !important;
+    height: 80px !important;
+    border-radius: 50% !important; /* دائرة كاملة */
+    object-fit: cover !important;
+    margin: 0 0 20px 0 !important; /* مسافة من الأسفل فقط */
+    background: transparent !important;
+    border: none !important;
+    
+    /* تأثير الكوكب المضيء */
+    box-shadow: 
+        0 0 0 4px rgba(255, 255, 255, 0.05), 
+        0 0 20px rgba(0, 170, 255, 0.3) !important;
+        
+    transition: transform 0.5s ease, box-shadow 0.5s ease !important;
+}
+
+/* 3. تفاعل الكوكب عند مرور الماوس */
+.tool-card:hover {
+    transform: translateY(-10px) !important;
+    background: rgba(255, 255, 255, 0.06) !important;
+    border-color: rgba(0, 170, 255, 0.4) !important;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4) !important;
+}
+
+.tool-card:hover img, .tool-card:hover .tool-logo {
+    transform: scale(1.1) rotate(10deg) !important; /* دوران الكوكب */
+    box-shadow: 
+        0 0 0 6px rgba(255, 255, 255, 0.1),
+        0 0 40px rgba(0, 170, 255, 0.6) !important; /* اشتعال التوهج */
+}
+
+/* 4. إجبار النصوص على التوسط */
+.tool-info, .tool-header {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+}
+
+.tool-info h3 {
+    margin-top: 10px !important;
+    font-size: 1.2rem !important;
+    color: #fff !important;
+}
