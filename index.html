@@ -823,8 +823,8 @@ window.onload = loadTools;
     document.addEventListener('DOMContentLoaded', function() {
         const container = document.querySelector('.hero-section');
         
-        // 1. زيادة العدد (كان 20 أصبح 50)
-        const meteorCount = 50; 
+        // زدنا العدد من 50 إلى 80
+        const meteorCount = 80; 
 
         for (let i = 0; i < meteorCount; i++) {
             const meteor = document.createElement('div');
@@ -834,15 +834,15 @@ window.onload = loadTools;
                 meteor.classList.add('purple');
             }
 
-            meteor.style.left = Math.random() * 100 + '%';
+            // التوزيع المتوازن (من -40% يساراً إلى 100% يميناً)
+            meteor.style.left = (Math.random() * 140 - 40) + '%';
             
-            // 2. تبطئة السرعة (كلما زاد الرقم، أصبحت الحركة أبطأ)
-            // كانت (بين 2 و 5) والآن أصبحت (بين 5 و 9 ثواني) لحركة هادئة جداً
+            // السرعة الهادئة (5 إلى 9 ثواني)
             const duration = Math.random() * 4 + 5; 
             meteor.style.animationDuration = duration + 's';
             
-            // توزيع الظهور (تأخير عشوائي يصل لـ 15 ثانية لضمان استمرار العرض)
-            const delay = Math.random() * 15;
+            // تأخير أطول قليلاً لاستيعاب العدد الزائد (توزيع على 20 ثانية)
+            const delay = Math.random() * 20;
             meteor.style.animationDelay = delay + 's';
 
             if(container) {
