@@ -707,25 +707,25 @@ Object.keys(protectedTerms).forEach(term => {
 
 async function loadTools() {
     try {
-      const response = await fetch('/api/tools');
+        const response = await fetch('/api/tools');
         const tools = await response.json();
-console.log("البيانات وصلت:", tools);
-        // تحديد الحاويات الثلاثة التي أضفت لها IDs
+        console.log("البيانات وصلت:", tools);
+
+        // تحديد الحاويات
         const containers = {
             'Creative & Tech Tools': document.getElementById('creative-container'),
             'Professional Office Tools': document.getElementById('office-container'),
             'Media Transform Tools': document.getElementById('transform-container')
         };
 
-        // تجميع الأدوات حسب الـ category (مثل Image Enhancer)
+        // تجميع الأدوات
         const groups = {};
         tools.forEach(tool => {
             if (!groups[tool.category]) groups[tool.category] = [];
             groups[tool.category].push(tool);
         });
 
-        // بناء الكروت لكل مجموعة
-        // بناء الكروت وتوزيعها باستخدام "القاموس"
+        // خريطة التوزيع
         const categoryToContainer = {
             'Image Enhancer': 'Creative & Tech Tools',
             'AI Background Remover': 'Creative & Tech Tools',
@@ -750,30 +750,41 @@ console.log("البيانات وصلت:", tools);
             const groupTools = groups[groupName];
             const groupID = groupName.replace(/\s+/g, '-').toLowerCase();
 
-            // تصنيف الأدوات بناءً على بيانات الكونسول
             const freeTools = groupTools.filter(t => t.pricing.toLowerCase() === 'free');
             const premTools = groupTools.filter(t => t.pricing.toLowerCase() === 'premium');
 
-            // توزيع المجاني
             const mainFree = freeTools[0];
-            const extraFree = freeTools.slice(1, 11); // أول 10 أدوات مجانية إضافية
+            const extraFree = freeTools.slice(1, 11);
 
-            // توزيع المدفوع + سد العجز
             const mainPrem = premTools[0]; 
-            // إذا كان المدفوع فارغاً، نسحب من فائض المجاني (من الأداة رقم 11 وما فوق)
             const extraPrem = premTools.length > 1 
                 ? premTools.slice(1, 11) 
                 : freeTools.slice(11, 21); 
 
-          const containerID = categoryToContainer[groupName] === 'Creative & Tech Tools' ? 'creative-container' :
-                    categoryToContainer[groupName] === 'Professional Office Tools' ? 'office-container' : 'transform-container';
-const targetContainer = document.getElementById(containerID);
+            const containerID = categoryToContainer[groupName] === 'Creative & Tech Tools' ? 'creative-container' :
+                                categoryToContainer[groupName] === 'Professional Office Tools' ? 'office-container' : 'transform-container';
+            const targetContainer = document.getElementById(containerID);
 
             if (targetContainer) {
-                console.log("تم العثور على حاوية لـ:", groupName);
+                // ============================================================
+                // التعديل الجوهري هنا: إضافة صورة الكوكب وتعديل الهيكل
+                // ============================================================
+                
+                // سنحاول جلب صورة من الأداة، وإذا لم توجد نضع صورة كوكب افتراضية أنيقة
+                // ملاحظة: افترضت أن الكائن يحتوي على خاصية .image أو .logo، إذا لم توجد سيستخدم الرابط البديل
+                const planetImage = mainFree?.image || mainFree?.logo || 'https://cdn-icons-png.flaticon.com/512/3212/3212629.png'; 
+
+                const cleanTitle = groupName.replace(/\bAI\b/g, '').replace('PDF Magic', 'PDF Editor').replace('Resume Builder', 'CV Builder').trim();
+
                 const cardHTML = `
     <div class="tool-card" tabindex="0">
-        <h3 class="card-title" data-key="${groupName.replace(/\bAI\b/g, '').replace('PDF Magic', 'PDF Editor').replace('Resume Builder', 'CV Builder').trim()}" data-original="${groupName.replace(/\bAI\b/g, '').replace('PDF Magic', 'PDF Editor').replace('Resume Builder', 'CV Builder').trim()}">${groupName.replace(/\bAI\b/g, '').replace('PDF Magic', 'PDF Editor').replace('Resume Builder', 'CV Builder').trim()}</h3>
+        
+        <img src="${planetImage}" class="tool-logo" alt="${cleanTitle}">
+
+        <div class="tool-info">
+            <h3 class="card-title" data-key="${cleanTitle}" data-original="${cleanTitle}">${cleanTitle}</h3>
+        </div>
+
         <div class="button-group">
             <div class="item-wrapper">
                 <a href="${mainFree?.url || '#'}" target="_blank" class="btn btn-purple">${mainFree?.name || 'N/A'}</a>
@@ -800,22 +811,20 @@ const targetContainer = document.getElementById(containerID);
         </div>
     </div>`;
                 
-                // هذا السطر يحمي الهيكل من الانهيار
-            targetContainer.insertAdjacentHTML('beforeend', cardHTML);
+                targetContainer.insertAdjacentHTML('beforeend', cardHTML);
             }
         }
         setTimeout(initMobileFeatures, 100);
-        // إعادة ترجمة البطاقات الجديدة بناءً على اللغة المختارة حالياً
-const currentLang = document.getElementById('language-picker').value;
-if (currentLang !== 'en') {
-    updateContent(currentLang);
-}
+        
+        const currentLang = document.getElementById('language-picker').value;
+        if (currentLang !== 'en') {
+            updateContent(currentLang);
+        }
     } catch (error) {
         console.error("خطأ في جلب البيانات:", error);
     }
 }
 
-// تشغيل الوظيفة عند تحميل الصفحة
 window.onload = loadTools;
 </script>
 
