@@ -200,7 +200,7 @@ body {
 /* 1. البطاقة الزجاجية المدمجة مع التدرج الموازن */
 
 
-.tool-card-OFF {
+.tool-card {
     background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.2) 100%);
     backdrop-filter: blur(12px); 
     padding: 35px 25px;
@@ -218,7 +218,7 @@ body {
 }
 
 /* 2. تأثير الحوم الجريء (Glow Effect) */
-.tool-card-OFF:hover {
+.tool-card:hover {
     transform: translateY(-10px) scale(1.02);
     border-color: rgba(111, 66, 193, 0.6);
     background: rgba(255, 255, 255, 0.07);
@@ -226,7 +226,7 @@ body {
 }
 
 /* 3. تعديل العنوان ليكون مضيئاً وواضحاً */
-.tool-card-OFF h3 {
+.tool-card h3 {
     font-family: 'Cairo', sans-serif;
     font-size: 1.2rem;
     font-weight: 700;
@@ -236,7 +236,7 @@ body {
 }
 
 /* 4. تعديل روابط See more لتناسب التصميم العالمي */
-tool-card-OFF a {
+.tool-card a {
     font-size: 13px;
     font-weight: 600;
     color: #a29bfe; /* لون بنفسجي فاتح (Pastel) ليكون مريحاً للعين */
@@ -252,7 +252,7 @@ tool-card-OFF a {
 }
 
 /* 5. خط الجموح (Light Ray) */
-.tool-card-OFF::before {
+.tool-card::before {
     content: '';
     position: absolute;
     top: 0;
@@ -294,7 +294,7 @@ tool-card-OFF a {
     gap: 5px; 
 }
 /* تنسيق صور الأيقونات داخل البطاقة */
-.tool-card-OFF img {
+.tool-card img {
     width: 45px; /* حجم موحد للأيقونات */
     height: 45px;
     border-radius: 12px; /* زوايا منحنية للأيقونة نفسها */
@@ -307,7 +307,7 @@ tool-card-OFF a {
 }
 
 /* حركة بسيطة للأيقونة عند مرور الماوس على البطاقة */
-.tool-card-OFF:hover img {
+.tool-card:hover img {
     transform: rotate(5deg) scale(1.1); /* ميلان خفيف وتكبير */
 }
 
