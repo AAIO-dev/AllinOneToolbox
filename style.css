@@ -196,120 +196,7 @@ body {
     margin: 10px auto 0;
     border-radius: 10px;
 }
-/* 1. البطاقة الزجاجية المدمجة (Glassmorphism) */
-/* 1. البطاقة الزجاجية المدمجة مع التدرج الموازن */
 
-
-.tool-card-OFF {
-    background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.2) 100%);
-    backdrop-filter: blur(12px); 
-    padding: 35px 25px;
-    border-radius: 24px;
-    margin-bottom: 25px;
-    text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.08); 
-    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-    position: relative;
-    overflow: hidden;
-
-    cursor: pointer; 
-    -webkit-tap-highlight-color: transparent;
-}
-
-/* 2. تأثير الحوم الجريء (Glow Effect) */
-.tool-card-OFF:hover {
-    transform: translateY(-10px) scale(1.02);
-    border-color: rgba(111, 66, 193, 0.6);
-    background: rgba(255, 255, 255, 0.07);
-    box-shadow: 0 0 30px rgba(111, 66, 193, 0.2);
-}
-
-/* 3. تعديل العنوان ليكون مضيئاً وواضحاً */
-.tool-card-OFF h3 {
-    font-family: 'Cairo', sans-serif;
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #ffffff; /* أبيض ناصع ليبرز في الظلام */
-    margin-bottom: 18px;
-    text-shadow: 0 2px 10px rgba(255,255,255,0.1); /* توهج بسيط للنص */
-}
-
-/* 4. تعديل روابط See more لتناسب التصميم العالمي */
-tool-card-OFF a {
-    font-size: 13px;
-    font-weight: 600;
-    color: #a29bfe; /* لون بنفسجي فاتح (Pastel) ليكون مريحاً للعين */
-    text-decoration: none;
-    display: inline-block;
-    margin-top: 10px;
-    transition: 0.3s;
-}
-
-.tool-card a:hover {
-    color: #ffffff;
-    text-shadow: 0 0 8px #a29bfe;
-}
-
-/* 5. خط الجموح (Light Ray) */
-.tool-card-OFF::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, #a29bfe, transparent);
-    transition: 0.5s;
-}
-
-.tool-card:hover::before {
-    left: 100%;
-}
-
-/* الحجم الكبير مع إعادة الظل لضمان العمق والفخامة */
-[data-theme="light"] .status-badge {
-    padding: 4px 16px !important;
-    border-radius: 6px !important;
-    font-size: 12px !important;
-    font-weight: 850 !important;
-    display: inline-block !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.5px !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
-}
-
-
-.button-group {
-    display: flex;
-    flex-direction: row; /* جعل الأزرار بجانب بعضها */
-    justify-content: center; /* توسيطهم في المنتصف */
-    gap: 12px; /* مسافة متساوية بين الزرين */
-    flex-wrap: wrap; /* للسماح بالنزول لسطر جديد في الشاشات الصغيرة جداً */
-    margin-bottom: 15px;
-}
-.item-wrapper { 
-    display: flex; 
-    align-items: center; 
-    gap: 5px; 
-}
-/* تنسيق صور الأيقونات داخل البطاقة */
-.tool-card-OFF img {
-    width: 45px; /* حجم موحد للأيقونات */
-    height: 45px;
-    border-radius: 12px; /* زوايا منحنية للأيقونة نفسها */
-    object-fit: contain; /* يضمن عدم تمدد الصورة بشكل مشوه */
-    background: #ffffff;
-    padding: 5px;
-    border: 1px solid #f0f0f0;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    transition: transform 0.3s ease;
-}
-
-/* حركة بسيطة للأيقونة عند مرور الماوس على البطاقة */
-.tool-card-OFF:hover img {
-    transform: rotate(5deg) scale(1.1); /* ميلان خفيف وتكبير */
-}
 
 
 /* تحويل الحاوية البيضاء إلى حاوية زجاجية فخمة */
@@ -632,20 +519,8 @@ input:checked + .slider.round:before {
     color: #888; /* لون محايد لا يغير شكل الموقع حالياً */
 }
 /* 1. جعل البطاقة شفافة قليلاً لتظهر لون الخلفية الأصلي الفخم */
-/* تجربة التدرج الذهبي الفخم للبطاقات */
-[data-theme="light"] .tool-card {
-    /* تدرج يبدأ بلمعة ذهبية خفيفة وينتهي بالرمادي العميق */
-    background: linear-gradient(145deg, #fdfcf0 0%, #dae1e9 50%, #c8d1db 100%) !important;
-    
-    /* تغيير لون الظل ليتناسب مع اللمسة الذهبية */
-    box-shadow: 8px 8px 18px rgba(163, 177, 198, 0.4), 
-                -10px -10px 25px rgba(253, 252, 240, 0.6) !important;
-    
-    /* إطار بلمسة ذهبية باهتة جداً لإكمال اللوحة */
-    border: 1.5px solid rgba(212, 175, 55, 0.2) !important;
-    
-    transition: all 0.4s ease;
-}
+
+
 /* 2. تثبيت لون الصناديق الذي أعجبك (الرمادي السحابي) */
 [data-theme="light"] .item-wrapper {
     background: #cbd5e0 !important; 
@@ -683,15 +558,6 @@ input:checked + .slider.round:before {
 }
 
 
-[data-theme="dark"] .tool-card {
-    /* زيادة وضوح اللون الذهبي في البداية (0%) وتقليل الشفافية قليلاً للبروز */
-    background: linear-gradient(145deg, 
-        rgba(212, 175, 55, 0.22) 0%,   /* زادت من 0.12 إلى 0.22 لبريق أوضح */
-        rgba(50, 55, 65, 0.45) 50%,    /* رمادي أعمق قليلاً لزيادة التباين */
-        rgba(15, 15, 20, 0.98) 100%    /* نهاية سوداء شبه مصمتة لتعطي ثقلاً للبطاقة */
-    ) !important;
-
-}
 
 /* تنسيق حاوية أدوات التحكم (اللغات + الثيم) */
 .theme-switch-wrapper {
@@ -1845,241 +1711,112 @@ body.rtl-mode #send-btn {
     z-index: 10;
     width: 100%;
 }
-/* ==================== تصميم البطاقات: الكواكب العائمة (Galaxy Cards) ==================== */
+/* ==================== نظام المجرة النهائي (Galaxy System) ==================== */
 
-/* 1. الحاوية (البطاقة نفسها) */
-.tool-card {
-    /* الخلفية الزجاجية */
-    background: rgba(255, 255, 255, 0.03); 
-    backdrop-filter: blur(15px); /* تمويه الخلفية */
-    -webkit-backdrop-filter: blur(15px);
-    
-    /* الحدود والحواف */
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 24px; /* زوايا دائرية ناعمة */
-    
-    /* الأبعاد والمسافات */
-    padding: 30px 20px;
-    margin-bottom: 30px;
-    text-align: center; /* توسيط المحتوى */
-    position: relative;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* حركة مرنة */
-    cursor: pointer;
-    overflow: visible; /* مهم لظهور التوهج خارج الحدود */
-}
-
-/* 2. اللوجو (الكوكب) */
-.tool-logo {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%; /* دائري تماماً كالكوكب */
-    object-fit: cover;
-    margin-bottom: 20px;
-    
-    /* تأثير الكوكب المضيء */
-    box-shadow: 
-        0 0 0 4px rgba(255, 255, 255, 0.05), /* حلقة خفيفة حوله */
-        0 0 20px rgba(0, 170, 255, 0.3); /* توهج أزرق */
-        
-    transition: transform 0.5s ease, box-shadow 0.5s ease;
-}
-
-/* 3. العناوين والنصوص */
-.tool-info h3 {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: #fff;
-    margin-bottom: 10px;
-    letter-spacing: 0.5px;
-}
-
-.tool-info p {
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.7);
-    line-height: 1.6;
-}
-
-/* 4. التفاعل عند مرور الماوس (Hover) */
-.tool-card:hover {
-    transform: translateY(-10px); /* يرتفع للأعلى */
-    background: rgba(255, 255, 255, 0.06); /* تزيد الإضاءة */
-    border-color: rgba(0, 170, 255, 0.4); /* الحدود تصبح زرقاء */
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4); /* ظل عميق */
-}
-
-.tool-card:hover .tool-logo {
-    transform: scale(1.1) rotate(5deg); /* الكوكب يكبر ويدور قليلاً */
-    box-shadow: 
-        0 0 0 6px rgba(255, 255, 255, 0.1),
-        0 0 40px rgba(0, 170, 255, 0.6); /* التوهج يشتعل */
-}
-/* =======================================================
-   تصميم الكواكب العائمة (يجب وضعه في نهاية الملف)
-   هذا الكود يفرض التصميم الجديد فوق أي تصميم قديم
-   ======================================================= */
-
-/* 1. هيكل البطاقة (تحويلها لزجاجة عائمة) */
-.tool-card {
-    /* إلغاء أي تنسيق قديم للأبعاد */
+/* 1. ترتيب الحاويات (توزيع الكواكب) */
+#creative-container, #office-container, #transform-container {
     display: flex !important;
-    flex-direction: column !important; /* العناصر فوق بعضها */
-    align-items: center !important;
+    flex-wrap: wrap !important;
     justify-content: center !important;
-    
-    /* التصميم الزجاجي */
-    background: rgba(255, 255, 255, 0.03) !important; 
-    backdrop-filter: blur(15px) !important;
-    -webkit-backdrop-filter: blur(15px) !important;
-    
-    /* الحدود والزوايا */
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    border-radius: 24px !important;
-    
-    /* مسافات وأبعاد */
-    padding: 30px 20px !important;
-    margin-bottom: 30px !important;
-    text-align: center !important;
-    
-    /* الظلال والحركة */
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3) !important;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-    
-    /* إعدادات إضافية */
-    position: relative;
-    overflow: visible !important; /* مهم جداً لظهور توهج الكوكب */
-    cursor: pointer;
+    gap: 40px !important;
+    padding: 20px !important;
+    width: 100% !important;
 }
 
-/* 2. اللوجو (تحويله لكوكب دائري) */
-.tool-card img, .tool-logo {
-    width: 80px !important;
-    height: 80px !important;
-    border-radius: 50% !important; /* دائرة كاملة */
-    object-fit: cover !important;
-    margin: 0 0 20px 0 !important; /* مسافة من الأسفل فقط */
+/* 2. إلغاء الصندوق الأسود (شفافية كاملة) */
+.tool-card {
     background: transparent !important;
     border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
     
-    /* تأثير الكوكب المضيء */
-    box-shadow: 
-        0 0 0 4px rgba(255, 255, 255, 0.05), 
-        0 0 20px rgba(0, 170, 255, 0.3) !important;
-        
-    transition: transform 0.5s ease, box-shadow 0.5s ease !important;
-}
-
-/* 3. تفاعل الكوكب عند مرور الماوس */
-.tool-card:hover {
-    transform: translateY(-10px) !important;
-    background: rgba(255, 255, 255, 0.06) !important;
-    border-color: rgba(0, 170, 255, 0.4) !important;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4) !important;
-}
-
-.tool-card:hover img, .tool-card:hover .tool-logo {
-    transform: scale(1.1) rotate(10deg) !important; /* دوران الكوكب */
-    box-shadow: 
-        0 0 0 6px rgba(255, 255, 255, 0.1),
-        0 0 40px rgba(0, 170, 255, 0.6) !important; /* اشتعال التوهج */
-}
-
-/* 4. إجبار النصوص على التوسط */
-.tool-info, .tool-header {
-    width: 100% !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
-}
-
-.tool-info h3 {
-    margin-top: 10px !important;
-    font-size: 1.2rem !important;
-    color: #fff !important;
-}
-/* ==================== إصلاح الزجاج النهائي ==================== */
-
-/* 1. إزالة الخلفية الداكنة القديمة تماماً وتطبيق الزجاج */
-.tool-card {
-    background: rgba(255, 255, 255, 0.02) !important; /* شفافية عالية جداً */
-    background-image: none !important; /* إيقاف أي تدرج لوني قديم */
-    backdrop-filter: blur(20px) !important; /* تفعيل التمويه الزجاجي */
-    -webkit-backdrop-filter: blur(20px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important; /* حدود بيضاء خفيفة */
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1) !important; /* ظل ناعم */
-}
-
-/* 2. تحسين شكل الأيقونة (جعلها تشع ضوءاً) */
-.tool-logo {
-    background: rgba(0, 0, 0, 0.3) !important; /* خلفية خفيفة خلف الأيقونة */
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    padding: 10px !important; /* مسافة لكي لا تلتصق الحواف */
-    box-shadow: 0 0 20px rgba(0, 170, 255, 0.2) !important; /* توهج أزرق */
-}
-
-/* 3. جعل النصوص تبرز فوق الزجاج */
-.tool-info h3 {
-    color: #ffffff !important;
-    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5) !important;
-}
-/* ==================== نظام المجرة: الكواكب العائمة (Galaxy Grid) ==================== */
-
-/* 1. إخفاء الصندوق المربع تماماً (الجاذبية فقط) */
-.tool-card {
-    background: transparent !important; /* خلفية شفافة بالكامل */
-    background-image: none !important;
-    border: none !important; /* بدون حدود */
-    box-shadow: none !important; /* بدون ظل للصندوق */
-    backdrop-filter: none !important; /* إلغاء التمويه الخلفي */
+    justify-content: flex-start !important;
     
-    /* ترتيب العناصر عمودياً */
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    margin-bottom: 40px !important; /* مسافة بين الكواكب */
-    padding: 10px !important;
+    width: 150px !important; /* عرض الكوكب */
+    margin: 15px !important;
+    position: relative;
     overflow: visible !important;
 }
 
-/* 2. تحويل اللوجو إلى كوكب 3D (الكرة) */
-.tool-logo {
-    width: 90px !important;
-    height: 90px !important;
-    border-radius: 50% !important; /* دائرة كاملة */
-    object-fit: cover !important;
-    margin-bottom: 15px !important;
-    background: #1a0b2e !important; /* لون خلفية الكوكب في حال كانت الصورة شفافة */
+/* 3. الكرة الزجاجية (الحاوية) */
+.planet-container {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
     
-    /* سحر الـ 3D: تلاعب بالظلال لتبدو ككرة بارزة */
+    /* مظهر زجاجي كريستالي */
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1), rgba(0,0,0,0.6));
     box-shadow: 
-        inset 10px 10px 20px rgba(255, 255, 255, 0.1), /* إضاءة علوية */
-        inset -10px -10px 20px rgba(0, 0, 0, 0.8), /* ظل سفلي داخلي للعمق */
-        0 0 25px rgba(111, 66, 193, 0.4), /* توهج خارجي بنفسجي */
-        0 10px 15px rgba(0,0,0,0.5) !important; /* ظل سقوط الكرة */
+        inset -5px -5px 15px rgba(0,0,0,0.8),
+        inset 5px 5px 15px rgba(255,255,255,0.1),
+        0 0 20px rgba(111, 66, 193, 0.2);
         
-    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-    border: 2px solid rgba(255, 255, 255, 0.1) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.4s ease;
+    z-index: 2;
 }
 
-/* 3. تأثير الطفو عند مرور الماوس */
-.tool-card:hover .tool-logo {
-    transform: translateY(-15px) rotate(15deg) scale(1.1) !important; /* يرتفع ويدور */
-    box-shadow: 
-        inset 5px 5px 10px rgba(255, 255, 255, 0.3),
-        inset -5px -5px 15px rgba(0, 0, 0, 0.9),
-        0 0 50px rgba(0, 170, 255, 0.8), /* توهج أزرق قوي عند التحويم */
-        0 20px 30px rgba(0,0,0,0.6) !important;
-    border-color: rgba(0, 170, 255, 0.5) !important;
+/* 4. الأيقونة الفضية الموحدة (Silver Icons) */
+.tool-logo {
+    width: 50px !important;
+    height: 50px !important;
+    object-fit: contain !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    
+    /* الفلتر السحري: يحول أي لون إلى فضي أبيض */
+    filter: grayscale(100%) brightness(300%) drop-shadow(0 0 5px rgba(255,255,255,0.4)) !important;
+    opacity: 0.9;
+    transition: transform 0.4s ease;
 }
 
-/* 4. تنسيق العناوين (تطفو تحت الكوكب) */
+/* 5. النصوص (العناوين) */
 .tool-info h3 {
     color: #ffffff !important;
-    font-size: 1.1rem !important;
-    font-weight: 700 !important;
-    text-shadow: 0 2px 5px rgba(0,0,0,0.8) !important; /* ظل للنص ليظهر بوضوح فوق الشهب */
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    text-shadow: 0 2px 5px #000 !important;
     margin-top: 5px !important;
-    background: rgba(0,0,0,0.3); /* خلفية خفيفة جداً خلف النص للقراءة */
-    padding: 5px 15px;
-    border-radius: 20px;
-    backdrop-filter: blur(5px);
+}
+
+/* 6. الأزرار (تصغير وتنسيق) */
+.button-group {
+    display: flex !important;
+    gap: 5px !important;
+    margin-top: 10px !important;
+    transform: scale(0.9);
+}
+
+.item-wrapper {
+    background: rgba(0,0,0,0.6) !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    padding: 5px 10px !important;
+}
+
+.item-wrapper a, .item-wrapper button {
+    width: auto !important; /* إلغاء العرض الثابت القديم */
+    min-width: 80px !important;
+}
+
+/* 7. حركة التفاعل (Hover) */
+.tool-card:hover .planet-container {
+    transform: translateY(-10px);
+    box-shadow: 0 0 40px rgba(0, 170, 255, 0.6);
+    border-color: rgba(0, 170, 255, 0.4);
+}
+
+.tool-card:hover .tool-logo {
+    transform: scale(1.1) rotate(5deg);
+    filter: grayscale(100%) brightness(400%) drop-shadow(0 0 10px rgba(0, 170, 255, 0.8)) !important;
 }
