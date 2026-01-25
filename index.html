@@ -722,6 +722,30 @@ async function loadTools() {
             groups[tool.category].push(tool);
         });
 
+        // 1. خريطة الأيقونات: نعطي كل "كوكب" (أداة) هويته الخاصة
+        const toolIcons = {
+            // Creative & Tech Tools
+            'Image Enhancer': 'https://cdn-icons-png.flaticon.com/512/3342/3342137.png', // أيقونة تحسين صور
+            'AI Background Remover': 'https://cdn-icons-png.flaticon.com/512/1627/1627582.png', // طبقات/ممحاة
+            'AI Video Creator': 'https://cdn-icons-png.flaticon.com/512/4618/4618239.png', // كاميرا فيديو
+            'AI Voice Generator': 'https://cdn-icons-png.flaticon.com/512/709/709699.png', // موجات صوت
+            'AI Code Assistant': 'https://cdn-icons-png.flaticon.com/512/1005/1005141.png', // كود برمجي
+            'Text to AI Image': 'https://cdn-icons-png.flaticon.com/512/8369/8369490.png', // نص يتحول لصورة
+
+            // Professional Office Tools
+            'AI Resume Builder': 'https://cdn-icons-png.flaticon.com/512/3135/3135699.png', // سيرة ذاتية
+            'AI Email Writer': 'https://cdn-icons-png.flaticon.com/512/2965/2965306.png', // رسالة بريد
+            'AI Translator Pro': 'https://cdn-icons-png.flaticon.com/512/3898/3898082.png', // ترجمة لغات
+            'AI Text Summarizer': 'https://cdn-icons-png.flaticon.com/512/2911/2911232.png', // تلخيص نص
+
+            // Media Transform Tools
+            'PDF Magic': 'https://cdn-icons-png.flaticon.com/512/337/337946.png', // ملف PDF
+            'Video to GIF': 'https://cdn-icons-png.flaticon.com/512/2859/2859706.png', // تحويل فيديو
+            'Text to Professional Voice': 'https://cdn-icons-png.flaticon.com/512/2983/2983788.png', // مكبر صوت
+            'Text to AI Video': 'https://cdn-icons-png.flaticon.com/512/1179/1179069.png', // سينما
+            'Chat with PDF': 'https://cdn-icons-png.flaticon.com/512/4725/4725964.png' // محادثة ملف
+        };
+
         const categoryToContainer = {
             'Image Enhancer': 'Creative & Tech Tools',
             'AI Background Remover': 'Creative & Tech Tools',
@@ -748,14 +772,10 @@ async function loadTools() {
 
             const freeTools = groupTools.filter(t => t.pricing.toLowerCase() === 'free');
             const premTools = groupTools.filter(t => t.pricing.toLowerCase() === 'premium');
-
             const mainFree = freeTools[0];
             const extraFree = freeTools.slice(1, 11);
-
             const mainPrem = premTools[0]; 
-            const extraPrem = premTools.length > 1 
-                ? premTools.slice(1, 11) 
-                : freeTools.slice(11, 21); 
+            const extraPrem = premTools.length > 1 ? premTools.slice(1, 11) : freeTools.slice(11, 21); 
 
             const containerID = categoryToContainer[groupName] === 'Creative & Tech Tools' ? 'creative-container' :
                                 categoryToContainer[groupName] === 'Professional Office Tools' ? 'office-container' : 'transform-container';
@@ -763,11 +783,16 @@ async function loadTools() {
 
             if (targetContainer) {
                 
+                // تحديد الأيقونة الخاصة بكل كوكب من القاموس أعلاه
+                // إذا لم توجد أيقونة محددة، نستخدم أيقونة الكوكب الافتراضية
+                const specificIcon = toolIcons[groupName] || 'https://cdn-icons-png.flaticon.com/512/4645/4645286.png';
                 const cleanTitle = groupName.replace(/\bAI\b/g, '').replace('PDF Magic', 'PDF Editor').replace('Resume Builder', 'CV Builder').trim();
 
                 const cardHTML = `
     <div class="tool-card" tabindex="0">
-        <div class="planet-container"></div>
+        <div class="planet-container">
+            <img src="${specificIcon}" class="tool-logo" alt="${cleanTitle}">
+        </div>
         
         <div class="tool-info">
             <h3 class="card-title" data-key="${cleanTitle}" data-original="${cleanTitle}">${cleanTitle}</h3>
@@ -803,12 +828,8 @@ async function loadTools() {
         setTimeout(initMobileFeatures, 100);
         
         const currentLang = document.getElementById('language-picker').value;
-        if (currentLang !== 'en') {
-            updateContent(currentLang);
-        }
-    } catch (error) {
-        console.error("خطأ:", error);
-    }
+        if (currentLang !== 'en') { updateContent(currentLang); }
+    } catch (error) { console.error("خطأ:", error); }
 }
 
 window.onload = loadTools;
