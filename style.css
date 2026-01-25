@@ -1845,3 +1845,112 @@ body.rtl-mode #send-btn {
     z-index: 10;
     width: 100%;
 }
+/* ==================== نظام المجرة النهائي (Galaxy System) ==================== */
+
+/* 1. ترتيب الحاويات (توزيع الكواكب) */
+#creative-container, #office-container, #transform-container {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 40px !important;
+    padding: 20px !important;
+    width: 100% !important;
+}
+
+/* 2. إلغاء الصندوق الأسود (شفافية كاملة) */
+.tool-card {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    
+    width: 150px !important; /* عرض الكوكب */
+    margin: 15px !important;
+    position: relative;
+    overflow: visible !important;
+}
+
+/* 3. الكرة الزجاجية (الحاوية) */
+.planet-container {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    
+    /* مظهر زجاجي كريستالي */
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1), rgba(0,0,0,0.6));
+    box-shadow: 
+        inset -5px -5px 15px rgba(0,0,0,0.8),
+        inset 5px 5px 15px rgba(255,255,255,0.1),
+        0 0 20px rgba(111, 66, 193, 0.2);
+        
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.4s ease;
+    z-index: 2;
+}
+
+/* 4. الأيقونة الفضية الموحدة (Silver Icons) */
+.tool-logo {
+    width: 50px !important;
+    height: 50px !important;
+    object-fit: contain !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    
+    /* الفلتر السحري: يحول أي لون إلى فضي أبيض */
+    filter: grayscale(100%) brightness(300%) drop-shadow(0 0 5px rgba(255,255,255,0.4)) !important;
+    opacity: 0.9;
+    transition: transform 0.4s ease;
+}
+
+/* 5. النصوص (العناوين) */
+.tool-info h3 {
+    color: #ffffff !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    text-shadow: 0 2px 5px #000 !important;
+    margin-top: 5px !important;
+}
+
+/* 6. الأزرار (تصغير وتنسيق) */
+.button-group {
+    display: flex !important;
+    gap: 5px !important;
+    margin-top: 10px !important;
+    transform: scale(0.9);
+}
+
+.item-wrapper {
+    background: rgba(0,0,0,0.6) !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    padding: 5px 10px !important;
+}
+
+.item-wrapper a, .item-wrapper button {
+    width: auto !important; /* إلغاء العرض الثابت القديم */
+    min-width: 80px !important;
+}
+
+/* 7. حركة التفاعل (Hover) */
+.tool-card:hover .planet-container {
+    transform: translateY(-10px);
+    box-shadow: 0 0 40px rgba(0, 170, 255, 0.6);
+    border-color: rgba(0, 170, 255, 0.4);
+}
+
+.tool-card:hover .tool-logo {
+    transform: scale(1.1) rotate(5deg);
+    filter: grayscale(100%) brightness(400%) drop-shadow(0 0 10px rgba(0, 170, 255, 0.8)) !important;
+}
