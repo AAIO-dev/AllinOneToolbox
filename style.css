@@ -2021,3 +2021,166 @@ body.rtl-mode #send-btn {
     color: #ffffff !important;
     text-shadow: 0 0 10px rgba(0, 0, 0, 0.5) !important;
 }
+/* ==================== 🪐 تصميم المجرة: النظام الشمسي الجديد 🪐 ==================== */
+
+/* 1. الشموس (عناوين الأقسام) */
+/* نجعل العنوان يشع مثل النجم في مركز المجموعة */
+.column-title {
+    font-size: 2rem !important;
+    font-weight: 800 !important;
+    text-align: center;
+    margin-bottom: 50px !important;
+    position: relative;
+    z-index: 2;
+    /* تأثير التوهج الشمسي */
+    text-shadow: 0 0 20px currentColor, 0 0 40px currentColor;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border: none !important; /* إلغاء الحدود القديمة */
+}
+/* إزالة الخط الذي كان تحت العنوان */
+.column-title::after { display: none !important; }
+
+/* 2. تنسيق حاوية الكواكب (لتصطف تحت الشمس) */
+#creative-container, #office-container, #transform-container {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 40px !important; /* مسافة بين الكواكب */
+    padding: 20px !important;
+    width: 100% !important;
+}
+
+/* 3. الكوكب (الحاوية الجديدة) - لاحظ الاسم الجديد */
+.galaxy-system {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 140px !important; /* حجم مسار الكوكب */
+    margin: 15px !important;
+    position: relative;
+    transition: transform 0.4s ease;
+    cursor: pointer;
+    /* لا توجد خلفية سوداء هنا! */
+}
+
+/* 4. نواة الكوكب (الكرة الزجاجية) */
+.planet-core {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    
+    /* مظهر الزجاج الكريستالي */
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.2), rgba(0,0,0,0.6));
+    box-shadow: 
+        inset -5px -5px 15px rgba(0,0,0,0.8), /* عمق */
+        inset 5px 5px 15px rgba(255,255,255,0.2), /* لمعة */
+        0 0 25px rgba(111, 66, 193, 0.4); /* هالة الغلاف الجوي */
+        
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.5s ease;
+    z-index: 5;
+}
+
+/* 5. سطح الكوكب (الأيقونة) */
+.planet-icon {
+    width: 50px !important;
+    height: 50px !important;
+    object-fit: contain !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    
+    /* توحيد اللون: فضي لامع */
+    filter: grayscale(100%) brightness(300%) drop-shadow(0 0 5px rgba(255,255,255,0.5)) !important;
+    opacity: 0.9;
+    transition: transform 5s linear; /* دوران بطيء */
+}
+
+/* 6. اسم الكوكب */
+.planet-name {
+    color: #ffffff !important;
+    font-size: 0.9rem !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+    text-shadow: 0 2px 4px #000 !important;
+    margin: 0 0 10px 0 !important;
+    z-index: 6;
+}
+
+/* 7. الأقمار (الأزرار تدور أو تطفو تحت الكوكب) */
+.moons-orbit {
+    display: flex !important;
+    gap: 8px !important;
+    justify-content: center !important;
+    width: 160px; /* مدار واسع قليلاً */
+}
+
+.moon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: rgba(0,0,0,0.7);
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+}
+
+.moon-btn a {
+    color: #fff !important;
+    font-size: 0.7rem !important;
+    text-decoration: none !important;
+    font-weight: bold !important;
+    white-space: nowrap;
+}
+
+.moon-tag {
+    font-size: 0.5rem !important;
+    padding: 1px 3px;
+    border-radius: 3px;
+    background: rgba(255,255,255,0.1);
+}
+
+.free-moon { border-color: #00aaff; box-shadow: 0 0 5px rgba(0, 170, 255, 0.2); }
+.prem-moon { border-color: #ffaa00; box-shadow: 0 0 5px rgba(255, 170, 0, 0.2); }
+
+/* 8. الروابط الإضافية (مخفية كالسدم) */
+.nebula-links {
+    display: flex;
+    gap: 10px;
+    margin-top: 5px;
+    font-size: 0.7rem;
+}
+.nebula-trigger {
+    cursor: pointer;
+    opacity: 0.7;
+    transition: 0.3s;
+}
+.nebula-trigger:hover { opacity: 1; text-shadow: 0 0 5px currentColor; }
+
+/* ==================== 🪐 الحركات (Physics) 🪐 ==================== */
+
+/* عند مرور الماوس على النظام الشمسي */
+.galaxy-system:hover .planet-core {
+    transform: scale(1.1); /* الكوكب يكبر */
+    box-shadow: 0 0 40px rgba(0, 170, 255, 0.6); /* التوهج يزيد */
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3), rgba(0,100,255,0.2));
+}
+
+.galaxy-system:hover .planet-icon {
+    transform: rotate(360deg); /* الأيقونة تدور دورة كاملة */
+    filter: grayscale(0%) brightness(120%) !important; /* الألوان تعود قليلاً عند التفاعل */
+}
+
+.galaxy-system:hover .moons-orbit {
+    transform: translateY(5px); /* الأقمار تبتعد قليلاً */
+}

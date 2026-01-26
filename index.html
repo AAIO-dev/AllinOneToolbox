@@ -713,6 +713,7 @@ async function loadTools() {
         const response = await fetch('/api/tools');
         const tools = await response.json();
 
+        // 1. تعريف حاويات المجرات (الأقسام)
         const containers = {
             'Creative & Tech Tools': document.getElementById('creative-container'),
             'Professional Office Tools': document.getElementById('office-container'),
@@ -725,28 +726,23 @@ async function loadTools() {
             groups[tool.category].push(tool);
         });
 
-        // 1. خريطة الأيقونات: نعطي كل "كوكب" (أداة) هويته الخاصة
+        // 2. خريطة أيقونات الكواكب (تحديد هوية كل كوكب)
         const toolIcons = {
-            // Creative & Tech Tools
-            'Image Enhancer': 'https://cdn-icons-png.flaticon.com/512/3342/3342137.png', // أيقونة تحسين صور
-            'AI Background Remover': 'https://cdn-icons-png.flaticon.com/512/1627/1627582.png', // طبقات/ممحاة
-            'AI Video Creator': 'https://cdn-icons-png.flaticon.com/512/4618/4618239.png', // كاميرا فيديو
-            'AI Voice Generator': 'https://cdn-icons-png.flaticon.com/512/709/709699.png', // موجات صوت
-            'AI Code Assistant': 'https://cdn-icons-png.flaticon.com/512/1005/1005141.png', // كود برمجي
-            'Text to AI Image': 'https://cdn-icons-png.flaticon.com/512/8369/8369490.png', // نص يتحول لصورة
-
-            // Professional Office Tools
-            'AI Resume Builder': 'https://cdn-icons-png.flaticon.com/512/3135/3135699.png', // سيرة ذاتية
-            'AI Email Writer': 'https://cdn-icons-png.flaticon.com/512/2965/2965306.png', // رسالة بريد
-            'AI Translator Pro': 'https://cdn-icons-png.flaticon.com/512/3898/3898082.png', // ترجمة لغات
-            'AI Text Summarizer': 'https://cdn-icons-png.flaticon.com/512/2911/2911232.png', // تلخيص نص
-
-            // Media Transform Tools
-            'PDF Magic': 'https://cdn-icons-png.flaticon.com/512/337/337946.png', // ملف PDF
-            'Video to GIF': 'https://cdn-icons-png.flaticon.com/512/2859/2859706.png', // تحويل فيديو
-            'Text to Professional Voice': 'https://cdn-icons-png.flaticon.com/512/2983/2983788.png', // مكبر صوت
-            'Text to AI Video': 'https://cdn-icons-png.flaticon.com/512/1179/1179069.png', // سينما
-            'Chat with PDF': 'https://cdn-icons-png.flaticon.com/512/4725/4725964.png' // محادثة ملف
+            'Image Enhancer': 'https://cdn-icons-png.flaticon.com/512/3342/3342137.png',
+            'AI Background Remover': 'https://cdn-icons-png.flaticon.com/512/1627/1627582.png',
+            'AI Video Creator': 'https://cdn-icons-png.flaticon.com/512/4618/4618239.png',
+            'AI Voice Generator': 'https://cdn-icons-png.flaticon.com/512/709/709699.png',
+            'AI Code Assistant': 'https://cdn-icons-png.flaticon.com/512/1005/1005141.png',
+            'Text to AI Image': 'https://cdn-icons-png.flaticon.com/512/8369/8369490.png',
+            'AI Resume Builder': 'https://cdn-icons-png.flaticon.com/512/3135/3135699.png',
+            'AI Email Writer': 'https://cdn-icons-png.flaticon.com/512/2965/2965306.png',
+            'AI Translator Pro': 'https://cdn-icons-png.flaticon.com/512/3898/3898082.png',
+            'AI Text Summarizer': 'https://cdn-icons-png.flaticon.com/512/2911/2911232.png',
+            'PDF Magic': 'https://cdn-icons-png.flaticon.com/512/337/337946.png',
+            'Video to GIF': 'https://cdn-icons-png.flaticon.com/512/2859/2859706.png',
+            'Text to Professional Voice': 'https://cdn-icons-png.flaticon.com/512/2983/2983788.png',
+            'Text to AI Video': 'https://cdn-icons-png.flaticon.com/512/1179/1179069.png',
+            'Chat with PDF': 'https://cdn-icons-png.flaticon.com/512/4725/4725964.png'
         };
 
         const categoryToContainer = {
@@ -756,12 +752,10 @@ async function loadTools() {
             'AI Voice Generator': 'Creative & Tech Tools',
             'AI Code Assistant': 'Creative & Tech Tools',
             'Text to AI Image': 'Creative & Tech Tools',
-            
             'AI Resume Builder': 'Professional Office Tools',
             'AI Email Writer': 'Professional Office Tools',
             'AI Translator Pro': 'Professional Office Tools',
             'AI Text Summarizer': 'Professional Office Tools',
-            
             'PDF Magic': 'Media Transform Tools',
             'Video to GIF': 'Media Transform Tools',
             'Text to Professional Voice': 'Media Transform Tools',
@@ -785,40 +779,36 @@ async function loadTools() {
             const targetContainer = document.getElementById(containerID);
 
             if (targetContainer) {
-                
-                // تحديد الأيقونة الخاصة بكل كوكب من القاموس أعلاه
-                // إذا لم توجد أيقونة محددة، نستخدم أيقونة الكوكب الافتراضية
                 const specificIcon = toolIcons[groupName] || 'https://cdn-icons-png.flaticon.com/512/4645/4645286.png';
                 const cleanTitle = groupName.replace(/\bAI\b/g, '').replace('PDF Magic', 'PDF Editor').replace('Resume Builder', 'CV Builder').trim();
 
+                // لاحظ: غيرنا اسم الكلاس الرئيسي إلى "galaxy-system" للهروب من المشاكل القديمة
                 const cardHTML = `
-    <div class="tool-card" tabindex="0">
-        <div class="planet-container">
-            <img src="${specificIcon}" class="tool-logo" alt="${cleanTitle}">
+    <div class="galaxy-system" tabindex="0">
+        <div class="planet-core">
+            <img src="${specificIcon}" class="planet-icon" alt="${cleanTitle}">
         </div>
         
-        <div class="tool-info">
-            <h3 class="card-title" data-key="${cleanTitle}" data-original="${cleanTitle}">${cleanTitle}</h3>
-        </div>
+        <h3 class="planet-name" data-key="${cleanTitle}" data-original="${cleanTitle}">${cleanTitle}</h3>
 
-        <div class="button-group">
-            <div class="item-wrapper">
-                <a href="${mainFree?.url || '#'}" target="_blank" class="btn btn-purple">${mainFree?.name || 'N/A'}</a>
-                <span class="status-badge free">FREE</span>
+        <div class="moons-orbit">
+            <div class="moon-btn free-moon">
+                <a href="${mainFree?.url || '#'}" target="_blank">${mainFree?.name || 'N/A'}</a>
+                <span class="moon-tag">FREE</span>
             </div>
-            <div class="item-wrapper">
-                <a href="${mainPrem?.url || '#'}" target="_blank" rel="nofollow" class="btn btn-purple">${mainPrem?.name || 'N/A'}</a>
-                <span class="status-badge premium">PREM</span>
+            <div class="moon-btn prem-moon">
+                <a href="${mainPrem?.url || '#'}" target="_blank" rel="nofollow">${mainPrem?.name || 'N/A'}</a>
+                <span class="moon-tag">PREM</span>
             </div>
         </div>
         
-        <div class="see-more-links">
-            <a onclick="toggleBox('free-${groupID}', this)" class="see-more-link" style="color: #00aaff; cursor: pointer;">+ See More Free</a>
+        <div class="nebula-links">
+            <a onclick="toggleBox('free-${groupID}', this)" class="nebula-trigger" style="color: #00aaff;">+ Free</a>
             <div id="free-${groupID}" class="dropdown-content">
                 ${extraFree.map(t => `<a href="${t.url}" target="_blank">${t.name}</a>`).join('')}
             </div>
 
-            <a onclick="toggleBox('prem-${groupID}', this)" class="see-more-link" style="color: #ffaa00; cursor: pointer;">+ See More Premium</a>
+            <a onclick="toggleBox('prem-${groupID}', this)" class="nebula-trigger" style="color: #ffaa00;">+ Prem</a>
             <div id="prem-${groupID}" class="dropdown-content">
                 ${extraPrem.length > 0 ? extraPrem.map(t => `<a href="${t.url}" target="_blank" rel="nofollow">${t.name}</a>`).join('') : '<a>Explore More</a>'}
             </div>
