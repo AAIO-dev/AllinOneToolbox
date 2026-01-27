@@ -2191,9 +2191,9 @@ body.rtl-mode #send-btn {
 /* 1. الحاوية الكونية (تعديل التوسيط) */
 .solar-system-container {
     position: relative !important;
-    width: 100% !important;
+    width: 420px !important;
     max-width: 500px !important; /* 👈 (جديد) تحديد العرض يمنع السباحة يميناً ويساراً */
-    height: 500px !important;    /* 👈 (جديد) تقليل الارتفاع ليناسب التقريب */
+    height: 420px !important;    /* 👈 (جديد) تقليل الارتفاع ليناسب التقريب */
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
