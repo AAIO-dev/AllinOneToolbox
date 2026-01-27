@@ -713,6 +713,10 @@ async function loadTools() {
         const response = await fetch('/api/tools');
         const tools = await response.json();
 
+        // 🕵️‍♂️ كود كشف المسميات (مؤقت)
+        const pricingTypes = [...new Set(tools.map(t => t.pricing))];
+        console.log("🔥🔥 مسميات الأسعار الموجودة في الداتابيس هي:", pricingTypes);
+
         // تعريف الحاويات
         const containers = {
             'Creative & Tech Tools': document.getElementById('creative-container'),
