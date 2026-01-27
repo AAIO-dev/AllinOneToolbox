@@ -713,29 +713,11 @@ async function loadTools() {
         const response = await fetch('/api/tools');
         const tools = await response.json();
 
-        // 1. تعريف الحاويات
+        // تعريف الحاويات
         const containers = {
             'Creative & Tech Tools': document.getElementById('creative-container'),
             'Professional Office Tools': document.getElementById('office-container'),
             'Media Transform Tools': document.getElementById('transform-container')
-        };
-
-        const categoryToContainer = {
-            'Image Enhancer': 'Creative & Tech Tools',
-            'AI Background Remover': 'Creative & Tech Tools',
-            'AI Video Creator': 'Creative & Tech Tools',
-            'AI Voice Generator': 'Creative & Tech Tools',
-            'AI Code Assistant': 'Creative & Tech Tools',
-            'Text to AI Image': 'Creative & Tech Tools',
-            'AI Resume Builder': 'Professional Office Tools',
-            'AI Email Writer': 'Professional Office Tools',
-            'AI Translator Pro': 'Professional Office Tools',
-            'AI Text Summarizer': 'Professional Office Tools',
-            'PDF Magic': 'Media Transform Tools',
-            'Video to GIF': 'Media Transform Tools',
-            'Text to Professional Voice': 'Media Transform Tools',
-            'Text to AI Video': 'Media Transform Tools',
-            'Chat with PDF': 'Media Transform Tools'
         };
 
         const toolIcons = {
@@ -756,7 +738,25 @@ async function loadTools() {
             'Chat with PDF': 'https://cdn-icons-png.flaticon.com/512/4725/4725964.png'
         };
 
-        // 2. تجميع البيانات
+        const categoryToContainer = {
+            'Image Enhancer': 'Creative & Tech Tools',
+            'AI Background Remover': 'Creative & Tech Tools',
+            'AI Video Creator': 'Creative & Tech Tools',
+            'AI Voice Generator': 'Creative & Tech Tools',
+            'AI Code Assistant': 'Creative & Tech Tools',
+            'Text to AI Image': 'Creative & Tech Tools',
+            'AI Resume Builder': 'Professional Office Tools',
+            'AI Email Writer': 'Professional Office Tools',
+            'AI Translator Pro': 'Professional Office Tools',
+            'AI Text Summarizer': 'Professional Office Tools',
+            'PDF Magic': 'Media Transform Tools',
+            'Video to GIF': 'Media Transform Tools',
+            'Text to Professional Voice': 'Media Transform Tools',
+            'Text to AI Video': 'Media Transform Tools',
+            'Chat with PDF': 'Media Transform Tools'
+        };
+
+        // تجميع البيانات
         const organizedData = {
             'Creative & Tech Tools': {},
             'Professional Office Tools': {},
@@ -773,7 +773,7 @@ async function loadTools() {
             }
         });
 
-        // 3. الرسم
+        // الرسم
         for (const [sectionName, subCategories] of Object.entries(organizedData)) {
             const targetContainer = containers[sectionName];
             
@@ -781,13 +781,11 @@ async function loadTools() {
                 targetContainer.innerHTML = '';
                 targetContainer.className = 'solar-system-container';
 
-                // الشمس
                 targetContainer.insertAdjacentHTML('beforeend', `
                 <div class="sun-star">
                     <div class="sun-content"><h2>${sectionName.replace('Tools', '')}</h2></div>
                 </div>`);
 
-                // حلقة الكواكب
                 const planetsRing = document.createElement('div');
                 planetsRing.className = 'planets-orbit-ring';
                 targetContainer.appendChild(planetsRing);
@@ -800,19 +798,20 @@ async function loadTools() {
                     const cleanTitle = categoryName.replace(/\bAI\b/g, '').replace('PDF Magic', 'PDF Editor').replace('Resume Builder', 'CV Builder').trim();
                     const iconUrl = toolIcons[categoryName] || 'https://cdn-icons-png.flaticon.com/512/4645/4645286.png';
 
-                    // --- فصل الأدوات بدقة ---
-                    const freeTools = categoryTools.filter(t => t.pricing.toLowerCase().includes('free'));
-                    const proTools = categoryTools.filter(t => !t.pricing.toLowerCase().includes('free'));
+                    // --- الفصل الجراحي للأدوات ---
+                    // 1. كل ما هو مجاني
+                    const allFree = categoryTools.filter(t => t.pricing.toLowerCase().includes('free'));
+                    // 2. كل ما هو مدفوع
+                    const allPro = categoryTools.filter(t => !t.pricing.toLowerCase().includes('free'));
 
-                    // الزر الرئيسي لكل عمود
-                    const mainFree = freeTools.length > 0 ? freeTools[0] : null;
-                    const mainPro = proTools.length > 0 ? proTools[0] : null;
+                    // تحديد الرأس (الزر الرئيسي) والذيل (القائمة المنسدلة) لكل عمود
+                    const mainFree = allFree.length > 0 ? allFree[0] : null;
+                    const extraFree = allFree.length > 1 ? allFree.slice(1) : [];
 
-                    // الروابط الإضافية لكل عمود
-                    const extraFree = freeTools.length > 1 ? freeTools.slice(1) : [];
-                    const extraPro = proTools.length > 1 ? proTools.slice(1) : [];
+                    const mainPro = allPro.length > 0 ? allPro[0] : null;
+                    const extraPro = allPro.length > 1 ? allPro.slice(1) : [];
 
-                    // بناء الهيكل العمودي
+                    // بناء الهيكل: عمود يمين وعمود يسار
                     const planetHTML = `
                     <div class="orbit-planet" style="--i:${index}; --total:${totalPlanets};">
                         <div class="planet-body">
@@ -821,27 +820,31 @@ async function loadTools() {
                             
                             <div class="hidden-moons">
                                 <div class="moon-split-container">
+                                    
                                     <div class="moon-col">
-                                        ${mainFree ? `<a href="${mainFree.url}" target="_blank" class="moon-action free">Free</a>` : ''}
+                                        ${mainFree ? `<a href="${mainFree.url}" target="_blank" class="moon-action free">Free</a>` : '<span class="empty-slot">-</span>'}
+                                        
                                         ${extraFree.length > 0 ? `
-                                        <div class="more-trigger free-trigger">
+                                        <div class="more-trigger">
                                             + More
-                                            <div class="mini-dropdown">
+                                            <div class="mini-dropdown free-list">
                                                 ${extraFree.map(l => `<a href="${l.url}" target="_blank">${l.name}</a>`).join('')}
                                             </div>
                                         </div>` : ''}
                                     </div>
 
                                     <div class="moon-col">
-                                        ${mainPro ? `<a href="${mainPro.url}" target="_blank" rel="nofollow" class="moon-action prem">Pro</a>` : ''}
+                                        ${mainPro ? `<a href="${mainPro.url}" target="_blank" rel="nofollow" class="moon-action prem">Pro</a>` : '<span class="empty-slot">-</span>'}
+                                        
                                         ${extraPro.length > 0 ? `
-                                        <div class="more-trigger pro-trigger">
+                                        <div class="more-trigger">
                                             + More
-                                            <div class="mini-dropdown">
+                                            <div class="mini-dropdown pro-list">
                                                 ${extraPro.map(l => `<a href="${l.url}" target="_blank" rel="nofollow">${l.name}</a>`).join('')}
                                             </div>
                                         </div>` : ''}
                                     </div>
+
                                 </div>
                             </div>
                         </div>
