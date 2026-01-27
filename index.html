@@ -713,30 +713,11 @@ async function loadTools() {
         const response = await fetch('/api/tools');
         const tools = await response.json();
 
-        // 1. تعريف الحاويات الرئيسية
+        // 1. تعريف الحاويات
         const containers = {
             'Creative & Tech Tools': document.getElementById('creative-container'),
             'Professional Office Tools': document.getElementById('office-container'),
             'Media Transform Tools': document.getElementById('transform-container')
-        };
-
-        // خريطة الأيقونات
-        const toolIcons = {
-            'Image Enhancer': 'https://cdn-icons-png.flaticon.com/512/3342/3342137.png',
-            'AI Background Remover': 'https://cdn-icons-png.flaticon.com/512/1627/1627582.png',
-            'AI Video Creator': 'https://cdn-icons-png.flaticon.com/512/4618/4618239.png',
-            'AI Voice Generator': 'https://cdn-icons-png.flaticon.com/512/709/709699.png',
-            'AI Code Assistant': 'https://cdn-icons-png.flaticon.com/512/1005/1005141.png',
-            'Text to AI Image': 'https://cdn-icons-png.flaticon.com/512/8369/8369490.png',
-            'AI Resume Builder': 'https://cdn-icons-png.flaticon.com/512/3135/3135699.png',
-            'AI Email Writer': 'https://cdn-icons-png.flaticon.com/512/2965/2965306.png',
-            'AI Translator Pro': 'https://cdn-icons-png.flaticon.com/512/3898/3898082.png',
-            'AI Text Summarizer': 'https://cdn-icons-png.flaticon.com/512/2911/2911232.png',
-            'PDF Magic': 'https://cdn-icons-png.flaticon.com/512/337/337946.png',
-            'Video to GIF': 'https://cdn-icons-png.flaticon.com/512/2859/2859706.png',
-            'Text to Professional Voice': 'https://cdn-icons-png.flaticon.com/512/2983/2983788.png',
-            'Text to AI Video': 'https://cdn-icons-png.flaticon.com/512/1179/1179069.png',
-            'Chat with PDF': 'https://cdn-icons-png.flaticon.com/512/4725/4725964.png'
         };
 
         const categoryToContainer = {
@@ -757,7 +738,25 @@ async function loadTools() {
             'Chat with PDF': 'Media Transform Tools'
         };
 
-        // 2. تجميع الأدوات تحت أقسامها الرئيسية
+        const toolIcons = {
+            'Image Enhancer': 'https://cdn-icons-png.flaticon.com/512/3342/3342137.png',
+            'AI Background Remover': 'https://cdn-icons-png.flaticon.com/512/1627/1627582.png',
+            'AI Video Creator': 'https://cdn-icons-png.flaticon.com/512/4618/4618239.png',
+            'AI Voice Generator': 'https://cdn-icons-png.flaticon.com/512/709/709699.png',
+            'AI Code Assistant': 'https://cdn-icons-png.flaticon.com/512/1005/1005141.png',
+            'Text to AI Image': 'https://cdn-icons-png.flaticon.com/512/8369/8369490.png',
+            'AI Resume Builder': 'https://cdn-icons-png.flaticon.com/512/3135/3135699.png',
+            'AI Email Writer': 'https://cdn-icons-png.flaticon.com/512/2965/2965306.png',
+            'AI Translator Pro': 'https://cdn-icons-png.flaticon.com/512/3898/3898082.png',
+            'AI Text Summarizer': 'https://cdn-icons-png.flaticon.com/512/2911/2911232.png',
+            'PDF Magic': 'https://cdn-icons-png.flaticon.com/512/337/337946.png',
+            'Video to GIF': 'https://cdn-icons-png.flaticon.com/512/2859/2859706.png',
+            'Text to Professional Voice': 'https://cdn-icons-png.flaticon.com/512/2983/2983788.png',
+            'Text to AI Video': 'https://cdn-icons-png.flaticon.com/512/1179/1179069.png',
+            'Chat with PDF': 'https://cdn-icons-png.flaticon.com/512/4725/4725964.png'
+        };
+
+        // 2. تجميع البيانات
         const organizedData = {
             'Creative & Tech Tools': {},
             'Professional Office Tools': {},
@@ -765,8 +764,7 @@ async function loadTools() {
         };
 
         tools.forEach(tool => {
-            const mainSection = categoryToContainer[tool.category]; // تحديد القسم الكبير
-            // إذا وجدنا القسم، نضيف الأداة تحت تصنيفها الفرعي (مثل Image Enhancer)
+            const mainSection = categoryToContainer[tool.category];
             if (mainSection && organizedData[mainSection]) {
                 if (!organizedData[mainSection][tool.category]) {
                     organizedData[mainSection][tool.category] = [];
@@ -775,7 +773,7 @@ async function loadTools() {
             }
         });
 
-        // 3. الرسم (بناء الهيكل)
+        // 3. الرسم والبناء
         for (const [sectionName, subCategories] of Object.entries(organizedData)) {
             const targetContainer = containers[sectionName];
             
@@ -783,7 +781,7 @@ async function loadTools() {
                 targetContainer.innerHTML = '';
                 targetContainer.className = 'solar-system-container';
 
-                // أ. الشمس (عنوان القسم)
+                // أ. الشمس (الثابتة)
                 const sunHTML = `
                 <div class="sun-star">
                     <div class="sun-content">
@@ -792,47 +790,57 @@ async function loadTools() {
                 </div>`;
                 targetContainer.insertAdjacentHTML('beforeend', sunHTML);
 
+                // ب. حلقة الكواكب (التي ستدور لاحقاً في CSS)
+                // أنشأنا حاوية خاصة للكواكب لنتمكن من تدويرها وحدها دون تدوير الشمس
+                const planetsRing = document.createElement('div');
+                planetsRing.className = 'planets-orbit-ring';
+                targetContainer.appendChild(planetsRing);
+
                 const planetKeys = Object.keys(subCategories);
                 const totalPlanets = planetKeys.length;
 
-                // ب. الكواكب (المهام)
                 planetKeys.forEach((categoryName, index) => {
                     const categoryTools = subCategories[categoryName];
                     const cleanTitle = categoryName.replace(/\bAI\b/g, '').replace('PDF Magic', 'PDF Editor').replace('Resume Builder', 'CV Builder').trim();
                     const iconUrl = toolIcons[categoryName] || 'https://cdn-icons-png.flaticon.com/512/4645/4645286.png';
 
-                    // 1. تحديد الزرين الرئيسيين
-                    const freeLink = categoryTools.find(t => t.pricing.toLowerCase() === 'free') || categoryTools[0];
-                    const premLink = categoryTools.find(t => t.pricing.toLowerCase() === 'premium') || categoryTools[1] || categoryTools[0];
+                    // 1. استخراج الزرين الرئيسيين
+                    const freeLink = categoryTools.find(t => t.pricing.toLowerCase().includes('free')) || categoryTools[0];
+                    const premLink = categoryTools.find(t => !t.pricing.toLowerCase().includes('free')) || categoryTools[1] || categoryTools[0];
                     
-                    // 2. جراحة فصل القوائم (بقية الروابط)
+                    // 2. تصفية القائمة المنسدلة (More)
                     const otherLinks = categoryTools.filter(t => t !== freeLink && t !== premLink);
-                    const moreFree = otherLinks.filter(t => t.pricing.toLowerCase() === 'free');
-                    const morePro = otherLinks.filter(t => t.pricing.toLowerCase() === 'premium');
+                    
+                    // إصلاح الفلتر: أي شيء يحتوي free فهو مجاني، وما عدا ذلك فهو Pro
+                    const moreFree = otherLinks.filter(t => t.pricing.toLowerCase().includes('free'));
+                    const morePro = otherLinks.filter(t => !t.pricing.toLowerCase().includes('free'));
 
-                    // بناء كود القائمة المنسدلة المقسمة
+                    // بناء القائمة المنسدلة المقسمة
                     let dropdownHTML = '';
                     if (moreFree.length > 0 || morePro.length > 0) {
                         dropdownHTML += `<div class="see-more-trigger">More ▼<div class="nebula-dropdown">`;
                         
-                        // قسم المجاني الإضافي
+                        // قسم المجاني
                         if (moreFree.length > 0) {
-                            dropdownHTML += `<div class="dropdown-section"><span class="section-title">Free</span>`;
-                            dropdownHTML += moreFree.map(l => `<a href="${l.url}" target="_blank">${l.name}</a>`).join('');
-                            dropdownHTML += `</div>`;
+                            dropdownHTML += `<div class="dropdown-header free">Free Tools</div>`;
+                            dropdownHTML += moreFree.map(l => `<a href="${l.url}" target="_blank" class="dropdown-item">${l.name}</a>`).join('');
                         }
 
-                        // قسم المدفوع الإضافي
+                        // قسم البرو (فاصل إذا وجد القسمان)
+                        if (moreFree.length > 0 && morePro.length > 0) {
+                            dropdownHTML += `<div class="dropdown-divider"></div>`;
+                        }
+
+                        // قسم المدفوع
                         if (morePro.length > 0) {
-                            dropdownHTML += `<div class="dropdown-section"><span class="section-title">Pro</span>`;
-                            dropdownHTML += morePro.map(l => `<a href="${l.url}" target="_blank" rel="nofollow">${l.name}</a>`).join('');
-                            dropdownHTML += `</div>`;
+                            dropdownHTML += `<div class="dropdown-header pro">Pro Tools</div>`;
+                            dropdownHTML += morePro.map(l => `<a href="${l.url}" target="_blank" rel="nofollow" class="dropdown-item">${l.name}</a>`).join('');
                         }
                         
                         dropdownHTML += `</div></div>`;
                     }
 
-                    // الشكل النهائي للكوكب
+                    // الكوكب
                     const planetHTML = `
                     <div class="orbit-planet" style="--i:${index}; --total:${totalPlanets};">
                         <div class="planet-body">
@@ -849,12 +857,11 @@ async function loadTools() {
                         </div>
                     </div>`;
                     
-                    targetContainer.insertAdjacentHTML('beforeend', planetHTML);
+                    planetsRing.insertAdjacentHTML('beforeend', planetHTML);
                 });
             }
         }
-
-    } catch (error) { console.error("Error building solar system:", error); }
+    } catch (error) { console.error("Error:", error); }
 }
 
 window.onload = loadTools;
