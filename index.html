@@ -831,7 +831,7 @@ async function loadTools() {
                                     
                                     <div class="moon-col">
                                         ${mainFree ? `<a href="${mainFree.url}" target="_blank" class="moon-action free">${mainFree ? mainFree.name : 'Free'}</a>>` : '<span class="empty-slot">-</span>'}
-                                        
+                                        <div class="separator-label free-text">Free</div>
                                         ${extraFree.length > 0 ? `
                                         <div class="more-trigger">
                                             + More
@@ -843,7 +843,7 @@ async function loadTools() {
 
                                     <div class="moon-col">
                                         ${mainPrem ? `<a href="${mainPrem.url}" target="_blank" rel="nofollow" class="moon-action prem">${mainPrem ? mainPrem.name : 'Pro'}</a>>` : '<span class="empty-slot">-</span>'}
-                                        
+                                        <div class="separator-label prem-text">Prem</div>
                                         ${extraPrem.length > 0 ? `
                                         <div class="more-trigger">
                                             + More
