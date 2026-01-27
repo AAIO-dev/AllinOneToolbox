@@ -2184,7 +2184,7 @@ body.rtl-mode #send-btn {
 .galaxy-system:hover .moons-orbit {
     transform: translateY(5px); /* الأقمار تبتعد قليلاً */
 }
-/* ==================== 🪐 تنسيق النظام الشمسي (توزيع الأعمدة الدقيق) 🪐 ==================== */
+/* ==================== 🪐 تنسيق النظام الشمسي (النسخة النهائية المرتبة) 🪐 ==================== */
 
 /* 1. الحاوية الكونية */
 .solar-system-container {
@@ -2198,7 +2198,7 @@ body.rtl-mode #send-btn {
     overflow: visible !important; 
 }
 
-/* 2. الشمس */
+/* 2. الشمس (الثابتة) */
 .sun-star {
     position: absolute;
     top: 50%;
@@ -2251,6 +2251,7 @@ body.rtl-mode #send-btn {
         rotate(calc(-360deg / var(--total) * var(--i))); 
 }
 
+/* دوران عكسي للأيقونة لتبقى ثابتة */
 .orbit-planet .planet-body {
     animation: counterRotate 60s linear infinite;
 }
@@ -2260,7 +2261,7 @@ body.rtl-mode #send-btn {
     to { transform: rotate(-360deg); }
 }
 
-/* جسم الكوكب */
+/* تصميم جسم الكوكب */
 .planet-body {
     width: 95px;
     height: 95px;
@@ -2295,7 +2296,7 @@ body.rtl-mode #send-btn {
     text-shadow: 0 2px 4px #000;
 }
 
-/* التفاعل */
+/* تفاعل الكوكب */
 .planet-body:hover {
     background: rgba(40, 40, 60, 0.95);
     border-color: #a29bfe;
@@ -2312,53 +2313,53 @@ body.rtl-mode #send-btn {
 }
 
 /* ============================================================
-   🔧 التقسيم العمودي الصحيح (الأهم) 🔧
+   🔧 إصلاح القوائم المدمرة (هذا هو الجزء المهم) 🔧
    ============================================================ */
 
-/* الحاوية التي تظهر عند اللمس */
+/* حاوية القائمة المنسدلة */
 .hidden-moons {
     position: absolute;
     top: 105%;
     left: 50%;
     transform: translateX(-50%);
-    display: none; 
-    background: rgba(10, 10, 15, 0.98);
-    padding: 10px;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    min-width: 190px; /* عرض يكفي لعمودين */
+    display: none; /* مخفي افتراضياً */
+    background: rgba(15, 15, 20, 0.98); /* خلفية داكنة جداً */
+    padding: 15px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    min-width: 180px; /* عرض كافٍ للعمودين */
     z-index: 200;
     box-shadow: 0 10px 40px rgba(0,0,0,0.8);
 }
 
-.planet-body:hover .hidden-moons { display: block; }
+.planet-body:hover .hidden-moons {
+    display: block; /* يظهر عند اللمس */
+}
 
-/* حاوية العمودين (يمين ويسار) */
+/* تقسيم العمودين (Free يمين - Pro يسار) */
 .moon-split-container {
-    display: flex !important;
-    flex-direction: row !important; /* إجبار العناصر لتكون بجانب بعض */
-    justify-content: space-between;
-    gap: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 15px; /* مسافة فاصلة بين العمودين */
     width: 100%;
 }
 
-/* تنسيق العمود الواحد */
 .moon-col {
     display: flex;
     flex-direction: column;
-    width: 48%; /* كل عمود يأخذ نصف المساحة تقريباً */
     align-items: center;
+    width: 80px; /* عرض ثابت لكل عمود */
 }
 
-/* الأزرار الرئيسية */
+/* تنسيق الأزرار الرئيسية (Free/Pro) */
 .moon-action {
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     width: 100%;
     padding: 6px 0;
     font-size: 0.75rem;
-    color: #fff !important;
+    color: #fff !important; /* لون أبيض إجباري */
     text-decoration: none !important;
     border-radius: 6px;
     font-weight: bold;
@@ -2366,58 +2367,66 @@ body.rtl-mode #send-btn {
     transition: 0.2s;
 }
 
-.moon-action.free { background: rgba(0, 170, 255, 0.25); border: 1px solid rgba(0, 170, 255, 0.6); }
-.moon-action.prem { background: rgba(255, 170, 0, 0.25); border: 1px solid rgba(255, 170, 0, 0.6); }
-.moon-action:hover { filter: brightness(1.3); }
+.moon-action.free { background: rgba(0, 170, 255, 0.2); border: 1px solid rgba(0, 170, 255, 0.5); }
+.moon-action.prem { background: rgba(255, 170, 0, 0.2); border: 1px solid rgba(255, 170, 0, 0.5); }
 
-/* زر المزيد (+ More) */
+.moon-action:hover { filter: brightness(1.2); transform: translateY(-2px); }
+
+/* تنسيق زر "More" */
 .more-trigger {
-    font-size: 0.65rem;
-    color: #bbb;
+    font-size: 0.7rem;
+    color: #aaa;
     cursor: pointer;
-    position: relative;
-    padding: 4px 0;
+    position: relative; /* ضروري لظهور القائمة تحته */
+    padding: 4px;
+    border-top: 1px solid rgba(255,255,255,0.1);
     width: 100%;
     text-align: center;
-    border-top: 1px solid rgba(255,255,255,0.1);
     transition: 0.3s;
 }
-.more-trigger:hover { color: #fff; background: rgba(255,255,255,0.1); border-radius: 4px; }
+.more-trigger:hover { color: #fff; background: rgba(255,255,255,0.05); border-radius: 4px; }
 
-/* القائمة المنسدلة الصغيرة للأدوات */
+/* القائمة المنسدلة الصغيرة (التي كانت مدمرة) */
 .mini-dropdown {
-    display: none;
+    display: none; /* مخفي */
     position: absolute;
-    top: 100%;
+    top: 100%; /* يظهر تحت زر More مباشرة */
     left: 50%;
     transform: translateX(-50%);
-    background: #1a1a2e;
-    border: 1px solid #444;
+    background: #000; /* خلفية سوداء للقائمة */
+    border: 1px solid #333;
     border-radius: 8px;
     padding: 5px;
-    width: 140px; /* عرض القائمة المنسدلة */
-    max-height: 200px;
-    overflow-y: auto;
+    width: 120px;
     z-index: 300;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.8);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    max-height: 150px; /* لضمان عدم الطول الزائد */
+    overflow-y: auto;
 }
 
-/* إظهار القائمة عند الوقوف على زر More */
-.more-trigger:hover .mini-dropdown { display: block; }
-
-/* روابط الأدوات داخل القائمة */
-.mini-dropdown a {
+/* إظهار القائمة عند وضع الماوس على More */
+.more-trigger:hover .mini-dropdown {
     display: block;
-    color: #ccc !important;
-    text-decoration: none !important;
+}
+
+/* تنسيق الروابط داخل القائمة (لإصلاح اللون الأزرق) */
+.mini-dropdown a {
+    display: block; /* كل رابط في سطر */
+    color: #ddd !important; /* لون رمادي فاتح */
+    text-decoration: none !important; /* إزالة الخط */
     font-size: 0.7rem;
-    padding: 6px;
+    padding: 5px;
     text-align: left;
     border-bottom: 1px solid rgba(255,255,255,0.05);
     transition: 0.2s;
 }
+
 .mini-dropdown a:hover {
-    background: #00aaff;
+    background: rgba(255,255,255,0.1);
     color: #fff !important;
-    padding-left: 10px;
+    padding-left: 8px; /* حركة بسيطة */
 }
+
+/* تخصيص السكرول بار للقوائم الصغيرة */
+.mini-dropdown::-webkit-scrollbar { width: 4px; }
+.mini-dropdown::-webkit-scrollbar-thumb { background: #555; border-radius: 4px; }
