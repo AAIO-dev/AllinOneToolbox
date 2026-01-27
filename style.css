@@ -2326,3 +2326,200 @@ body.rtl-mode #send-btn {
     50% { transform: scale(1.05); box-shadow: 0 0 80px rgba(255, 165, 0, 0.5); }
     100% { transform: scale(1); box-shadow: 0 0 50px rgba(255, 165, 0, 0.3); }
 }
+/* ==================== 🪐 نظام المدار الشمسي (The Solar Orbit) 🪐 ==================== */
+
+/* 1. الفضاء (الحاوية): مساحة واسعة ليأخذ المدار راحته */
+.solar-system-container {
+    position: relative !important;
+    width: 100% !important;
+    height: 650px !important; /* ارتفاع كافٍ للدوران */
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin-bottom: 50px !important;
+    overflow: visible !important; /* السماح للكواكب بالظهور حتى لو خرجت قليلاً */
+}
+
+/* 2. الشمس (عنوان القسم): ثابتة، مشعة، في المركز */
+.sun-star {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    
+    /* مظهر الشمس المشع */
+    background: radial-gradient(circle, rgba(255, 150, 50, 0.2) 0%, rgba(0,0,0,0) 70%);
+    box-shadow: 0 0 60px rgba(255, 100, 0, 0.15); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5; /* خلف الكواكب */
+}
+
+.sun-content h2 {
+    color: #fff;
+    font-size: 1.4rem;
+    font-weight: 800;
+    text-align: center;
+    text-transform: uppercase;
+    text-shadow: 0 0 15px rgba(255, 120, 0, 0.8);
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* 3. مسار الكوكب (العمليات الحسابية للدوران) */
+.orbit-planet {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    /* --i: رقم الكوكب، --total: عدد الكواكب */
+    /* نقوم بتدوير الحاوية، ثم نبعد الكوكب مسافة 240 بكسل (نصف القطر)، ثم ندير الكوكب عكسياً ليبقى مستقيماً */
+    transform: 
+        rotate(calc(360deg / var(--total) * var(--i))) 
+        translate(240px) 
+        rotate(calc(-360deg / var(--total) * var(--i)));
+        
+    z-index: 10;
+    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); /* حركة ناعمة */
+}
+
+/* 4. جسم الكوكب (الكرة الزجاجية) */
+.planet-body {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    
+    /* زجاج فضي غامق */
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15), rgba(0,0,0,0.8));
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: inset 5px 5px 15px rgba(255,255,255,0.1), 0 0 20px rgba(0,0,0,0.5);
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    transition: 0.3s ease;
+}
+
+/* 5. أيقونة واسم الكوكب */
+.planet-icon {
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+    filter: grayscale(100%) brightness(200%); /* فضي */
+    margin-bottom: 8px;
+    transition: 0.3s;
+}
+
+.planet-label {
+    font-size: 0.75rem;
+    color: #ccc;
+    font-weight: 600;
+    text-align: center;
+    max-width: 90px;
+    line-height: 1.2;
+}
+
+/* 6. الأقمار المخفية (المنطقة التفاعلية) */
+.hidden-moons {
+    position: absolute;
+    top: 90%; /* يظهر أسفل الكوكب */
+    left: 50%;
+    transform: translateX(-50%) scale(0.8);
+    opacity: 0;
+    visibility: hidden;
+    
+    display: flex;
+    flex-direction: column; /* قائمة منسدلة عمودية */
+    gap: 6px;
+    background: rgba(10, 10, 20, 0.95);
+    padding: 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+    min-width: 100px;
+    z-index: 100;
+    
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+/* أزرار الفتح والنسخة الاحترافية */
+.moon-action {
+    display: block;
+    text-align: center;
+    padding: 6px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: #fff;
+    transition: 0.2s;
+}
+.moon-action.free { background: rgba(0, 170, 255, 0.2); border: 1px solid rgba(0, 170, 255, 0.4); }
+.moon-action.prem { background: rgba(255, 170, 0, 0.2); border: 1px solid rgba(255, 170, 0, 0.4); }
+
+.moon-action.free:hover { background: #00aaff; }
+.moon-action.prem:hover { background: #ffaa00; }
+
+/* زر المزيد (See More) */
+.see-more-trigger {
+    font-size: 0.7rem;
+    color: #aaa;
+    text-align: center;
+    cursor: pointer;
+    margin-top: 5px;
+    position: relative;
+}
+.see-more-trigger:hover { color: #fff; }
+
+/* قائمة السدم (القائمة الفرعية للمزيد) */
+.nebula-dropdown {
+    display: none; /* مخفية افتراضياً */
+    margin-top: 5px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 5px;
+}
+.see-more-trigger:hover .nebula-dropdown { display: block; }
+.nebula-dropdown a {
+    display: block;
+    color: #888;
+    text-decoration: none;
+    padding: 3px 0;
+    font-size: 0.65rem;
+}
+.nebula-dropdown a:hover { color: #fff; }
+
+/* ==================== 🖱️ التفاعل (Animation) 🖱️ ==================== */
+
+/* عند وضع الماوس على الكوكب */
+.planet-body:hover {
+    transform: scale(1.15); /* تكبير */
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.2), rgba(20, 20, 50, 0.9));
+    box-shadow: 0 0 30px rgba(0, 170, 255, 0.5);
+    z-index: 50; /* يصبح فوق الجميع */
+}
+
+/* إظهار القائمة المخفية */
+.planet-body:hover .hidden-moons {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) scale(1);
+    top: 100%;
+}
+
+/* تلوين الأيقونة عند التفاعل */
+.planet-body:hover .planet-icon {
+    filter: none;
+    transform: scale(1.1);
+}
+
+.planet-body:hover .planet-label {
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
