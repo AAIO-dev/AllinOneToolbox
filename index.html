@@ -713,7 +713,7 @@ async function loadTools() {
         const response = await fetch('/api/tools');
         const tools = await response.json();
 
-        // 1. تعريف حاويات المجرات (الأقسام)
+        // سنفرغ الحاويات القديمة لنبني النظام الشمسي داخلها
         const containers = {
             'Creative & Tech Tools': document.getElementById('creative-container'),
             'Professional Office Tools': document.getElementById('office-container'),
@@ -726,7 +726,7 @@ async function loadTools() {
             groups[tool.category].push(tool);
         });
 
-        // 2. خريطة أيقونات الكواكب (تحديد هوية كل كوكب)
+        // خريطة الأيقونات
         const toolIcons = {
             'Image Enhancer': 'https://cdn-icons-png.flaticon.com/512/3342/3342137.png',
             'AI Background Remover': 'https://cdn-icons-png.flaticon.com/512/1627/1627582.png',
@@ -766,62 +766,57 @@ async function loadTools() {
         for (const groupName in groups) {
             const groupTools = groups[groupName];
             const groupID = groupName.replace(/\s+/g, '-').toLowerCase();
-
-            const freeTools = groupTools.filter(t => t.pricing.toLowerCase() === 'free');
-            const premTools = groupTools.filter(t => t.pricing.toLowerCase() === 'premium');
-            const mainFree = freeTools[0];
-            const extraFree = freeTools.slice(1, 11);
-            const mainPrem = premTools[0]; 
-            const extraPrem = premTools.length > 1 ? premTools.slice(1, 11) : freeTools.slice(11, 21); 
-
+            
+            // تحديد الحاوية
             const containerID = categoryToContainer[groupName] === 'Creative & Tech Tools' ? 'creative-container' :
                                 categoryToContainer[groupName] === 'Professional Office Tools' ? 'office-container' : 'transform-container';
             const targetContainer = document.getElementById(containerID);
 
             if (targetContainer) {
-                const specificIcon = toolIcons[groupName] || 'https://cdn-icons-png.flaticon.com/512/4645/4645286.png';
-                const cleanTitle = groupName.replace(/\bAI\b/g, '').replace('PDF Magic', 'PDF Editor').replace('Resume Builder', 'CV Builder').trim();
+                // تنظيف الحاوية لضمان عدم التكرار وبناء الهيكل الجديد
+                targetContainer.innerHTML = '';
+                targetContainer.className = 'solar-system-container'; // كلاس جديد للحاوية
 
-                // لاحظ: غيرنا اسم الكلاس الرئيسي إلى "galaxy-system" للهروب من المشاكل القديمة
-                const cardHTML = `
-    <div class="galaxy-system" tabindex="0">
-        <div class="planet-core">
-            <img src="${specificIcon}" class="planet-icon" alt="${cleanTitle}">
-        </div>
-        
-        <h3 class="planet-name" data-key="${cleanTitle}" data-original="${cleanTitle}">${cleanTitle}</h3>
+                // 1. إضافة الشمس (عنوان القسم) في المركز
+                const sunHTML = `
+                <div class="sun-star">
+                    <div class="sun-content">
+                        <h2>${groupName.replace('Tools', '')}</h2>
+                    </div>
+                </div>`;
+                targetContainer.insertAdjacentHTML('beforeend', sunHTML);
 
-        <div class="moons-orbit">
-            <div class="moon-btn free-moon">
-                <a href="${mainFree?.url || '#'}" target="_blank">${mainFree?.name || 'N/A'}</a>
-                <span class="moon-tag">FREE</span>
-            </div>
-            <div class="moon-btn prem-moon">
-                <a href="${mainPrem?.url || '#'}" target="_blank" rel="nofollow">${mainPrem?.name || 'N/A'}</a>
-                <span class="moon-tag">PREM</span>
-            </div>
-        </div>
-        
-        <div class="nebula-links">
-            <a onclick="toggleBox('free-${groupID}', this)" class="nebula-trigger" style="color: #00aaff;">+ Free</a>
-            <div id="free-${groupID}" class="dropdown-content">
-                ${extraFree.map(t => `<a href="${t.url}" target="_blank">${t.name}</a>`).join('')}
-            </div>
-
-            <a onclick="toggleBox('prem-${groupID}', this)" class="nebula-trigger" style="color: #ffaa00;">+ Prem</a>
-            <div id="prem-${groupID}" class="dropdown-content">
-                ${extraPrem.length > 0 ? extraPrem.map(t => `<a href="${t.url}" target="_blank" rel="nofollow">${t.name}</a>`).join('') : '<a>Explore More</a>'}
-            </div>
-        </div>
-    </div>`;
+                // 2. إضافة مدار الكواكب
+                const totalPlanets = groupTools.length;
                 
-                targetContainer.insertAdjacentHTML('beforeend', cardHTML);
+                groupTools.forEach((tool, index) => {
+                    const freeTools = groupTools.filter(t => t.pricing.toLowerCase() === 'free');
+                    const premTools = groupTools.filter(t => t.pricing.toLowerCase() === 'premium');
+                    const mainFree = freeTools[0] || tool; 
+                    const mainPrem = premTools[0] || tool;
+                    
+                    const specificIcon = toolIcons[tool.name] || 'https://cdn-icons-png.flaticon.com/512/4645/4645286.png';
+                    const cleanTitle = tool.name.replace(/\bAI\b/g, '').replace('PDF Magic', 'PDF Editor').replace('Resume Builder', 'CV Builder').trim();
+
+                    // هنا السحر: نمرر رقم الكوكب (index) والعدد الكلي (total) للـ CSS ليحسب مكانه
+                    const planetHTML = `
+                    <div class="orbit-planet" style="--i:${index}; --total:${totalPlanets};">
+                        <div class="planet-body">
+                            <img src="${specificIcon}" class="planet-icon" alt="${cleanTitle}">
+                            <div class="planet-label">${cleanTitle}</div>
+                            
+                            <div class="hidden-moons">
+                                <a href="${tool.url}" target="_blank" class="moon-action free">Open</a>
+                                <a href="${mainPrem?.url || '#'}" target="_blank" rel="nofollow" class="moon-action prem">Pro</a>
+                            </div>
+                        </div>
+                    </div>`;
+                    
+                    targetContainer.insertAdjacentHTML('beforeend', planetHTML);
+                });
             }
         }
-        setTimeout(initMobileFeatures, 100);
         
-        const currentLang = document.getElementById('language-picker').value;
-        if (currentLang !== 'en') { updateContent(currentLang); }
     } catch (error) { console.error("خطأ:", error); }
 }
 

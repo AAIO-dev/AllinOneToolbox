@@ -2184,3 +2184,145 @@ body.rtl-mode #send-btn {
 .galaxy-system:hover .moons-orbit {
     transform: translateY(5px); /* الأقمار تبتعد قليلاً */
 }
+/* ==================== 🪐 نظام المدار الحقيقي (Real Orbit System) 🪐 ==================== */
+
+/* 1. الحاوية الكونية (المساحة التي يدور فيها النظام) */
+.solar-system-container {
+    position: relative !important;
+    width: 100% !important;
+    height: 600px !important; /* ارتفاع ثابت لضمان وجود مساحة للدوران */
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin-bottom: 100px !important;
+    overflow: hidden !important; /* لكي لا تخرج الكواكب خارج الصفحة */
+}
+
+/* 2. الشمس (المركز الثابت) */
+.sun-star {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(255,200,0,0.2) 0%, rgba(255,100,0,0) 70%);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    box-shadow: 0 0 50px rgba(255, 165, 0, 0.3); /* توهج برتقالي */
+    animation: sunPulse 4s infinite ease-in-out;
+}
+
+.sun-content h2 {
+    color: #fff;
+    font-size: 1.5rem;
+    text-align: center;
+    text-shadow: 0 0 20px rgba(255, 165, 0, 0.8);
+    font-weight: 800;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+/* 3. الكوكب (يدور حول الشمس) */
+.orbit-planet {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    /* نصف قطر المدار: 220 بكسل */
+    /* الحسابات: ندور الحاوية بزاوية معينة، ثم نبعد الكوكب مسافة نصف القطر */
+    transform: 
+        rotate(calc(360deg / var(--total) * var(--i))) 
+        translate(220px) 
+        rotate(calc(-360deg / var(--total) * var(--i))); /* دوران عكسي ليبقى النص مستقيماً */
+        
+    z-index: 20;
+    transition: all 0.5s ease;
+}
+
+/* 4. جسم الكوكب (الكرة الزجاجية) */
+.planet-body {
+    width: 90px;
+    height: 90px;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.2), rgba(0,0,0,0.8));
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 
+        inset 5px 5px 15px rgba(255,255,255,0.1), 
+        0 0 20px rgba(111, 66, 193, 0.3);
+        
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    transition: 0.3s;
+}
+
+/* 5. أيقونة واسم الكوكب */
+.planet-icon {
+    width: 40px;
+    height: 40px;
+    filter: grayscale(100%) brightness(300%); /* فضي */
+    margin-bottom: 5px;
+    transition: 0.3s;
+}
+
+.planet-label {
+    font-size: 0.7rem;
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
+    max-width: 80px;
+}
+
+/* 6. الأقمار المخفية (تظهر عند اللمس) */
+.hidden-moons {
+    position: absolute;
+    top: 100%; /* تحت الكوكب مباشرة */
+    left: 50%;
+    transform: translateX(-50%) scale(0); /* مخفية وصغيرة */
+    opacity: 0;
+    display: flex;
+    gap: 5px;
+    margin-top: 10px;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* تأثير القفز */
+}
+
+.moon-action {
+    background: rgba(255,255,255,0.1);
+    color: white;
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.7rem;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255,255,255,0.2);
+}
+.moon-action.free:hover { background: #00aaff; border-color: #00aaff; }
+.moon-action.prem:hover { background: #ffaa00; border-color: #ffaa00; }
+
+/* 7. التفاعل (Hover Effects) */
+.planet-body:hover {
+    transform: scale(1.2); /* تكبير الكوكب */
+    box-shadow: 0 0 40px rgba(0, 170, 255, 0.6);
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3), rgba(0,100,255,0.4));
+    z-index: 100;
+}
+
+.planet-body:hover .hidden-moons {
+    opacity: 1;
+    transform: translateX(-50%) scale(1); /* ظهور الأقمار */
+}
+
+.planet-body:hover .planet-icon {
+    filter: none; /* عودة الألوان عند التفاعل */
+    transform: rotate(10deg);
+}
+
+/* أنيميشن بسيط للشمس */
+@keyframes sunPulse {
+    0% { transform: scale(1); box-shadow: 0 0 50px rgba(255, 165, 0, 0.3); }
+    50% { transform: scale(1.05); box-shadow: 0 0 80px rgba(255, 165, 0, 0.5); }
+    100% { transform: scale(1); box-shadow: 0 0 50px rgba(255, 165, 0, 0.3); }
+}
