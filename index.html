@@ -773,7 +773,7 @@ async function loadTools() {
             }
         });
 
-        // 3. الرسم والبناء
+        // 3. الرسم
         for (const [sectionName, subCategories] of Object.entries(organizedData)) {
             const targetContainer = containers[sectionName];
             
@@ -781,17 +781,13 @@ async function loadTools() {
                 targetContainer.innerHTML = '';
                 targetContainer.className = 'solar-system-container';
 
-                // أ. الشمس (الثابتة)
-                const sunHTML = `
+                // الشمس
+                targetContainer.insertAdjacentHTML('beforeend', `
                 <div class="sun-star">
-                    <div class="sun-content">
-                        <h2>${sectionName.replace('Tools', '')}</h2>
-                    </div>
-                </div>`;
-                targetContainer.insertAdjacentHTML('beforeend', sunHTML);
+                    <div class="sun-content"><h2>${sectionName.replace('Tools', '')}</h2></div>
+                </div>`);
 
-                // ب. حلقة الكواكب (التي ستدور لاحقاً في CSS)
-                // أنشأنا حاوية خاصة للكواكب لنتمكن من تدويرها وحدها دون تدوير الشمس
+                // حلقة الكواكب
                 const planetsRing = document.createElement('div');
                 planetsRing.className = 'planets-orbit-ring';
                 targetContainer.appendChild(planetsRing);
@@ -804,43 +800,19 @@ async function loadTools() {
                     const cleanTitle = categoryName.replace(/\bAI\b/g, '').replace('PDF Magic', 'PDF Editor').replace('Resume Builder', 'CV Builder').trim();
                     const iconUrl = toolIcons[categoryName] || 'https://cdn-icons-png.flaticon.com/512/4645/4645286.png';
 
-                    // 1. استخراج الزرين الرئيسيين
-                    const freeLink = categoryTools.find(t => t.pricing.toLowerCase().includes('free')) || categoryTools[0];
-                    const premLink = categoryTools.find(t => !t.pricing.toLowerCase().includes('free')) || categoryTools[1] || categoryTools[0];
-                    
-                    // 2. تصفية القائمة المنسدلة (More)
-                    const otherLinks = categoryTools.filter(t => t !== freeLink && t !== premLink);
-                    
-                    // إصلاح الفلتر: أي شيء يحتوي free فهو مجاني، وما عدا ذلك فهو Pro
-                    const moreFree = otherLinks.filter(t => t.pricing.toLowerCase().includes('free'));
-                    const morePro = otherLinks.filter(t => !t.pricing.toLowerCase().includes('free'));
+                    // --- فصل الأدوات بدقة ---
+                    const freeTools = categoryTools.filter(t => t.pricing.toLowerCase().includes('free'));
+                    const proTools = categoryTools.filter(t => !t.pricing.toLowerCase().includes('free'));
 
-                    // بناء القائمة المنسدلة المقسمة
-                    let dropdownHTML = '';
-                    if (moreFree.length > 0 || morePro.length > 0) {
-                        dropdownHTML += `<div class="see-more-trigger">More ▼<div class="nebula-dropdown">`;
-                        
-                        // قسم المجاني
-                        if (moreFree.length > 0) {
-                            dropdownHTML += `<div class="dropdown-header free">Free Tools</div>`;
-                            dropdownHTML += moreFree.map(l => `<a href="${l.url}" target="_blank" class="dropdown-item">${l.name}</a>`).join('');
-                        }
+                    // الزر الرئيسي لكل عمود
+                    const mainFree = freeTools.length > 0 ? freeTools[0] : null;
+                    const mainPro = proTools.length > 0 ? proTools[0] : null;
 
-                        // قسم البرو (فاصل إذا وجد القسمان)
-                        if (moreFree.length > 0 && morePro.length > 0) {
-                            dropdownHTML += `<div class="dropdown-divider"></div>`;
-                        }
+                    // الروابط الإضافية لكل عمود
+                    const extraFree = freeTools.length > 1 ? freeTools.slice(1) : [];
+                    const extraPro = proTools.length > 1 ? proTools.slice(1) : [];
 
-                        // قسم المدفوع
-                        if (morePro.length > 0) {
-                            dropdownHTML += `<div class="dropdown-header pro">Pro Tools</div>`;
-                            dropdownHTML += morePro.map(l => `<a href="${l.url}" target="_blank" rel="nofollow" class="dropdown-item">${l.name}</a>`).join('');
-                        }
-                        
-                        dropdownHTML += `</div></div>`;
-                    }
-
-                    // الكوكب
+                    // بناء الهيكل العمودي
                     const planetHTML = `
                     <div class="orbit-planet" style="--i:${index}; --total:${totalPlanets};">
                         <div class="planet-body">
@@ -848,11 +820,29 @@ async function loadTools() {
                             <div class="planet-label">${cleanTitle}</div>
                             
                             <div class="hidden-moons">
-                                <div class="main-buttons">
-                                    <a href="${freeLink?.url || '#'}" target="_blank" class="moon-action free">Free</a>
-                                    <a href="${premLink?.url || '#'}" target="_blank" rel="nofollow" class="moon-action prem">Pro</a>
+                                <div class="moon-split-container">
+                                    <div class="moon-col">
+                                        ${mainFree ? `<a href="${mainFree.url}" target="_blank" class="moon-action free">Free</a>` : ''}
+                                        ${extraFree.length > 0 ? `
+                                        <div class="more-trigger free-trigger">
+                                            + More
+                                            <div class="mini-dropdown">
+                                                ${extraFree.map(l => `<a href="${l.url}" target="_blank">${l.name}</a>`).join('')}
+                                            </div>
+                                        </div>` : ''}
+                                    </div>
+
+                                    <div class="moon-col">
+                                        ${mainPro ? `<a href="${mainPro.url}" target="_blank" rel="nofollow" class="moon-action prem">Pro</a>` : ''}
+                                        ${extraPro.length > 0 ? `
+                                        <div class="more-trigger pro-trigger">
+                                            + More
+                                            <div class="mini-dropdown">
+                                                ${extraPro.map(l => `<a href="${l.url}" target="_blank" rel="nofollow">${l.name}</a>`).join('')}
+                                            </div>
+                                        </div>` : ''}
+                                    </div>
                                 </div>
-                                ${dropdownHTML}
                             </div>
                         </div>
                     </div>`;
