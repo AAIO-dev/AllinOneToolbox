@@ -2363,12 +2363,7 @@ body.rtl-mode #send-btn {
     margin-bottom: 5px;
     transition: 0.2s;
     white-space: nowrap;      /* يمنع النص من النزول لسطر ثاني */
-    overflow: hidden;         /* يخفي الزائد */
-    text-overflow: ellipsis;  /* يضع ثلاث نقاط (...) للنص الطويل */
-    max-width: 90px;          /* عرض أقصى للزر لكي لا يتمدد */
-    display: block;           /* مهم لعمل الخصائص أعلاه */
-    padding: 6px 4px;
-}
+   }
 
 .moon-action.free { background: rgba(0, 170, 255, 0.2); border: 1px solid rgba(0, 170, 255, 0.5); }
 .moon-action.prem { background: rgba(255, 170, 0, 0.2); border: 1px solid rgba(255, 170, 0, 0.5); }
