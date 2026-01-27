@@ -2379,3 +2379,9 @@ body.rtl-mode #send-btn {
     color: #fff;
     text-shadow: 0 0 10px rgba(255,255,255,0.8);
 }
+/* أنيميشن نبض الشمس */
+@keyframes sunPulse {
+    0% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.05); }
+    100% { transform: translate(-50%, -50%) scale(1); }
+}
