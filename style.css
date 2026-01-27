@@ -2187,14 +2187,16 @@ body.rtl-mode #send-btn {
 /* ==================== 🪐 تنسيق النظام الشمسي (النسخة النهائية المفصولة) 🪐 ==================== */
 
 /* 1. الحاوية الكونية */
+/* التعديل هنا لضبط التوسيط */
 .solar-system-container {
     position: relative !important;
-    width: 100% !important;
-    height: 700px !important;
+    width: 100% !important;        /* 👈 ضروري جداً للتوسيط */
+    max-width: 100% !important;    /* 👈 ضمان عدم الخروج عن الشاشة */
+    height: 500px !important;      /* 👈 قلل الارتفاع قليلاً ليصبح ملموماً (كان 700) */
     display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    margin: 50px auto !important;
+    justify-content: center !important; /* 👈 هذا المسؤول عن التوسيط الأفقي */
+    align-items: center !important;     /* 👈 هذا المسؤول عن التوسيط العمودي */
+    margin: 0 auto !important;     /* 👈 يلغي أي هوامش جانبية تسبب الإزاحة */
     overflow: visible !important; 
 }
 
@@ -2247,7 +2249,7 @@ body.rtl-mode #send-btn {
     top: 0; left: 0;
     transform: 
         rotate(calc(360deg / var(--total) * var(--i))) 
-        translate(260px) 
+        translate(170px) 
         rotate(calc(-360deg / var(--total) * var(--i))); 
 }
 
