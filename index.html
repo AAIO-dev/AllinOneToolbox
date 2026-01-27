@@ -713,21 +713,21 @@ async function loadTools() {
         const response = await fetch('/api/tools');
         const tools = await response.json();
 
-        // تعريف المجموعات (الشموس)
+        // 1. تعريف الحاويات (المجرات الثلاث)
         const containers = {
             'Creative & Tech Tools': document.getElementById('creative-container'),
             'Professional Office Tools': document.getElementById('office-container'),
             'Media Transform Tools': document.getElementById('transform-container')
         };
 
-        // تجميع الأدوات حسب القسم
+        // 2. تجميع الأدوات حسب القسم الرئيسي
         const groups = {};
         tools.forEach(tool => {
             if (!groups[tool.category]) groups[tool.category] = [];
             groups[tool.category].push(tool);
         });
 
-        // خريطة الأيقونات
+        // خريطة الأيقونات (للكواكب)
         const toolIcons = {
             'Image Enhancer': 'https://cdn-icons-png.flaticon.com/512/3342/3342137.png',
             'AI Background Remover': 'https://cdn-icons-png.flaticon.com/512/1627/1627582.png',
@@ -746,7 +746,6 @@ async function loadTools() {
             'Chat with PDF': 'https://cdn-icons-png.flaticon.com/512/4725/4725964.png'
         };
 
-        // ربط أسماء الأدوات بالأقسام الصحيحة
         const categoryToContainer = {
             'Image Enhancer': 'Creative & Tech Tools',
             'AI Background Remover': 'Creative & Tech Tools',
@@ -765,21 +764,37 @@ async function loadTools() {
             'Chat with PDF': 'Media Transform Tools'
         };
 
-        // الدوران على كل مجموعة لبناء النظام الشمسي الخاص بها
+        // 3. بناء النظام الشمسي لكل قسم
         for (const groupName in groups) {
-            const groupTools = groups[groupName];
+            const groupTools = groups[groupName]; // هذه قائمة بكل الأدوات في القسم (مثلاً 20 أداة)
             
-            // تحديد الحاوية الصحيحة بناءً على اسم القسم
+            // --- الخطوة المهمة: دمج الأدوات المتكررة لتكوين كواكب فريدة ---
+            const uniquePlanetsMap = {};
+            groupTools.forEach(tool => {
+                // نستخدم اسم الأداة كمفتاح للتجميع (Image Enhancer)
+                if (!uniquePlanetsMap[tool.name]) {
+                    uniquePlanetsMap[tool.name] = {
+                        name: tool.name,
+                        icon: toolIcons[tool.name] || 'https://cdn-icons-png.flaticon.com/512/4645/4645286.png',
+                        links: [] // هنا سنخزن كل الروابط التابعة لهذا الكوكب
+                    };
+                }
+                uniquePlanetsMap[tool.name].links.push(tool);
+            });
+            // تحويل الخريطة إلى مصفوفة كواكب جاهزة
+            const planets = Object.values(uniquePlanetsMap);
+            // -------------------------------------------------------------
+
+            // تحديد الحاوية (الشمس)
             const containerID = categoryToContainer[groupName] === 'Creative & Tech Tools' ? 'creative-container' :
                                 categoryToContainer[groupName] === 'Professional Office Tools' ? 'office-container' : 'transform-container';
             const targetContainer = document.getElementById(containerID);
 
             if (targetContainer) {
-                // 1. تنظيف الحاوية بالكامل لنبدأ من الصفر
-                targetContainer.innerHTML = '';
+                targetContainer.innerHTML = ''; // تنظيف
                 targetContainer.className = 'solar-system-container'; 
 
-                // 2. زرع الشمس (عنوان القسم) في المركز
+                // أ. إضافة الشمس (عنوان القسم الكبير) في المنتصف
                 const sunHTML = `
                 <div class="sun-star">
                     <div class="sun-content">
@@ -788,33 +803,35 @@ async function loadTools() {
                 </div>`;
                 targetContainer.insertAdjacentHTML('beforeend', sunHTML);
 
-                // 3. زرع الكواكب (الأدوات) حول الشمس
-                const totalPlanets = groupTools.length;
+                // ب. إضافة الكواكب (المهام) تدور حول الشمس
+                const totalPlanets = planets.length;
                 
-                groupTools.forEach((tool, index) => {
-                    const specificIcon = toolIcons[tool.name] || 'https://cdn-icons-png.flaticon.com/512/4645/4645286.png';
-                    const cleanTitle = tool.name.replace(/\bAI\b/g, '').replace('PDF Magic', 'PDF Editor').replace('Resume Builder', 'CV Builder').trim();
+                planets.forEach((planet, index) => {
+                    const cleanTitle = planet.name.replace(/\bAI\b/g, '').replace('PDF Magic', 'PDF Editor').replace('Resume Builder', 'CV Builder').trim();
 
-                    // تحديد الروابط (الأقمار)
-                    const freeTools = groupTools.filter(t => t.pricing.toLowerCase() === 'free');
-                    const premTools = groupTools.filter(t => t.pricing.toLowerCase() === 'premium');
-                    const mainPrem = premTools[0] || tool;
+                    // استخراج روابط Free و Premium من القائمة المجمعة
+                    const freeLink = planet.links.find(l => l.pricing.toLowerCase() === 'free') || planet.links[0];
+                    const premLink = planet.links.find(l => l.pricing.toLowerCase() === 'premium') || planet.links[1] || planet.links[0];
+                    
+                    // بقية الروابط للقائمة المنسدلة
+                    const otherLinks = planet.links.filter(l => l !== freeLink && l !== premLink);
 
                     const planetHTML = `
                     <div class="orbit-planet" style="--i:${index}; --total:${totalPlanets};">
                         <div class="planet-body">
-                            <img src="${specificIcon}" class="planet-icon" alt="${cleanTitle}">
+                            <img src="${planet.icon}" class="planet-icon" alt="${cleanTitle}">
                             <div class="planet-label">${cleanTitle}</div>
                             
                             <div class="hidden-moons">
-                                <a href="${tool.url}" target="_blank" class="moon-action free">Open</a>
-                                <a href="${mainPrem?.url || '#'}" target="_blank" rel="nofollow" class="moon-action prem">Pro</a>
+                                <a href="${freeLink?.url || '#'}" target="_blank" class="moon-action free">${freeLink?.pricing === 'free' ? 'Free' : 'Link 1'}</a>
+                                <a href="${premLink?.url || '#'}" target="_blank" rel="nofollow" class="moon-action prem">${premLink?.pricing === 'premium' ? 'Pro' : 'Link 2'}</a>
+                                
+                                ${otherLinks.length > 0 ? `
                                 <div class="see-more-trigger">More ▼
                                     <div class="nebula-dropdown">
-                                        <a href="${tool.url}">More Free</a>
-                                        <a href="${mainPrem?.url}">More Pro</a>
+                                        ${otherLinks.map(l => `<a href="${l.url}" target="_blank">${l.name}</a>`).join('')}
                                     </div>
-                                </div>
+                                </div>` : ''}
                             </div>
                         </div>
                     </div>`;
