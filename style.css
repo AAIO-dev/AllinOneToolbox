@@ -2184,21 +2184,21 @@ body.rtl-mode #send-btn {
 .galaxy-system:hover .moons-orbit {
     transform: translateY(5px); /* الأقمار تبتعد قليلاً */
 }
-/* ==================== 🪐 تنسيق النظام الشمسي (النسخة الجراحية) 🪐 ==================== */
+/* ==================== 🪐 تنسيق النظام الشمسي (النسخة النهائية المرتبة) 🪐 ==================== */
 
-/* 1. الحاوية الكونية (الفضاء) */
+/* 1. الحاوية الكونية */
 .solar-system-container {
     position: relative !important;
     width: 100% !important;
-    height: 700px !important; /* ارتفاع مناسب للدوران */
+    height: 700px !important;
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
     margin: 50px auto !important;
-    overflow: visible !important; /* للسماح بظهور القوائم */
+    overflow: visible !important; 
 }
 
-/* 2. الشمس (الثابتة في المركز) */
+/* 2. الشمس (الثابتة) */
 .sun-star {
     position: absolute;
     top: 50%;
@@ -2207,16 +2207,13 @@ body.rtl-mode #send-btn {
     width: 220px;
     height: 220px;
     border-radius: 50%;
-    
-    /* توهج الشمس */
     background: radial-gradient(circle, rgba(120, 50, 220, 0.15) 0%, rgba(0,0,0,0) 70%);
     box-shadow: 0 0 100px rgba(138, 43, 226, 0.15);
     border: 1px solid rgba(255, 255, 255, 0.05);
-    
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 10; /* فوق الحلقة الخلفية */
+    z-index: 10;
 }
 
 .sun-content h2 {
@@ -2225,49 +2222,36 @@ body.rtl-mode #send-btn {
     font-weight: 800;
     text-align: center;
     text-transform: uppercase;
-    text-shadow: 0 0 25px rgba(162, 155, 254, 0.6);
+    text-shadow: 0 0 20px rgba(162, 155, 254, 0.6);
     margin: 0;
-    line-height: 1.4;
 }
 
-/* 3. حلقة الدوران (المحرك الخفي) */
+/* 3. حلقة الدوران */
 .planets-orbit-ring {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 0;   /* نقطة وهمية في المركز */
-    height: 0;
-    
-    /* حركة الدوران المستمرة */
+    width: 0; height: 0;
     animation: orbitRotation 60s linear infinite;
     z-index: 20;
 }
 
-/* تعريف حركة دوران الحلقة بالكامل */
 @keyframes orbitRotation {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
 }
 
-/* 4. الكوكب (المدار) */
+/* 4. الكوكب */
 .orbit-planet {
     position: absolute;
-    top: 0;
-    left: 0;
-    
-    /* الحسابات الدقيقة:
-       1. تدوير العنصر ليصل لزاويته (var(--i))
-       2. إبعاده عن المركز مسافة 260px (نصف القطر)
-       3. تدويره عكسياً ليبقى مستقيماً (Counter-Rotate)
-       4. تدويره عكس حركة الحلقة الأم ليبقى ثابتاً بالنسبة للشاشة (اختياري، لكن هنا نتركه يدور مع الحلقة)
-    */
+    top: 0; left: 0;
     transform: 
         rotate(calc(360deg / var(--total) * var(--i))) 
         translate(260px) 
         rotate(calc(-360deg / var(--total) * var(--i))); 
 }
 
-/* لمنع الأيقونات من الانقلاب أثناء دوران الحلقة الأم، نضيف دوران عكسي داخل الحركة */
+/* دوران عكسي للأيقونة لتبقى ثابتة */
 .orbit-planet .planet-body {
     animation: counterRotate 60s linear infinite;
 }
@@ -2277,19 +2261,15 @@ body.rtl-mode #send-btn {
     to { transform: rotate(-360deg); }
 }
 
-
-/* 5. جسم الكوكب (الكرة الزجاجية) */
+/* تصميم جسم الكوكب */
 .planet-body {
     width: 95px;
     height: 95px;
     border-radius: 50%;
-    
-    /* زجاج فضي غامق */
     background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1), rgba(10,10,25,0.95));
     backdrop-filter: blur(5px);
     border: 1px solid rgba(255, 255, 255, 0.15);
     box-shadow: 0 0 15px rgba(0,0,0,0.5);
-    
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -2300,8 +2280,7 @@ body.rtl-mode #send-btn {
 }
 
 .planet-icon {
-    width: 40px;
-    height: 40px;
+    width: 40px; height: 40px;
     object-fit: contain;
     filter: grayscale(100%) brightness(150%);
     margin-bottom: 5px;
@@ -2317,140 +2296,137 @@ body.rtl-mode #send-btn {
     text-shadow: 0 2px 4px #000;
 }
 
-/* 6. التفاعل (عند اللمس/المرور) */
+/* تفاعل الكوكب */
 .planet-body:hover {
     background: rgba(40, 40, 60, 0.95);
     border-color: #a29bfe;
     box-shadow: 0 0 30px rgba(138, 43, 226, 0.4);
-    z-index: 100; /* يبرز فوق الجميع */
+    z-index: 100;
+    transform: scale(1.1); 
 }
+.planet-body:hover .planet-icon { filter: none; transform: scale(1.1); }
 
-/* إيقاف الدوران عند وضع الماوس ليسهل الضغط */
+/* إيقاف الدوران عند اللمس */
 .solar-system-container:hover .planets-orbit-ring,
 .solar-system-container:hover .planet-body {
     animation-play-state: paused;
 }
 
-.planet-body:hover .planet-icon {
-    filter: none;
-    transform: scale(1.1);
+/* ============================================================
+   🔧 إصلاح القوائم المدمرة (هذا هو الجزء المهم) 🔧
+   ============================================================ */
+
+/* حاوية القائمة المنسدلة */
+.hidden-moons {
+    position: absolute;
+    top: 105%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none; /* مخفي افتراضياً */
+    background: rgba(15, 15, 20, 0.98); /* خلفية داكنة جداً */
+    padding: 15px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    min-width: 180px; /* عرض كافٍ للعمودين */
+    z-index: 200;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.8);
 }
 
 .planet-body:hover .hidden-moons {
-    display: flex;
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
+    display: block; /* يظهر عند اللمس */
 }
 
-/* 7. القائمة المنسدلة (التصميم الجراحي) */
-.hidden-moons {
-    position: absolute;
-    top: 105%; /* أسفل الكوكب مباشرة */
-    left: 50%;
-    transform: translateX(-50%) translateY(-10px);
-    
-    display: none; /* مخفي افتراضياً */
-    flex-direction: column;
-    gap: 8px;
-    
-    background: rgba(15, 15, 20, 0.98);
-    padding: 12px;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    min-width: 140px;
-    z-index: 200;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.8);
-    opacity: 0;
-    transition: 0.3s ease;
-}
-
-/* الأزرار الرئيسية (Free / Pro) */
-.main-buttons {
+/* تقسيم العمودين (Free يمين - Pro يسار) */
+.moon-split-container {
     display: flex;
-    gap: 5px;
     justify-content: center;
+    gap: 15px; /* مسافة فاصلة بين العمودين */
+    width: 100%;
 }
 
+.moon-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80px; /* عرض ثابت لكل عمود */
+}
+
+/* تنسيق الأزرار الرئيسية (Free/Pro) */
 .moon-action {
-    flex: 1;
-    text-align: center;
-    padding: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 6px 0;
     font-size: 0.75rem;
-    color: #fff;
-    text-decoration: none;
+    color: #fff !important; /* لون أبيض إجباري */
+    text-decoration: none !important;
     border-radius: 6px;
     font-weight: bold;
+    margin-bottom: 5px;
     transition: 0.2s;
 }
 
-.moon-action.free { background: rgba(0, 170, 255, 0.2); border: 1px solid rgba(0, 170, 255, 0.4); }
-.moon-action.prem { background: rgba(255, 170, 0, 0.2); border: 1px solid rgba(255, 170, 0, 0.4); }
+.moon-action.free { background: rgba(0, 170, 255, 0.2); border: 1px solid rgba(0, 170, 255, 0.5); }
+.moon-action.prem { background: rgba(255, 170, 0, 0.2); border: 1px solid rgba(255, 170, 0, 0.5); }
 
-.moon-action:hover { filter: brightness(1.2); }
+.moon-action:hover { filter: brightness(1.2); transform: translateY(-2px); }
 
-/* زر المزيد (More) */
-.see-more-trigger {
+/* تنسيق زر "More" */
+.more-trigger {
     font-size: 0.7rem;
     color: #aaa;
-    text-align: center;
     cursor: pointer;
-    padding-top: 5px;
+    position: relative; /* ضروري لظهور القائمة تحته */
+    padding: 4px;
     border-top: 1px solid rgba(255,255,255,0.1);
+    width: 100%;
+    text-align: center;
+    transition: 0.3s;
 }
-.see-more-trigger:hover { color: #fff; }
+.more-trigger:hover { color: #fff; background: rgba(255,255,255,0.05); border-radius: 4px; }
 
-/* القائمة المتفرعة (Nebula Dropdown) */
-.nebula-dropdown {
-    display: none;
-    margin-top: 8px;
-    text-align: left;
-    background: rgba(0,0,0,0.3);
+/* القائمة المنسدلة الصغيرة (التي كانت مدمرة) */
+.mini-dropdown {
+    display: none; /* مخفي */
+    position: absolute;
+    top: 100%; /* يظهر تحت زر More مباشرة */
+    left: 50%;
+    transform: translateX(-50%);
+    background: #000; /* خلفية سوداء للقائمة */
+    border: 1px solid #333;
     border-radius: 8px;
     padding: 5px;
-}
-.see-more-trigger:hover .nebula-dropdown { display: block; }
-
-/* عناوين الأقسام داخل القائمة (التجميل النهائي) */
-.dropdown-header {
-    font-size: 0.65rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    padding: 4px 8px;
-    margin-top: 4px;
-    border-radius: 4px;
-    letter-spacing: 0.5px;
+    width: 120px;
+    z-index: 300;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    max-height: 150px; /* لضمان عدم الطول الزائد */
+    overflow-y: auto;
 }
 
-.dropdown-header.free {
-    color: #00aaff;
-    background: rgba(0, 170, 255, 0.1);
-    border-left: 2px solid #00aaff;
-}
-
-.dropdown-header.pro {
-    color: #ffaa00;
-    background: rgba(255, 170, 0, 0.1);
-    border-left: 2px solid #ffaa00;
-}
-
-/* روابط الأدوات */
-.dropdown-item {
+/* إظهار القائمة عند وضع الماوس على More */
+.more-trigger:hover .mini-dropdown {
     display: block;
-    color: #ccc;
-    text-decoration: none;
-    padding: 4px 8px;
-    font-size: 0.75rem;
+}
+
+/* تنسيق الروابط داخل القائمة (لإصلاح اللون الأزرق) */
+.mini-dropdown a {
+    display: block; /* كل رابط في سطر */
+    color: #ddd !important; /* لون رمادي فاتح */
+    text-decoration: none !important; /* إزالة الخط */
+    font-size: 0.7rem;
+    padding: 5px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
     transition: 0.2s;
 }
-.dropdown-item:hover {
-    color: #fff;
-    background: rgba(255,255,255,0.05);
-    padding-left: 12px; /* حركة انزلاق بسيطة */
+
+.mini-dropdown a:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff !important;
+    padding-left: 8px; /* حركة بسيطة */
 }
 
-/* فاصل بين القسمين */
-.dropdown-divider {
-    height: 1px;
-    background: rgba(255,255,255,0.1);
-    margin: 5px 0;
-}
+/* تخصيص السكرول بار للقوائم الصغيرة */
+.mini-dropdown::-webkit-scrollbar { width: 4px; }
+.mini-dropdown::-webkit-scrollbar-thumb { background: #555; border-radius: 4px; }
