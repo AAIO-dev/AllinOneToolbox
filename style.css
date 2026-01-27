@@ -2417,3 +2417,15 @@ body.rtl-mode #send-btn {
 /* تخصيص السكرول بار */
 .mini-dropdown::-webkit-scrollbar { width: 3px; }
 .mini-dropdown::-webkit-scrollbar-thumb { background: #555; border-radius: 4px; }
+/* تنسيق الفاصل النصي (Free / Prem) */
+.separator-label {
+    font-size: 0.6rem;      /* خط صغير جداً */
+    font-weight: 700;       /* عريض */
+    text-transform: uppercase;
+    margin: 2px 0;          /* مسافة بسيطة جداً فوق وتحت */
+    letter-spacing: 1px;    /* تباعد أحرف */
+    opacity: 0.8;
+}
+
+.free-text { color: #00aaff; text-shadow: 0 0 5px rgba(0, 170, 255, 0.5); }
+.prem-text { color: #ffaa00; text-shadow: 0 0 5px rgba(255, 170, 0, 0.5); }
