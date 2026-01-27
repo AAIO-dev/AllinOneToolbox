@@ -798,31 +798,27 @@ async function loadTools() {
                     const iconUrl = toolIcons[categoryName] || 'https://cdn-icons-png.flaticon.com/512/4645/4645286.png';
 
                     // =========================================================
-                    // 🩸 منطق الكنس الشامل (Everything Else Logic)
+                    // 🩸 المعادلة الذهبية (دمج منطقك مع التصميم)
                     // =========================================================
                     
-                    const allFree = [];
-                    const allPro = [];
+                    // 1. التصنيف الأساسي
+                    const freeTools = categoryTools.filter(t => t.pricing.toLowerCase() === 'free');
+                    const premTools = categoryTools.filter(t => t.pricing.toLowerCase() === 'premium');
 
-                    categoryTools.forEach(t => {
-                        // تنظيف السعر من المسافات وتحويله لأحرف صغيرة
-                        const price = t.pricing ? t.pricing.toString().toLowerCase().trim() : '';
+                    // 2. توزيع المجاني (العمود الأول)
+                    const mainFree = freeTools[0] || null;
+                    // نأخذ الـ 10 أدوات التالية للقائمة المنسدلة
+                    const extraFree = freeTools.slice(1, 11); 
 
-                        // الشرط القاطع: إذا كان "free" يذهب لليمين، أي شيء آخر يذهب لليسار
-                        if (price === 'free') {
-                            allFree.push(t);
-                        } else {
-                            allPro.push(t); // (Freemium, Paid, Premium, Trial, Empty...)
-                        }
-                    });
+                    // 3. توزيع المدفوع + سد العجز (العمود الثاني)
+                    const mainPrem = premTools[0] || null;
+                    
+                    // المنطق الذكي: إذا كان المدفوع قليلاً، املأ القائمة من فائض المجاني
+                    const extraPrem = premTools.length > 1 
+                        ? premTools.slice(1, 11) 
+                        : freeTools.slice(11, 21); // نأخذ من المجاني (بعد رقم 11) لنملأ الفراغ
 
                     // =========================================================
-
-                    const mainFree = allFree.length > 0 ? allFree[0] : null;
-                    const extraFree = allFree.length > 1 ? allFree.slice(1) : [];
-
-                    const mainPro = allPro.length > 0 ? allPro[0] : null;
-                    const extraPro = allPro.length > 1 ? allPro.slice(1) : [];
 
                     const planetHTML = `
                     <div class="orbit-planet" style="--i:${index}; --total:${totalPlanets};">
@@ -846,13 +842,13 @@ async function loadTools() {
                                     </div>
 
                                     <div class="moon-col">
-                                        ${mainPro ? `<a href="${mainPro.url}" target="_blank" rel="nofollow" class="moon-action prem">Pro</a>` : '<span class="empty-slot">-</span>'}
+                                        ${mainPrem ? `<a href="${mainPrem.url}" target="_blank" rel="nofollow" class="moon-action prem">Pro</a>` : '<span class="empty-slot">-</span>'}
                                         
-                                        ${extraPro.length > 0 ? `
+                                        ${extraPrem.length > 0 ? `
                                         <div class="more-trigger">
                                             + More
                                             <div class="mini-dropdown pro-list">
-                                                ${extraPro.map(l => `<a href="${l.url}" target="_blank" rel="nofollow">${l.name}</a>`).join('')}
+                                                ${extraPrem.map(l => `<a href="${l.url}" target="_blank" rel="nofollow">${l.name}</a>`).join('')}
                                             </div>
                                         </div>` : ''}
                                     </div>
