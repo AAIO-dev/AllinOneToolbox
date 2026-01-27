@@ -756,7 +756,6 @@ async function loadTools() {
             'Chat with PDF': 'Media Transform Tools'
         };
 
-        // تجميع البيانات
         const organizedData = {
             'Creative & Tech Tools': {},
             'Professional Office Tools': {},
@@ -781,11 +780,13 @@ async function loadTools() {
                 targetContainer.innerHTML = '';
                 targetContainer.className = 'solar-system-container';
 
+                // الشمس
                 targetContainer.insertAdjacentHTML('beforeend', `
                 <div class="sun-star">
                     <div class="sun-content"><h2>${sectionName.replace('Tools', '')}</h2></div>
                 </div>`);
 
+                // حلقة الكواكب
                 const planetsRing = document.createElement('div');
                 planetsRing.className = 'planets-orbit-ring';
                 targetContainer.appendChild(planetsRing);
@@ -798,20 +799,25 @@ async function loadTools() {
                     const cleanTitle = categoryName.replace(/\bAI\b/g, '').replace('PDF Magic', 'PDF Editor').replace('Resume Builder', 'CV Builder').trim();
                     const iconUrl = toolIcons[categoryName] || 'https://cdn-icons-png.flaticon.com/512/4645/4645286.png';
 
-                    // --- الفصل الجراحي للأدوات ---
-                    // 1. كل ما هو مجاني
-                    const allFree = categoryTools.filter(t => t.pricing.toLowerCase().includes('free'));
-                    // 2. كل ما هو مدفوع
-                    const allPro = categoryTools.filter(t => !t.pricing.toLowerCase().includes('free'));
+                    // ============================================================
+                    // 🔧 التعديل الجراحي: فرز صارم جداً لإظهار الزرين 🔧
+                    // ============================================================
+                    
+                    // 1. القائمة الزرقاء: فقط ما هو "Free" (بدون Freemium)
+                    const allFree = categoryTools.filter(t => t.pricing.toLowerCase() === 'free');
+                    
+                    // 2. القائمة الذهبية: كل ما تبقى (Freemium, Paid, Premium)
+                    // هذا سيجبر الأدوات للانتقال لليسار وبالتالي سيظهر زر More
+                    const allPro = categoryTools.filter(t => t.pricing.toLowerCase() !== 'free');
 
-                    // تحديد الرأس (الزر الرئيسي) والذيل (القائمة المنسدلة) لكل عمود
+                    // تجهيز الرأس والقائمة لكل عمود
                     const mainFree = allFree.length > 0 ? allFree[0] : null;
                     const extraFree = allFree.length > 1 ? allFree.slice(1) : [];
 
                     const mainPro = allPro.length > 0 ? allPro[0] : null;
                     const extraPro = allPro.length > 1 ? allPro.slice(1) : [];
 
-                    // بناء الهيكل: عمود يمين وعمود يسار
+                    // بناء الهيكل (عمودين منفصلين)
                     const planetHTML = `
                     <div class="orbit-planet" style="--i:${index}; --total:${totalPlanets};">
                         <div class="planet-body">
