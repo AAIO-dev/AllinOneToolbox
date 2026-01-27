@@ -2188,15 +2188,17 @@ body.rtl-mode #send-btn {
 
 /* 1. الحاوية الكونية */
 /* التعديل هنا لضبط التوسيط */
+/* 1. الحاوية الكونية (تعديل التوسيط) */
 .solar-system-container {
     position: relative !important;
-    width: 100% !important;        /* 👈 ضروري جداً للتوسيط */
-    max-width: 100% !important;    /* 👈 ضمان عدم الخروج عن الشاشة */
-    height: 500px !important;      /* 👈 قلل الارتفاع قليلاً ليصبح ملموماً (كان 700) */
+    width: 100% !important;
+    max-width: 500px !important; /* 👈 (جديد) تحديد العرض يمنع السباحة يميناً ويساراً */
+    height: 500px !important;    /* 👈 (جديد) تقليل الارتفاع ليناسب التقريب */
     display: flex !important;
-    justify-content: center !important; /* 👈 هذا المسؤول عن التوسيط الأفقي */
-    align-items: center !important;     /* 👈 هذا المسؤول عن التوسيط العمودي */
-    margin: 0 auto !important;     /* 👈 يلغي أي هوامش جانبية تسبب الإزاحة */
+    justify-content: center !important;
+    align-items: center !important;
+    margin: 0 auto !important;   /* 👈 الإجبار على المنتصف */
+    padding: 0 !important;       /* 👈 إزالة أي إزاحة داخلية */
     overflow: visible !important; 
 }
 
@@ -2249,7 +2251,7 @@ body.rtl-mode #send-btn {
     top: 0; left: 0;
     transform: 
         rotate(calc(360deg / var(--total) * var(--i))) 
-        translate(170px) 
+        translate(165px) 
         rotate(calc(-360deg / var(--total) * var(--i))); 
 }
 
