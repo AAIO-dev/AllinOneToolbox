@@ -713,11 +713,6 @@ async function loadTools() {
         const response = await fetch('/api/tools');
         const tools = await response.json();
 
-        // 🕵️‍♂️ كود كشف المسميات (مؤقت)
-        const pricingTypes = [...new Set(tools.map(t => t.pricing))];
-        console.log("🔥🔥 مسميات الأسعار الموجودة في الداتابيس هي:", pricingTypes);
-
-        // تعريف الحاويات
         const containers = {
             'Creative & Tech Tools': document.getElementById('creative-container'),
             'Professional Office Tools': document.getElementById('office-container'),
@@ -766,6 +761,7 @@ async function loadTools() {
             'Media Transform Tools': {}
         };
 
+        // توزيع البيانات
         tools.forEach(tool => {
             const mainSection = categoryToContainer[tool.category];
             if (mainSection && organizedData[mainSection]) {
@@ -784,13 +780,11 @@ async function loadTools() {
                 targetContainer.innerHTML = '';
                 targetContainer.className = 'solar-system-container';
 
-                // الشمس
                 targetContainer.insertAdjacentHTML('beforeend', `
                 <div class="sun-star">
                     <div class="sun-content"><h2>${sectionName.replace('Tools', '')}</h2></div>
                 </div>`);
 
-                // حلقة الكواكب
                 const planetsRing = document.createElement('div');
                 planetsRing.className = 'planets-orbit-ring';
                 targetContainer.appendChild(planetsRing);
@@ -803,25 +797,24 @@ async function loadTools() {
                     const cleanTitle = categoryName.replace(/\bAI\b/g, '').replace('PDF Magic', 'PDF Editor').replace('Resume Builder', 'CV Builder').trim();
                     const iconUrl = toolIcons[categoryName] || 'https://cdn-icons-png.flaticon.com/512/4645/4645286.png';
 
-                    // ============================================================
-                    // 🔧 التعديل الجراحي: فرز صارم جداً لإظهار الزرين 🔧
-                    // ============================================================
+                    // =========================================================
+                    // 🩸 الفرز الجراحي الدقيق (بناءً على الصورة)
+                    // =========================================================
                     
-                    // 1. القائمة الزرقاء: فقط ما هو "Free" (بدون Freemium)
-                    const allFree = categoryTools.filter(t => t.pricing.toLowerCase() === 'free');
+                    // 1. العمود الأزرق: فقط ما يساوي 'free' بالضبط
+                    const allFree = categoryTools.filter(t => t.pricing.trim().toLowerCase() === 'free');
                     
-                    // 2. القائمة الذهبية: كل ما تبقى (Freemium, Paid, Premium)
-                    // هذا سيجبر الأدوات للانتقال لليسار وبالتالي سيظهر زر More
-                    const allPro = categoryTools.filter(t => t.pricing.toLowerCase() !== 'pro');
+                    // 2. العمود الذهبي: فقط ما يساوي 'premium' بالضبط
+                    const allPro = categoryTools.filter(t => t.pricing.trim().toLowerCase() === 'premium');
 
-                    // تجهيز الرأس والقائمة لكل عمود
+                    // =========================================================
+
                     const mainFree = allFree.length > 0 ? allFree[0] : null;
                     const extraFree = allFree.length > 1 ? allFree.slice(1) : [];
 
                     const mainPro = allPro.length > 0 ? allPro[0] : null;
                     const extraPro = allPro.length > 1 ? allPro.slice(1) : [];
 
-                    // بناء الهيكل (عمودين منفصلين)
                     const planetHTML = `
                     <div class="orbit-planet" style="--i:${index}; --total:${totalPlanets};">
                         <div class="planet-body">
