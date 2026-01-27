@@ -713,6 +713,7 @@ async function loadTools() {
         const response = await fetch('/api/tools');
         const tools = await response.json();
 
+        // تعريف الحاويات
         const containers = {
             'Creative & Tech Tools': document.getElementById('creative-container'),
             'Professional Office Tools': document.getElementById('office-container'),
@@ -761,7 +762,6 @@ async function loadTools() {
             'Media Transform Tools': {}
         };
 
-        // توزيع البيانات
         tools.forEach(tool => {
             const mainSection = categoryToContainer[tool.category];
             if (mainSection && organizedData[mainSection]) {
@@ -798,14 +798,23 @@ async function loadTools() {
                     const iconUrl = toolIcons[categoryName] || 'https://cdn-icons-png.flaticon.com/512/4645/4645286.png';
 
                     // =========================================================
-                    // 🩸 الفرز الجراحي الدقيق (بناءً على الصورة)
+                    // 🩸 منطق الكنس الشامل (Everything Else Logic)
                     // =========================================================
                     
-                    // 1. العمود الأزرق: فقط ما يساوي 'free' بالضبط
-                    const allFree = categoryTools.filter(t => t.pricing.trim().toLowerCase() === 'free');
-                    
-                    // 2. العمود الذهبي: فقط ما يساوي 'premium' بالضبط
-                    const allPro = categoryTools.filter(t => t.pricing.trim().toLowerCase() === 'premium');
+                    const allFree = [];
+                    const allPro = [];
+
+                    categoryTools.forEach(t => {
+                        // تنظيف السعر من المسافات وتحويله لأحرف صغيرة
+                        const price = t.pricing ? t.pricing.toString().toLowerCase().trim() : '';
+
+                        // الشرط القاطع: إذا كان "free" يذهب لليمين، أي شيء آخر يذهب لليسار
+                        if (price === 'free') {
+                            allFree.push(t);
+                        } else {
+                            allPro.push(t); // (Freemium, Paid, Premium, Trial, Empty...)
+                        }
+                    });
 
                     // =========================================================
 
