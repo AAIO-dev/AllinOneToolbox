@@ -713,18 +713,27 @@ async function loadTools() {
         const response = await fetch('/api/tools');
         const tools = await response.json();
 
-        // 1. تعريف الحاويات (لدينا 3 أقسام فقط)
-        const containers = {
-            'Creative & Tech Tools': document.getElementById('creative-container'),
-            'Professional Office Tools': document.getElementById('office-container'),
-            'Media Transform Tools': document.getElementById('transform-container')
+        // 1. تحديد الحاويات الثلاث الرئيسية
+        const sections = {
+            'Creative & Tech Tools': {
+                container: document.getElementById('creative-container'),
+                tools: []
+            },
+            'Professional Office Tools': {
+                container: document.getElementById('office-container'),
+                tools: []
+            },
+            'Media Transform Tools': {
+                container: document.getElementById('transform-container'),
+                tools: []
+            }
         };
 
         // 2. توزيع الأدوات على الأقسام الثلاثة
-        const groups = {};
         tools.forEach(tool => {
-            if (!groups[tool.category]) groups[tool.category] = [];
-            groups[tool.category].push(tool);
+            if (sections[tool.category]) {
+                sections[tool.category].tools.push(tool);
+            }
         });
 
         // خريطة الأيقونات
@@ -746,60 +755,27 @@ async function loadTools() {
             'Chat with PDF': 'https://cdn-icons-png.flaticon.com/512/4725/4725964.png'
         };
 
-        const categoryToContainer = {
-            'Image Enhancer': 'Creative & Tech Tools',
-            'AI Background Remover': 'Creative & Tech Tools',
-            'AI Video Creator': 'Creative & Tech Tools',
-            'AI Voice Generator': 'Creative & Tech Tools',
-            'AI Code Assistant': 'Creative & Tech Tools',
-            'Text to AI Image': 'Creative & Tech Tools',
-            'AI Resume Builder': 'Professional Office Tools',
-            'AI Email Writer': 'Professional Office Tools',
-            'AI Translator Pro': 'Professional Office Tools',
-            'AI Text Summarizer': 'Professional Office Tools',
-            'PDF Magic': 'Media Transform Tools',
-            'Video to GIF': 'Media Transform Tools',
-            'Text to Professional Voice': 'Media Transform Tools',
-            'Text to AI Video': 'Media Transform Tools',
-            'Chat with PDF': 'Media Transform Tools'
-        };
-
-        // 3. بناء الأنظمة الشمسية (3 أنظمة فقط)
-        for (const [groupName, groupTools] of Object.entries(groups)) {
+        // 3. بناء النظام الشمسي لكل قسم
+        for (const [sectionName, sectionData] of Object.entries(sections)) {
+            const container = sectionData.container;
             
-            // تحديد الحاوية الصحيحة
-            let targetContainerId = '';
-            // نأخذ عينة من الأدوات لنعرف لأي قسم تنتمي
-            const sampleTool = groupTools[0];
-            if (categoryToContainer[sampleTool.name]) {
-                 if (categoryToContainer[sampleTool.name] === 'Creative & Tech Tools') targetContainerId = 'creative-container';
-                 else if (categoryToContainer[sampleTool.name] === 'Professional Office Tools') targetContainerId = 'office-container';
-                 else targetContainerId = 'transform-container';
-            }
+            if (container && sectionData.tools.length > 0) {
+                // تنظيف الحاوية بالكامل
+                container.innerHTML = '';
+                container.className = 'solar-system-container'; // كلاس موحد
 
-            const targetContainer = document.getElementById(targetContainerId);
-
-            if (targetContainer) {
-                // تنظيف الحاوية بالكامل وتهيئتها كنظام شمسي واحد
-                targetContainer.innerHTML = '';
-                targetContainer.className = 'solar-system-container';
-
-                // أ. زرع الشمس (عنوان القسم) في المركز
-                // تنظيف اسم القسم من كلمة Tools للتجميل
-                const sunTitle = targetContainerId === 'creative-container' ? 'CREATIVE TOOLS' : 
-                                 targetContainerId === 'office-container' ? 'OFFICE TOOLS' : 'MEDIA TOOLS';
-
+                // أ. إضافة الشمس (عنوان القسم) مرة واحدة في المركز
                 const sunHTML = `
                 <div class="sun-star">
                     <div class="sun-content">
-                        <h2>${sunTitle}</h2>
+                        <h2>${sectionName.replace('Tools', '')}</h2>
                     </div>
                 </div>`;
-                targetContainer.insertAdjacentHTML('beforeend', sunHTML);
+                container.insertAdjacentHTML('beforeend', sunHTML);
 
-                // ب. تجميع الأدوات لتكوين الكواكب (تجميع حسب اسم المهمة)
+                // ب. تجميع الأدوات لتكوين الكواكب (دمج المتشابهات)
                 const uniquePlanetsMap = {};
-                groupTools.forEach(tool => {
+                sectionData.tools.forEach(tool => {
                     if (!uniquePlanetsMap[tool.name]) {
                         uniquePlanetsMap[tool.name] = {
                             name: tool.name,
@@ -809,7 +785,7 @@ async function loadTools() {
                     }
                     uniquePlanetsMap[tool.name].links.push(tool);
                 });
-                
+
                 const planets = Object.values(uniquePlanetsMap);
                 const totalPlanets = planets.length;
 
@@ -842,12 +818,11 @@ async function loadTools() {
                         </div>
                     </div>`;
                     
-                    targetContainer.insertAdjacentHTML('beforeend', planetHTML);
+                    container.insertAdjacentHTML('beforeend', planetHTML);
                 });
             }
         }
-        
-    } catch (error) { console.error("خطأ:", error); }
+    } catch (error) { console.error("Error loading tools:", error); }
 }
 
 window.onload = loadTools;
