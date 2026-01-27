@@ -713,19 +713,31 @@ async function loadTools() {
         const response = await fetch('/api/tools');
         const tools = await response.json();
 
-        // 1. تعريف الحاويات (المجرات الثلاث)
+        // تعريف الحاويات الرئيسية
         const containers = {
             'Creative & Tech Tools': document.getElementById('creative-container'),
             'Professional Office Tools': document.getElementById('office-container'),
             'Media Transform Tools': document.getElementById('transform-container')
         };
 
-        // 2. تجميع الأدوات حسب القسم الرئيسي (لصنع 3 شموس فقط)
-        const groups = {};
-        tools.forEach(tool => {
-            if (!groups[tool.category]) groups[tool.category] = [];
-            groups[tool.category].push(tool);
-        });
+        // خريطة ربط التصنيفات بالأقسام الرئيسية
+        const categoryToContainer = {
+            'Image Enhancer': 'Creative & Tech Tools',
+            'AI Background Remover': 'Creative & Tech Tools',
+            'AI Video Creator': 'Creative & Tech Tools',
+            'AI Voice Generator': 'Creative & Tech Tools',
+            'AI Code Assistant': 'Creative & Tech Tools',
+            'Text to AI Image': 'Creative & Tech Tools',
+            'AI Resume Builder': 'Professional Office Tools',
+            'AI Email Writer': 'Professional Office Tools',
+            'AI Translator Pro': 'Professional Office Tools',
+            'AI Text Summarizer': 'Professional Office Tools',
+            'PDF Magic': 'Media Transform Tools',
+            'Video to GIF': 'Media Transform Tools',
+            'Text to Professional Voice': 'Media Transform Tools',
+            'Text to AI Video': 'Media Transform Tools',
+            'Chat with PDF': 'Media Transform Tools'
+        };
 
         // خريطة الأيقونات
         const toolIcons = {
@@ -746,57 +758,66 @@ async function loadTools() {
             'Chat with PDF': 'https://cdn-icons-png.flaticon.com/512/4725/4725964.png'
         };
 
-        // 3. التنفيذ
-        for (const groupName in groups) {
-            const groupTools = groups[groupName];
-            
-            // تحديد الحاوية بناءً على اسم المجموعة مباشرة
-            let targetContainer = containers[groupName];
+        // 1. هيكلة البيانات: تجميع الأدوات تحت أقسامها الرئيسية أولاً
+        const organizedData = {
+            'Creative & Tech Tools': {},
+            'Professional Office Tools': {},
+            'Media Transform Tools': {}
+        };
+
+        tools.forEach(tool => {
+            const mainSection = categoryToContainer[tool.category];
+            if (mainSection && organizedData[mainSection]) {
+                if (!organizedData[mainSection][tool.category]) {
+                    organizedData[mainSection][tool.category] = [];
+                }
+                organizedData[mainSection][tool.category].push(tool);
+            }
+        });
+
+        // 2. الرسم: المرور على الأقسام الثلاثة وبناء النظام الشمسي
+        for (const [sectionName, subCategories] of Object.entries(organizedData)) {
+            const targetContainer = containers[sectionName];
             
             if (targetContainer) {
-                targetContainer.innerHTML = ''; // تنظيف
-                targetContainer.className = 'solar-system-container'; 
+                // تنظيف الحاوية لمرة واحدة فقط لكل قسم
+                targetContainer.innerHTML = '';
+                targetContainer.className = 'solar-system-container';
 
-                // أ. إضافة الشمس (العنوان) في المركز
+                // أ. إضافة الشمس (عنوان القسم الرئيسي)
                 const sunHTML = `
                 <div class="sun-star">
                     <div class="sun-content">
-                        <h2>${groupName.replace('Tools', '')}</h2>
+                        <h2>${sectionName.replace('Tools', '')}</h2>
                     </div>
                 </div>`;
                 targetContainer.insertAdjacentHTML('beforeend', sunHTML);
 
-                // ب. تجميع الكواكب (دمج الأدوات المتشابهة)
-                const uniquePlanetsMap = {};
-                groupTools.forEach(tool => {
-                    if (!uniquePlanetsMap[tool.name]) {
-                        uniquePlanetsMap[tool.name] = {
-                            name: tool.name,
-                            icon: toolIcons[tool.name] || 'https://cdn-icons-png.flaticon.com/512/4645/4645286.png',
-                            links: []
-                        };
-                    }
-                    uniquePlanetsMap[tool.name].links.push(tool);
-                });
-                const planets = Object.values(uniquePlanetsMap);
-                const totalPlanets = planets.length;
+                // تحويل التصنيفات الفرعية إلى مصفوفة لرسم الكواكب
+                const planetKeys = Object.keys(subCategories);
+                const totalPlanets = planetKeys.length;
 
-                // ج. إضافة الكواكب
-                planets.forEach((planet, index) => {
-                    const cleanTitle = planet.name.replace(/\bAI\b/g, '').replace('PDF Magic', 'PDF Editor').replace('Resume Builder', 'CV Builder').trim();
-                    const freeLink = planet.links.find(l => l.pricing.toLowerCase() === 'free') || planet.links[0];
-                    const premLink = planet.links.find(l => l.pricing.toLowerCase() === 'premium') || planet.links[1] || planet.links[0];
-                    const otherLinks = planet.links.filter(l => l !== freeLink && l !== premLink);
+                // ب. رسم الكواكب (التصنيفات الفرعية مثل Image Enhancer)
+                planetKeys.forEach((categoryName, index) => {
+                    const categoryTools = subCategories[categoryName];
+                    const cleanTitle = categoryName.replace(/\bAI\b/g, '').replace('PDF Magic', 'PDF Editor').replace('Resume Builder', 'CV Builder').trim();
+                    const iconUrl = toolIcons[categoryName] || 'https://cdn-icons-png.flaticon.com/512/4645/4645286.png';
+
+                    // تحضير روابط الأدوات (الأقمار)
+                    const freeLink = categoryTools.find(t => t.pricing.toLowerCase() === 'free') || categoryTools[0];
+                    const premLink = categoryTools.find(t => t.pricing.toLowerCase() === 'premium') || categoryTools[1] || categoryTools[0];
+                    const otherLinks = categoryTools.filter(t => t !== freeLink && t !== premLink);
 
                     const planetHTML = `
                     <div class="orbit-planet" style="--i:${index}; --total:${totalPlanets};">
                         <div class="planet-body">
-                            <img src="${planet.icon}" class="planet-icon" alt="${cleanTitle}">
+                            <img src="${iconUrl}" class="planet-icon" alt="${cleanTitle}">
                             <div class="planet-label">${cleanTitle}</div>
                             
                             <div class="hidden-moons">
                                 <a href="${freeLink?.url || '#'}" target="_blank" class="moon-action free">Free</a>
                                 <a href="${premLink?.url || '#'}" target="_blank" rel="nofollow" class="moon-action prem">Pro</a>
+                                
                                 ${otherLinks.length > 0 ? `
                                 <div class="see-more-trigger">More ▼
                                     <div class="nebula-dropdown">
@@ -806,11 +827,13 @@ async function loadTools() {
                             </div>
                         </div>
                     </div>`;
+                    
                     targetContainer.insertAdjacentHTML('beforeend', planetHTML);
                 });
             }
         }
-    } catch (error) { console.error("Error:", error); }
+
+    } catch (error) { console.error("Error building solar system:", error); }
 }
 
 window.onload = loadTools;
