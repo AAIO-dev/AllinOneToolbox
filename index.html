@@ -808,7 +808,7 @@ async function loadTools() {
                     
                     // 2. القائمة الذهبية: كل ما تبقى (Freemium, Paid, Premium)
                     // هذا سيجبر الأدوات للانتقال لليسار وبالتالي سيظهر زر More
-                    const allPro = categoryTools.filter(t => t.pricing.toLowerCase() !== 'free');
+                    const allPro = categoryTools.filter(t => t.pricing.toLowerCase() !== 'pro');
 
                     // تجهيز الرأس والقائمة لكل عمود
                     const mainFree = allFree.length > 0 ? allFree[0] : null;
