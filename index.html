@@ -713,13 +713,14 @@ async function loadTools() {
         const response = await fetch('/api/tools');
         const tools = await response.json();
 
-        // سنفرغ الحاويات القديمة لنبني النظام الشمسي داخلها
+        // تعريف المجموعات (الشموس)
         const containers = {
             'Creative & Tech Tools': document.getElementById('creative-container'),
             'Professional Office Tools': document.getElementById('office-container'),
             'Media Transform Tools': document.getElementById('transform-container')
         };
 
+        // تجميع الأدوات حسب القسم
         const groups = {};
         tools.forEach(tool => {
             if (!groups[tool.category]) groups[tool.category] = [];
@@ -745,6 +746,7 @@ async function loadTools() {
             'Chat with PDF': 'https://cdn-icons-png.flaticon.com/512/4725/4725964.png'
         };
 
+        // ربط أسماء الأدوات بالأقسام الصحيحة
         const categoryToContainer = {
             'Image Enhancer': 'Creative & Tech Tools',
             'AI Background Remover': 'Creative & Tech Tools',
@@ -763,21 +765,21 @@ async function loadTools() {
             'Chat with PDF': 'Media Transform Tools'
         };
 
+        // الدوران على كل مجموعة لبناء النظام الشمسي الخاص بها
         for (const groupName in groups) {
             const groupTools = groups[groupName];
-            const groupID = groupName.replace(/\s+/g, '-').toLowerCase();
             
-            // تحديد الحاوية
+            // تحديد الحاوية الصحيحة بناءً على اسم القسم
             const containerID = categoryToContainer[groupName] === 'Creative & Tech Tools' ? 'creative-container' :
                                 categoryToContainer[groupName] === 'Professional Office Tools' ? 'office-container' : 'transform-container';
             const targetContainer = document.getElementById(containerID);
 
             if (targetContainer) {
-                // تنظيف الحاوية لضمان عدم التكرار وبناء الهيكل الجديد
+                // 1. تنظيف الحاوية بالكامل لنبدأ من الصفر
                 targetContainer.innerHTML = '';
-                targetContainer.className = 'solar-system-container'; // كلاس جديد للحاوية
+                targetContainer.className = 'solar-system-container'; 
 
-                // 1. إضافة الشمس (عنوان القسم) في المركز
+                // 2. زرع الشمس (عنوان القسم) في المركز
                 const sunHTML = `
                 <div class="sun-star">
                     <div class="sun-content">
@@ -786,19 +788,18 @@ async function loadTools() {
                 </div>`;
                 targetContainer.insertAdjacentHTML('beforeend', sunHTML);
 
-                // 2. إضافة مدار الكواكب
+                // 3. زرع الكواكب (الأدوات) حول الشمس
                 const totalPlanets = groupTools.length;
                 
                 groupTools.forEach((tool, index) => {
-                    const freeTools = groupTools.filter(t => t.pricing.toLowerCase() === 'free');
-                    const premTools = groupTools.filter(t => t.pricing.toLowerCase() === 'premium');
-                    const mainFree = freeTools[0] || tool; 
-                    const mainPrem = premTools[0] || tool;
-                    
                     const specificIcon = toolIcons[tool.name] || 'https://cdn-icons-png.flaticon.com/512/4645/4645286.png';
                     const cleanTitle = tool.name.replace(/\bAI\b/g, '').replace('PDF Magic', 'PDF Editor').replace('Resume Builder', 'CV Builder').trim();
 
-                    // هنا السحر: نمرر رقم الكوكب (index) والعدد الكلي (total) للـ CSS ليحسب مكانه
+                    // تحديد الروابط (الأقمار)
+                    const freeTools = groupTools.filter(t => t.pricing.toLowerCase() === 'free');
+                    const premTools = groupTools.filter(t => t.pricing.toLowerCase() === 'premium');
+                    const mainPrem = premTools[0] || tool;
+
                     const planetHTML = `
                     <div class="orbit-planet" style="--i:${index}; --total:${totalPlanets};">
                         <div class="planet-body">
@@ -808,6 +809,12 @@ async function loadTools() {
                             <div class="hidden-moons">
                                 <a href="${tool.url}" target="_blank" class="moon-action free">Open</a>
                                 <a href="${mainPrem?.url || '#'}" target="_blank" rel="nofollow" class="moon-action prem">Pro</a>
+                                <div class="see-more-trigger">More ▼
+                                    <div class="nebula-dropdown">
+                                        <a href="${tool.url}">More Free</a>
+                                        <a href="${mainPrem?.url}">More Pro</a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>`;
