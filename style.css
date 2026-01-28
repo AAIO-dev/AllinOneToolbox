@@ -2318,6 +2318,11 @@ body.rtl-mode #send-btn {
 .orbit-planet .planet-body {
     animation: counterRotate 60s linear infinite;
 }
+/* الحل السحري لصراع الطبقات */
+.orbit-planet:hover {
+    /* بمجرد لمس الكوكب، نرفعه لطبقة عالية جداً فوق جيرانه */
+    z-index: 1000 !important; 
+}
 
 @keyframes counterRotate {
     from { transform: rotate(0deg); }
