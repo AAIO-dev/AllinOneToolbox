@@ -2419,11 +2419,13 @@ body.rtl-mode #send-btn {
     transform: translateX(-50%);
     display: none; 
     background: rgba(15, 15, 20, 0.98);
+    margin-top: 0;
     padding: 12px;
+    padding-top: 15px;
     border-radius: 16px;
     border: 1px solid rgba(255, 255, 255, 0.15);
     min-width: 180px; 
-    z-index: 200;
+    z-index: 100;
     box-shadow: 0 10px 40px rgba(0,0,0,0.8);
 }
 
