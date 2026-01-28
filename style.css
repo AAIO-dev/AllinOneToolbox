@@ -2204,7 +2204,7 @@ body.rtl-mode #send-btn {
 }
 
 /* 2. الشمس */
-/* 2. الشمس (كرة كريستالية ملتهبة) */
+/* 2. الشمس (كرة فضية مركزية) */
 .sun-star {
     position: absolute;
     top: 50%;
@@ -2215,43 +2215,39 @@ body.rtl-mode #send-btn {
     border-radius: 50%;
     z-index: 10;
     
-    /* --- النفخ والتجسيم 3D --- */
-    /* تدرج لوني عميق */
-    background: radial-gradient(circle at 30% 30%, #4c1a57, #000000);
-    
-    /* ظلال معقدة: ظل داخلي للعمق + توهج خارجي */
+    /* --- مظهر الفضة اللامعة --- */
+    background: radial-gradient(circle at 30% 30%, #e0e0e0, #707070); /* تدرج فضي */
     box-shadow: 
-        inset -10px -10px 30px rgba(0, 0, 0, 0.9), /* ظل داخلي سفلي */
-        inset 5px 5px 20px rgba(255, 255, 255, 0.2), /* لمعة علوية */
-        0 0 60px rgba(138, 43, 226, 0.4), /* هالة بنفسجية واسعة */
-        0 0 20px rgba(138, 43, 226, 0.8); /* هالة مركزة */
+        inset -10px -10px 30px rgba(0, 0, 0, 0.8), /* عمق معدني */
+        inset 5px 5px 20px rgba(255, 255, 255, 0.6), /* لمعة قوية */
+        0 0 20px rgba(255, 255, 255, 0.2); /* هالة فضية خفيفة */
         
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    
+    border: 2px solid rgba(255, 255, 255, 0.3); /* حافة فضية */
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden; /* لضمان عدم خروج اللمعة */
+    overflow: hidden;
 }
 
-/* لمعة الزجاج العلوية (Glare) */
+/* لمعة الزجاج العلوية (Glare) للشمس الفضية */
 .sun-star::after {
     content: '';
     position: absolute;
     top: 10%; left: 15%;
     width: 40%; height: 30%;
-    background: radial-gradient(ellipse at center, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 70%);
+    background: radial-gradient(ellipse at center, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
     transform: rotate(-45deg);
     pointer-events: none;
 }
 
+/* لون النص داخل الشمس */
 .sun-content h2 {
-    color: #fff;
+    color: #333; /* لون داكن ليبرز على الفضي */
     font-size: 1.5rem;
     font-weight: 800;
     text-align: center;
     text-transform: uppercase;
-    text-shadow: 0 0 20px rgba(162, 155, 254, 0.6);
+    text-shadow: 0 1px 2px rgba(255,255,255,0.5);
     margin: 0;
 }
 
@@ -2292,22 +2288,22 @@ body.rtl-mode #send-btn {
 }
 
 /* جسم الكوكب */
-/* جسم الكوكب (كرة زجاجية 3D) */
+/* جسم الكوكب (كرة فضية 3D) */
 .planet-body {
     width: 95px;
     height: 95px;
     border-radius: 50%;
     
-    /* خلفية زجاجية داكنة */
-    background: radial-gradient(circle at 30% 30%, #3e3e50, #0a0a10);
+    /* --- مظهر الفضة اللامعة --- */
+    background: radial-gradient(circle at 30% 30%, #d0d0d0, #505050);
     
-    /* تأثيرات التجسيم */
+    /* تأثيرات التجسيم الفضي */
     box-shadow: 
-        inset -5px -5px 15px rgba(0, 0, 0, 0.9), /* ظل العمق */
-        inset 2px 2px 10px rgba(255, 255, 255, 0.2), /* لمعة الحافة */
-        0 10px 20px rgba(0, 0, 0, 0.4); /* ظل السقوط */
+        inset -5px -5px 15px rgba(0, 0, 0, 0.8), /* عمق */
+        inset 2px 2px 10px rgba(255, 255, 255, 0.5), /* لمعة */
+        0 5px 15px rgba(0, 0, 0, 0.3); /* ظل سقوط */
         
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.4);
     
     display: flex;
     flex-direction: column;
@@ -2319,24 +2315,26 @@ body.rtl-mode #send-btn {
     z-index: 5;
 }
 
-/* لمعة الكوكب */
+/* لمعة الكوكب الفضي */
 .planet-body::after {
     content: '';
     position: absolute;
     top: 10%; left: 15%;
     width: 40%; height: 30%;
-    background: radial-gradient(ellipse at center, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+    background: radial-gradient(ellipse at center, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 70%);
     transform: rotate(-45deg);
     pointer-events: none;
 }
 
+/* لون نص اسم الكوكب */
 .planet-label {
     font-size: 0.7rem;
-    color: #ccc;
+    color: #fff; /* أبيض ليبرز على الخلفية الداكنة للموقع */
     font-weight: 700;
     text-align: center;
     max-width: 85px;
-    text-shadow: 0 2px 4px #000;
+    text-shadow: 0 2px 4px #000; /* ظل أسود قوي */
+    margin-top: 5px; /* مسافة صغيرة */
 }
 
 /* التفاعل عند التحويم (يكبر ويضيء) */
@@ -2516,3 +2514,70 @@ body.rtl-mode #send-btn {
 
 .free-text { color: #00aaff; text-shadow: 0 0 5px rgba(0, 170, 255, 0.5); }
 .prem-text { color: #ffaa00; text-shadow: 0 0 5px rgba(255, 170, 0, 0.5); }
+/* ==================== 🌟 كلاسات الوهج الملون (Glow Effects) 🌟 ==================== */
+
+/* 1. توهج القسم الإبداعي (Creative & Tech) - بنفسجي #6f42c1 */
+.creative-glow {
+    /* توهج للحواف + هالة خارجية قوية */
+    box-shadow: 
+        inset -10px -10px 30px rgba(0, 0, 0, 0.8), 
+        inset 5px 5px 20px rgba(255, 255, 255, 0.6),
+        0 0 30px rgba(111, 66, 193, 0.6), /* هالة واسعة */
+        0 0 10px rgba(111, 66, 193, 1) !important; /* حافة مركزة */
+    border-color: rgba(111, 66, 193, 0.8) !important; /* لون الحدود */
+}
+
+/* 2. توهج قسم المكاتب (Professional Office) - أزرق فولاذي #4682b4 */
+.office-glow {
+    box-shadow: 
+        inset -10px -10px 30px rgba(0, 0, 0, 0.8), 
+        inset 5px 5px 20px rgba(255, 255, 255, 0.6),
+        0 0 30px rgba(70, 130, 180, 0.6), 
+        0 0 10px rgba(70, 130, 180, 1) !important;
+    border-color: rgba(70, 130, 180, 0.8) !important;
+}
+
+/* 3. توهج قسم الميديا (Media Transform) - تركواز #00ced1 */
+.media-glow {
+    box-shadow: 
+        inset -10px -10px 30px rgba(0, 0, 0, 0.8), 
+        inset 5px 5px 20px rgba(255, 255, 255, 0.6),
+        0 0 30px rgba(0, 206, 209, 0.6), 
+        0 0 10px rgba(0, 206, 209, 1) !important;
+    border-color: rgba(0, 206, 209, 0.8) !important;
+}
+
+/* --- تطبيق الوهج على الكواكب عند التحويم (Hover) --- */
+
+/* عند مرور الماوس على كوكب في القسم الإبداعي */
+.creative-container .planet-body:hover {
+    transform: scale(1.15) translateY(-5px);
+    /* تطبيق توهج بنفسجي */
+    box-shadow: 
+        inset -5px -5px 20px rgba(0, 0, 0, 0.9),
+        0 0 40px rgba(111, 66, 193, 0.8),
+        0 0 15px rgba(111, 66, 193, 1) !important;
+    border-color: #6f42c1 !important;
+}
+
+/* عند مرور الماوس على كوكب في قسم المكاتب */
+.office-container .planet-body:hover {
+    transform: scale(1.15) translateY(-5px);
+    /* تطبيق توهج أزرق */
+    box-shadow: 
+        inset -5px -5px 20px rgba(0, 0, 0, 0.9),
+        0 0 40px rgba(70, 130, 180, 0.8),
+        0 0 15px rgba(70, 130, 180, 1) !important;
+    border-color: #4682b4 !important;
+}
+
+/* عند مرور الماوس على كوكب في قسم الميديا */
+.transform-container .planet-body:hover {
+    transform: scale(1.15) translateY(-5px);
+    /* تطبيق توهج تركواز */
+    box-shadow: 
+        inset -5px -5px 20px rgba(0, 0, 0, 0.9),
+        0 0 40px rgba(0, 206, 209, 0.8),
+        0 0 15px rgba(0, 206, 209, 1) !important;
+    border-color: #00ced1 !important;
+}
