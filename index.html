@@ -934,5 +934,50 @@ meteor.style.animationDuration = duration + 's';
     });
 </script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const systems = document.querySelectorAll('.solar-system-container');
+
+        systems.forEach(container => {
+            let isDown = false;
+            let startX;
+            let currentRotation = 0; // زاوية الدوران الحالية
+            let lastRotation = 0;    // لحفظ آخر زاوية عند ترك الماوس
+
+            // عند ضغط الماوس
+            container.addEventListener('mousedown', (e) => {
+                isDown = true;
+                startX = e.pageX; // تسجيل نقطة البداية
+                container.style.transition = 'none'; // إلغاء التنعيم لجعل الاستجابة فورية
+            });
+
+            // عند ترك الماوس أو الخروج من العنصر
+            const stopDragging = () => {
+                if (!isDown) return;
+                isDown = false;
+                lastRotation = currentRotation; // حفظ المكان الذي وصلنا له
+                container.style.transition = 'transform 0.5s ease-out'; // إضافة نعومة عند التوقف
+            };
+
+            container.addEventListener('mouseleave', stopDragging);
+            container.addEventListener('mouseup', stopDragging);
+
+            // عند تحريك الماوس
+            container.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                
+                const x = e.pageX;
+                const walk = (x - startX) * 0.5; // سرعة الدوران (0.5 تعني سرعة متوسطة)
+                
+                currentRotation = lastRotation + walk;
+                
+                // تدوير الحاوية بالكامل
+                container.style.transform = `rotate(${currentRotation}deg)`;
+            });
+        });
+    });
+</script>
+
 </body>
 </html>
