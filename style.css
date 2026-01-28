@@ -2342,23 +2342,14 @@ body.rtl-mode #send-btn {
 }
 
 /* لون نص اسم الكوكب */
-/* النص أسفل الأيقونة */
 .planet-label {
-    margin-top: 5px;
-    font-size: 0.85rem;
-    
-    /* 👇 هنا التغيير: اللون أسود داكن ليكون واضحاً على الفضي */
-    color: #000000 !important; 
-    
-    /* يفضل جعل الخط أسمك قليلاً ليكون أوضح */
-    font-weight: 600; 
-    
-    /* (اختياري) إضافة ظل أبيض خفيف جداً حول النص ليفصله عن الخلفية لو كانت فيها تفاصيل */
-    text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.4); 
-
+    font-size: 0.7rem;
+    color: #000000 !important;
+    font-weight: 700;
     text-align: center;
-    transition: all 0.3s ease;
-    z-index: 6;
+    max-width: 85px;
+    text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.4);
+    margin-top: 5px; /* مسافة صغيرة */
 }
 
 /* التفاعل عند التحويم (يكبر ويضيء) */
