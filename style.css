@@ -2097,8 +2097,8 @@ body.rtl-mode #send-btn {
     border: none !important;
     box-shadow: none !important;
     
-   /* 👇 هذا السطر يحول الصورة للأسود تماماً مع شفافية بسيطة للاندماج */
-    filter: brightness(0) opacity(0.85) !important;
+   /* 👇 التعديل هنا: تفتيح قوي + لمعة بيضاء مشعة 👇 */
+    filter: grayscale(100%) brightness(200%) drop-shadow(0 0 8px rgba(255,255,255,0.8)) !important;
     
     opacity: 0.95; /* زيادة الشفافية قليلاً لتبرز */
     transition: transform 5s linear, filter 0.3s ease !important;
@@ -2342,14 +2342,23 @@ body.rtl-mode #send-btn {
 }
 
 /* لون نص اسم الكوكب */
+/* النص أسفل الأيقونة */
 .planet-label {
-    font-size: 0.7rem;
-    color: #fff; /* أبيض ليبرز على الخلفية الداكنة للموقع */
-    font-weight: 700;
+    margin-top: 5px;
+    font-size: 0.85rem;
+    
+    /* 👇 هنا التغيير: اللون أسود داكن ليكون واضحاً على الفضي */
+    color: #000000 !important; 
+    
+    /* يفضل جعل الخط أسمك قليلاً ليكون أوضح */
+    font-weight: 600; 
+    
+    /* (اختياري) إضافة ظل أبيض خفيف جداً حول النص ليفصله عن الخلفية لو كانت فيها تفاصيل */
+    text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.4); 
+
     text-align: center;
-    max-width: 85px;
-    text-shadow: 0 2px 4px #000; /* ظل أسود قوي */
-    margin-top: 5px; /* مسافة صغيرة */
+    transition: all 0.3s ease;
+    z-index: 6;
 }
 
 /* التفاعل عند التحويم (يكبر ويضيء) */
