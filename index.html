@@ -901,49 +901,84 @@ async function loadTools() {
     initRotationControl();
 }
 
-// 👇 2. أضفنا دالة الدوران الجديدة هنا (خارج دالة loadTools)
+// دالة التحكم الذكي بالكواكب (نظام العجلة)
 function initRotationControl() {
-    const containers = document.querySelectorAll('.solar-system-container');
+    const systems = document.querySelectorAll('.solar-system-container');
 
-    containers.forEach(container => {
+    systems.forEach(container => {
+        const ring = container.querySelector('.planets-ring');
+        // نجمع كل الكواكب الموجودة داخل الحلقة
+        const planets = ring.querySelectorAll('.planet-item'); 
+        
+        // 1. نلغي الأنيميشن التلقائي من الـ CSS لنسيطر عليه بالجافاسكربت
+        ring.style.animation = 'none';
+
+        // المتغيرات
+        let currentAngle = 0;       // الزاوية الحالية
+        let autoSpeed = 0.2;        // سرعة الدوران التلقائي الأساسية
+        let dragSpeed = 0;          // السرعة الإضافية عند السحب
         let isDown = false;
         let startX;
-        let currentRotation = 0; // لحفظ زاوية الدوران الحالية
+        let lastX;
 
-        // عند ضغط الماوس (إمساك الكوكب)
+        // حلقة التحريك المستمر (Game Loop)
+        function animate() {
+            // المعادلة: الزاوية = القديمة + السرعة التلقائية + سرعة السحب
+            currentAngle += autoSpeed + dragSpeed;
+            
+            // 1. تدوير الحلقة (المسار)
+            ring.style.transform = `translate(-50%, -50%) rotate(${currentAngle}deg)`;
+
+            // 2. تدوير الكواكب "عكس الاتجاه" لتبقى ثابتة ومقروءة
+            planets.forEach(planet => {
+                // نحافظ على أبعاد الكوكب ونقوم بتدويره عكس الحلقة
+                // ملاحظة: نستخدم المتغير الموجود في الستايل لحساب مكان الكوكب إذا وجد
+                const planetIndex = getComputedStyle(planet).getPropertyValue('--i') || 0;
+                
+                // هنا السر: تدوير معاكس (-currentAngle)
+                planet.style.transform = `rotate(${-currentAngle}deg)`;
+                
+                // *توضيح:* الكواكب موزعة بـ left/top لذا التدوير في مكانها يكفي لتصحيح النص
+            });
+
+            // تقليل سرعة السحب تدريجياً (Inertia) لتعود للسرعة الطبيعية
+            dragSpeed *= 0.95; 
+
+            requestAnimationFrame(animate);
+        }
+        
+        // تشغيل المحرك
+        animate();
+
+        // --- أحداث الماوس (التحكم) ---
+
         container.addEventListener('mousedown', (e) => {
             isDown = true;
             startX = e.pageX;
+            lastX = startX;
             container.style.cursor = 'grabbing';
-            container.style.transition = 'none'; // إيقاف النعومة لجعل الاستجابة فورية
         });
 
-        // عند ترك الماوس
         const stopDragging = () => {
-            if (!isDown) return;
             isDown = false;
             container.style.cursor = 'grab';
-            container.style.transition = 'transform 0.5s ease-out'; // إعادة النعومة عند التوقف
         };
 
         container.addEventListener('mouseleave', stopDragging);
-        container.addEventListener('mouseup', (e) => {
-            if(isDown) {
-                // حفظ الزاوية الجديدة كي لا يعود للصفر عند السحب القادم
-                const x = e.pageX;
-                const walk = (x - startX) * 0.5;
-                currentRotation += walk;
-                stopDragging();
-            }
-        });
+        container.addEventListener('mouseup', stopDragging);
 
-        // عند التحريك
         container.addEventListener('mousemove', (e) => {
             if (!isDown) return;
             e.preventDefault();
+            
             const x = e.pageX;
-            const walk = (x - startX) * 0.5; // سرعة الدوران
-            container.style.transform = `rotate(${currentRotation + walk}deg)`;
+            const delta = x - lastX; // الفرق بين الحركة الحالية والسابقة
+            
+            // تحديد سرعة واتجاه الدوران بناء على حركة الماوس
+            // الرقم 0.1 يتحكم بحساسية الماوس
+            dragSpeed = delta * 0.1; 
+            
+            lastX = x;
         });
     });
 }
