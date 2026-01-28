@@ -2400,7 +2400,7 @@ body.rtl-mode #send-btn {
     width: 80px; 
 }
 
-/* الأزرار الرئيسية */
+/* الأزرار (كبسولات زجاجية) */
 .moon-action {
     display: flex;
     align-items: center;
@@ -2410,15 +2410,51 @@ body.rtl-mode #send-btn {
     font-size: 0.75rem;
     color: #fff !important; 
     text-decoration: none !important;
-    border-radius: 6px;
+    border-radius: 20px; /* تدوير كامل للحواف */
     font-weight: bold;
     margin-bottom: 5px;
-    transition: 0.2s;
-    white-space: nowrap;      /* يمنع النص من النزول لسطر ثاني */
-   }
+    transition: 0.3s;
+    white-space: nowrap;
+    position: relative;
+    border: none;
+    overflow: hidden;
+    
+    /* ظل خفيف للنص */
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    
+    /* تأثير الزجاج العام */
+    box-shadow: 
+        inset 0 -3px 5px rgba(0,0,0,0.3), /* عمق */
+        inset 0 2px 5px rgba(255,255,255,0.3), /* لمعة */
+        0 3px 5px rgba(0,0,0,0.2); /* ظل خارجي */
+}
 
-.moon-action.free { background: rgba(0, 170, 255, 0.2); border: 1px solid rgba(0, 170, 255, 0.5); }
-.moon-action.prem { background: rgba(255, 170, 0, 0.2); border: 1px solid rgba(255, 170, 0, 0.5); }
+/* لمعة علوية ثابتة للزر */
+.moon-action::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 50%;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.2), rgba(255,255,255,0));
+    pointer-events: none;
+}
+
+/* ألوان زجاجية للأزرق */
+.moon-action.free {
+    background: linear-gradient(180deg, #4facfe 0%, #00f2fe 100%);
+    box-shadow: 0 4px 10px rgba(0, 170, 255, 0.3);
+}
+
+/* ألوان زجاجية للذهبي */
+.moon-action.prem {
+    background: linear-gradient(180deg, #f09819 0%, #edde5d 100%);
+    box-shadow: 0 4px 10px rgba(255, 170, 0, 0.3);
+}
+
+/* تأثير الضغط */
+.moon-action:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
 .empty-slot { color: #555; font-size: 10px; padding: 5px; } /* للخانات الفارغة */
 
 /* زر المزيد (+ More) */
