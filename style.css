@@ -2088,8 +2088,8 @@ body.rtl-mode #send-btn {
 
 /* 5. سطح الكوكب (الأيقونة) */
 .planet-icon {
-    width: 50px !important;
-    height: 50px !important;
+    width: 60pximportant;
+    height: 60pximportant;
     object-fit: contain !important;
     margin: 0 !important;
     padding: 0 !important;
