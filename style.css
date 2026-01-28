@@ -2730,45 +2730,8 @@ html, body {
     box-sizing: border-box;
 }
 
-@media screen and (max-width: 768px) {
-    /* 1. السطر المنقذ: التأكد من أن الحاوية الأم لا تتقلص وتخرب الـ scale */
-    .solar-system-container {
-        display: block !important;
-        width: 100vw !important; /* إجبارها على أخذ عرض الشاشة بالكامل */
-        position: relative !important;
-        min-height: 450px !important; /* مساحة كافية للدوران */
-    }
 
-    /* 2. كودك الناجح حرفياً كما هو */
-    .solar-system-container {
-        transform: scale(0.60) !important;
-        transform-origin: center center !important;
-        margin-top: 10px !important; 
-        margin-bottom: -100px !important; 
-    }
-
-    .sun-star {
-        margin: 0 auto !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        padding-top: 40px !important; 
-    }
-
-    .sun-star span, .sun-star div {
-        transform: translateY(15px) !important;
-    }
-}
-
-
-
-
-
-
-
-
-
-/*   
+   
 @media screen and (max-width: 768px) {
 
     
@@ -2823,5 +2786,40 @@ html, body {
         .planets-orbit-ring * {
         animation: none !important;
         transform: none !important;
+    }
+}
+
+
+
+
+
+/*
+@media screen and (max-width: 768px) {
+  
+    .solar-system-container {
+        display: block !important;
+        width: 100vw !important; 
+        position: relative !important;
+        min-height: 450px !important; 
+    }
+
+   
+    .solar-system-container {
+        transform: scale(0.60) !important;
+        transform-origin: center center !important;
+        margin-top: 10px !important; 
+        margin-bottom: -100px !important; 
+    }
+
+    .sun-star {
+        margin: 0 auto !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding-top: 40px !important; 
+    }
+
+    .sun-star span, .sun-star div {
+        transform: translateY(15px) !important;
     }
 }*/
