@@ -2527,57 +2527,87 @@ body.rtl-mode #send-btn {
     border-color: rgba(111, 66, 193, 0.8) !important; /* لون الحدود */
 }
 
-/* 2. توهج قسم المكاتب (Professional Office) - أزرق فولاذي #4682b4 */
+/* ==================== 🌟 كلاسات الوهج الملون المعدلة (Boosted Glow Effects) 🌟 ==================== */
+
+/* ----- أولاً: زيادة قوة الوهج للشموس الرئيسية ----- */
+
+/* 1. توهج الشمس الإبداعية (Creative - بنفسجي) */
+.creative-glow {
+    box-shadow: 
+        inset -10px -10px 30px rgba(0, 0, 0, 0.8), 
+        inset 5px 5px 20px rgba(255, 255, 255, 0.6),
+        0 0 50px rgba(111, 66, 193, 0.7), /* زيادة الهالة الواسعة */
+        0 0 20px rgba(111, 66, 193, 1) !important; /* زيادة الحافة المركزة */
+    border-color: rgba(111, 66, 193, 1) !important;
+}
+
+/* 2. توهج شمس المكاتب (Office - أزرق فولاذي) */
 .office-glow {
     box-shadow: 
         inset -10px -10px 30px rgba(0, 0, 0, 0.8), 
         inset 5px 5px 20px rgba(255, 255, 255, 0.6),
-        0 0 30px rgba(70, 130, 180, 0.6), 
-        0 0 10px rgba(70, 130, 180, 1) !important;
-    border-color: rgba(70, 130, 180, 0.8) !important;
+        0 0 50px rgba(70, 130, 180, 0.7), 
+        0 0 20px rgba(70, 130, 180, 1) !important;
+    border-color: rgba(70, 130, 180, 1) !important;
 }
 
-/* 3. توهج قسم الميديا (Media Transform) - تركواز #00ced1 */
+/* 3. توهج شمس الميديا (Media - تركواز) */
 .media-glow {
     box-shadow: 
         inset -10px -10px 30px rgba(0, 0, 0, 0.8), 
         inset 5px 5px 20px rgba(255, 255, 255, 0.6),
-        0 0 30px rgba(0, 206, 209, 0.6), 
-        0 0 10px rgba(0, 206, 209, 1) !important;
-    border-color: rgba(0, 206, 209, 0.8) !important;
+        0 0 50px rgba(0, 206, 209, 0.7), 
+        0 0 20px rgba(0, 206, 209, 1) !important;
+    border-color: rgba(0, 206, 209, 1) !important;
 }
 
-/* --- تطبيق الوهج على الكواكب عند التحويم (Hover) --- */
 
-/* عند مرور الماوس على كوكب في القسم الإبداعي */
+/* ----- ثانياً: تطبيق الوهج الملون على الأيقونات حسب القسم ----- */
+
+/* أيقونات القسم الإبداعي (بنفسجي) */
+.creative-container .planet-body {
+    box-shadow: 
+        inset -5px -5px 15px rgba(0, 0, 0, 0.8), /* الحفاظ على العمق الفضي */
+        inset 2px 2px 10px rgba(255, 255, 255, 0.5), /* الحفاظ على اللمعة الفضية */
+        0 0 30px rgba(111, 66, 193, 0.6), /* إضافة هالة بنفسجية */
+        0 0 10px rgba(111, 66, 193, 0.9) !important; /* حافة بنفسجية */
+    border-color: rgba(111, 66, 193, 0.7) !important;
+}
+
+/* أيقونات قسم المكاتب (أزرق) */
+.office-container .planet-body {
+    box-shadow: 
+        inset -5px -5px 15px rgba(0, 0, 0, 0.8),
+        inset 2px 2px 10px rgba(255, 255, 255, 0.5),
+        0 0 30px rgba(70, 130, 180, 0.6), /* إضافة هالة زرقاء */
+        0 0 10px rgba(70, 130, 180, 0.9) !important;
+    border-color: rgba(70, 130, 180, 0.7) !important;
+}
+
+/* أيقونات قسم الميديا (تركواز) */
+.transform-container .planet-body {
+    box-shadow: 
+        inset -5px -5px 15px rgba(0, 0, 0, 0.8),
+        inset 2px 2px 10px rgba(255, 255, 255, 0.5),
+        0 0 30px rgba(0, 206, 209, 0.6), /* إضافة هالة تركواز */
+        0 0 10px rgba(0, 206, 209, 0.9) !important;
+    border-color: rgba(0, 206, 209, 0.7) !important;
+}
+
+
+/* ----- ثالثاً: زيادة التوهج عند مرور الماوس (Hover) ----- */
+
 .creative-container .planet-body:hover {
     transform: scale(1.15) translateY(-5px);
-    /* تطبيق توهج بنفسجي */
-    box-shadow: 
-        inset -5px -5px 20px rgba(0, 0, 0, 0.9),
-        0 0 40px rgba(111, 66, 193, 0.8),
-        0 0 15px rgba(111, 66, 193, 1) !important;
-    border-color: #6f42c1 !important;
+    box-shadow: inset -5px -5px 20px rgba(0, 0, 0, 0.9), 0 0 50px rgba(111, 66, 193, 0.9), 0 0 20px rgba(111, 66, 193, 1) !important;
 }
 
-/* عند مرور الماوس على كوكب في قسم المكاتب */
 .office-container .planet-body:hover {
     transform: scale(1.15) translateY(-5px);
-    /* تطبيق توهج أزرق */
-    box-shadow: 
-        inset -5px -5px 20px rgba(0, 0, 0, 0.9),
-        0 0 40px rgba(70, 130, 180, 0.8),
-        0 0 15px rgba(70, 130, 180, 1) !important;
-    border-color: #4682b4 !important;
+    box-shadow: inset -5px -5px 20px rgba(0, 0, 0, 0.9), 0 0 50px rgba(70, 130, 180, 0.9), 0 0 20px rgba(70, 130, 180, 1) !important;
 }
 
-/* عند مرور الماوس على كوكب في قسم الميديا */
 .transform-container .planet-body:hover {
     transform: scale(1.15) translateY(-5px);
-    /* تطبيق توهج تركواز */
-    box-shadow: 
-        inset -5px -5px 20px rgba(0, 0, 0, 0.9),
-        0 0 40px rgba(0, 206, 209, 0.8),
-        0 0 15px rgba(0, 206, 209, 1) !important;
-    border-color: #00ced1 !important;
+    box-shadow: inset -5px -5px 20px rgba(0, 0, 0, 0.9), 0 0 50px rgba(0, 206, 209, 0.9), 0 0 20px rgba(0, 206, 209, 1) !important;
 }
