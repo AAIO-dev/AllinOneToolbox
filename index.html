@@ -788,20 +788,23 @@ async function loadTools() {
 
         // الرسم
         for (const [sectionName, subCategories] of Object.entries(organizedData)) {
-            const targetContainer = containers[sectionName];
-            
-            if (targetContainer) {
-                targetContainer.innerHTML = '';
-                targetContainer.className = 'solar-system-container';
+    const targetContainer = containers[sectionName];
+    
+    if (targetContainer) {
+        // تحديد كلاس الوهج المناسب بناءً على اسم القسم
+        let glowClass = '';
+        if (sectionName === 'Creative & Tech Tools') glowClass = 'creative-glow';
+        else if (sectionName === 'Professional Office Tools') glowClass = 'office-glow';
+        else if (sectionName === 'Media Transform Tools') glowClass = 'media-glow';
 
-                targetContainer.insertAdjacentHTML('beforeend', `
-                <div class="sun-star">
-                    <div class="sun-content"><h2>${sectionName.replace('Tools', '')}</h2></div>
-                </div>`);
+        targetContainer.innerHTML = '';
+        // إضافة كلاس الوهج (glowClass) إلى حاوية النظام الشمسي لتمييز القسم
+        targetContainer.className = `solar-system-container ${sectionName.replace(' Tools', '').toLowerCase()}-container`;
 
-                const planetsRing = document.createElement('div');
-                planetsRing.className = 'planets-orbit-ring';
-                targetContainer.appendChild(planetsRing);
+        // إضافة كلاس الوهج (glowClass) للشمس المركزية
+        targetContainer.insertAdjacentHTML('beforeend', `
+        <div class="sun-star ${glowClass}">  <div class="sun-content"><h2>${sectionName.replace('Tools', '')}</h2></div>
+        </div>`);
 
                 const planetKeys = Object.keys(subCategories);
                 const totalPlanets = planetKeys.length;
