@@ -2729,12 +2729,49 @@ html, body {
     width: 100%;
     box-sizing: border-box;
 }
-/* =========================================
-   إعادة الكواكب لمكانها الصحيح في الجوال
-   ========================================= */
+
+@media screen and (max-width: 768px) {
+    /* 1. السطر المنقذ: التأكد من أن الحاوية الأم لا تتقلص وتخرب الـ scale */
+    .solar-system-container {
+        display: block !important;
+        width: 100vw !important; /* إجبارها على أخذ عرض الشاشة بالكامل */
+        position: relative !important;
+        min-height: 450px !important; /* مساحة كافية للدوران */
+    }
+
+    /* 2. كودك الناجح حرفياً كما هو */
+    .solar-system-container {
+        transform: scale(0.60) !important;
+        transform-origin: center center !important;
+        margin-top: 10px !important; 
+        margin-bottom: -100px !important; 
+    }
+
+    .sun-star {
+        margin: 0 auto !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding-top: 40px !important; 
+    }
+
+    .sun-star span, .sun-star div {
+        transform: translateY(15px) !important;
+    }
+}
+
+
+
+
+
+
+
+
+
+/*   
 @media screen and (max-width: 768px) {
 
-    /* 1. توسيط الشمس */
+    
     .sun-star {
         zoom: 0.70;
         margin: 40px auto 30px auto !important;
@@ -2744,30 +2781,30 @@ html, body {
         right: 0 !important;
     }
 
-    /* 2. تحويل المدار إلى "مغناطيس" تحت الشمس */
+    
     .planets-orbit-ring {
         width: 100% !important;
         height: auto !important;
         min-height: 100px;
         border: none !important;
         display: flex !important;
-        flex-direction: row !important; /* صف أفقي */
-        flex-wrap: wrap !important;     /* ينزل لسطر جديد إذا ضاق المكان */
-        justify-content: center !important; /* التوسيط هو الأهم هنا */
+        flex-direction: row !important; 
+        flex-wrap: wrap !important;    
+        justify-content: center !important; 
         align-items: center !important;
         gap: 20px !important;
         position: relative !important;
-        inset: 0 !important; /* يصفر كل الإزاحات (Top/Left/etc) */
+        inset: 0 !important; 
         transform: none !important;
         animation: none !important;
     }
 
-    /* 3. إجبار الكواكب على ترك أماكنها القديمة */
+   
     .orbit-planet {
-        position: relative !important; /* يجعلها تتبع نظام الـ Flex الجديد */
-        inset: auto !important;        /* يلغي Top و Left القديمة */
-        transform: none !important;    /* يلغي الدوران */
-        width: 80px !important;        /* حجم ثابت ومناسب للجوال */
+        position: relative !important; 
+        inset: auto !important;        
+        transform: none !important;    
+        width: 80px !important;        
         height: 80px !important;
         margin: 10px !important;
         display: flex !important;
@@ -2775,7 +2812,7 @@ html, body {
         align-items: center;
     }
 
-    /* 4. تصغير الكوكب نفسه */
+    
     .planet-body {
         zoom: 0.75;
         position: relative !important;
@@ -2783,9 +2820,8 @@ html, body {
         transform: none !important;
     }
 
-    /* 5. إلغاء أي دوران للجافاسكربت في الجوال */
-    .planets-orbit-ring * {
+        .planets-orbit-ring * {
         animation: none !important;
         transform: none !important;
     }
-}
+}*/
