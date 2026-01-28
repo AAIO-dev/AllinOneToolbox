@@ -909,64 +909,84 @@ async function loadTools() {
 
 // دالة التحكم الذكي بالكواكب (نظام العجلة)
 function initRotationControl() {
-    const systems = document.querySelectorAll('.solar-system-container');
+    // 1. نبحث عن أي كوكب موجود في الصفحة
+    const samplePlanet = document.querySelector('.orbit-planet');
+    
+    // إذا لم نجد كواكب، نوقف الدالة فوراً لتجنب الأخطاء
+    if (!samplePlanet) return; 
 
-    systems.forEach(container => {
-        const ring = container.querySelector('.planets-ring');
+    // 2. نمسك بـ "الحلقة" (وهي العنصر الأب للكواكب)
+    const ring = samplePlanet.parentElement;
+    
+    // 3. نمسك بالحاوية الكبيرة (للتحكم بالماوس)
+    const container = ring.parentElement;
+
+    // 4. نحدد الغلاف الداخلي للكواكب (لتثبيت اتجاهها)
+    const planetsInner = document.querySelectorAll('.planet-inner');
+
+    // --- إعدادات الحركة ---
+    // نوقف أنيميشن CSS فوراً لنسيطر نحن بالجافاسكربت
+    ring.style.animation = 'none'; 
+    
+    let currentAngle = 0;
+    let autoSpeed = 0.2; // سرعة الدوران التلقائي
+    let dragSpeed = 0;
+    let isDown = false;
+    let startX;
+    let lastX;
+
+    function animate() {
+        // المعادلة: الزاوية الحالية + السرعة التلقائية + سرعة يدك
+        currentAngle += autoSpeed + dragSpeed;
         
-        // 👇 التغيير هنا: نستهدف الغلاف الداخلي الجديد
-        const planetsInner = ring.querySelectorAll('.planet-inner'); 
+        // أ. تدوير الحلقة (الحاوية التي تحمل الكواكب)
+        ring.style.transform = `translate(-50%, -50%) rotate(${currentAngle}deg)`;
 
-        ring.style.animation = 'none';
-
-        let currentAngle = 0;
-        let autoSpeed = 0.2; // السرعة التلقائية
-        let dragSpeed = 0;
-        let isDown = false;
-        let startX;
-        let lastX;
-
-        function animate() {
-            currentAngle += autoSpeed + dragSpeed;
-            
-            // 1. تدوير الحلقة الكبيرة
-            ring.style.transform = `translate(-50%, -50%) rotate(${currentAngle}deg)`;
-
-            // 2. تدوير الكواكب "الداخلية" عكس الاتجاه لتبقى واقفة
-            planetsInner.forEach(planet => {
-                planet.style.transform = `rotate(${-currentAngle}deg)`;
-            });
-
-            dragSpeed *= 0.95; 
-            requestAnimationFrame(animate);
-        }
-        
-        animate();
-
-        // --- التحكم بالماوس ---
-        container.addEventListener('mousedown', (e) => {
-            isDown = true;
-            startX = e.pageX;
-            lastX = startX;
-            container.style.cursor = 'grabbing';
+        // ب. تدوير الكواكب الداخلية "عكس الاتجاه" لتبقى واقفة وثابتة
+        planetsInner.forEach(inner => {
+            inner.style.transform = `rotate(${-currentAngle}deg)`;
         });
 
-        const stopDragging = () => {
-            isDown = false;
-            container.style.cursor = 'grab';
-        };
+        // تخفيف سرعة السحب تدريجياً (Inertia)
+        dragSpeed *= 0.95; 
+        
+        requestAnimationFrame(animate);
+    }
+    
+    // تشغيل المحرك
+    animate();
 
-        container.addEventListener('mouseleave', stopDragging);
-        container.addEventListener('mouseup', stopDragging);
+    // --- أحداث الماوس (على الحاوية الكبيرة) ---
+    container.addEventListener('mousedown', (e) => {
+        isDown = true;
+        startX = e.pageX;
+        lastX = startX;
+        container.style.cursor = 'grabbing';
+        
+        // (اختياري) إيقاف السرعة التلقائية مؤقتاً أثناء السحب للتحكم الدقيق
+        // autoSpeed = 0; 
+    });
 
-        container.addEventListener('mousemove', (e) => {
-            if (!isDown) return;
-            e.preventDefault();
-            const x = e.pageX;
-            const delta = x - lastX;
-            dragSpeed = delta * 0.1; // حساسية السحب
-            lastX = x;
-        });
+    const stopDragging = () => {
+        isDown = false;
+        container.style.cursor = 'grab';
+        // autoSpeed = 0.2; // إعادة السرعة التلقائية
+    };
+
+    container.addEventListener('mouseleave', stopDragging);
+    container.addEventListener('mouseup', stopDragging);
+
+    container.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        
+        const x = e.pageX;
+        const delta = x - lastX;
+        
+        // معادلة السرعة: الفرق في المسافة * الحساسية
+        dragSpeed = delta * 0.15; 
+        
+        lastX = x;
     });
 }
 
