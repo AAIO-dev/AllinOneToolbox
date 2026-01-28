@@ -2236,6 +2236,15 @@ body.rtl-mode #send-btn {
     justify-content: center;
     align-items: center;
     overflow: hidden;
+    animation: sun-float 8s linear infinite;
+}
+/* تعريف حركة الطفو الدائري (Floating Orbit) */
+@keyframes sun-float {
+    0% { transform: translate(-50%, -50%) translate(0px, 5px); }    /* أسفل */
+    25% { transform: translate(-50%, -50%) translate(5px, 0px); }   /* يمين */
+    50% { transform: translate(-50%, -50%) translate(0px, -5px); }  /* أعلى */
+    75% { transform: translate(-50%, -50%) translate(-5px, 0px); }  /* يسار */
+    100% { transform: translate(-50%, -50%) translate(0px, 5px); }  /* عودة للبداية */
 }
 
 /* لمعة الانعكاس الزجاجي (Glare) - أكثر حدة */
