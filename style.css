@@ -2097,8 +2097,8 @@ body.rtl-mode #send-btn {
     border: none !important;
     box-shadow: none !important;
     
-   /* 👇 التعديل هنا: تفتيح قوي + لمعة بيضاء مشعة 👇 */
-    filter: grayscale(100%) brightness(200%) drop-shadow(0 0 8px rgba(255,255,255,0.8)) !important;
+   /* 👇 هذا السطر يحول الصورة للأسود تماماً مع شفافية بسيطة للاندماج */
+    filter: brightness(0) opacity(0.85) !important;
     
     opacity: 0.95; /* زيادة الشفافية قليلاً لتبرز */
     transition: transform 5s linear, filter 0.3s ease !important;
