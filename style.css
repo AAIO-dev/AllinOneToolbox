@@ -2428,6 +2428,26 @@ body.rtl-mode #send-btn {
     z-index: 100;
     box-shadow: 0 10px 40px rgba(0,0,0,0.8);
 }
+/* إنشاء طبقة حماية شفافة فوق الصندوق */
+.hidden-moons::before {
+    content: '';
+    position: absolute;
+    
+    /* يمتد للأعلى باتجاه الكرة */
+    top: -40px; 
+    
+    left: 0;
+    width: 100%;
+    
+    /* ارتفاع الجسر (يجب أن يغطي المسافة بين الصندوق والكرة) */
+    height: 40px; 
+    
+    background: transparent; /* شفاف لكي لا يرى */
+    /* background: rgba(255, 0, 0, 0.3); */ /* 👈 فعل هذا السطر مؤقتاً لو أردت رؤية الجسر بعينك للتأكد */
+    
+    display: block;
+    z-index: 1;
+}
 
 .planet-body:hover .hidden-moons { display: block; }
 
