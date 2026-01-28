@@ -2730,28 +2730,62 @@ html, body {
     box-sizing: border-box;
 }
 /* =========================================
-   تنسيقات الهاتف (Mobile Responsive)
+   إعادة الكواكب لمكانها الصحيح في الجوال
    ========================================= */
 @media screen and (max-width: 768px) {
 
-    /* 1. تصغير الشموس (عناوين الأقسام) بنسبة 25% */
-    /* النسبة الأصلية 1.0 - 0.25 = 0.75 */
+    /* 1. توسيط الشمس */
     .sun-star {
-        transform: scale(0.75); /* تصغير الحجم */
-        transform-origin: center; /* التصغير من المركز لكي لا تزاح */
-        margin-bottom: -20px; /* تقليل المسافة السفلية لأن الحجم صغر */
+        zoom: 0.70;
+        margin: 40px auto 30px auto !important;
+        display: flex !important;
+        position: relative !important;
+        left: 0 !important;
+        right: 0 !important;
     }
 
-    /* 2. تصغير الكواكب (الأدوات) بنسبة 15% */
-    /* النسبة الأصلية 1.0 - 0.15 = 0.85 */
+    /* 2. تحويل المدار إلى "مغناطيس" تحت الشمس */
+    .planets-orbit-ring {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 100px;
+        border: none !important;
+        display: flex !important;
+        flex-direction: row !important; /* صف أفقي */
+        flex-wrap: wrap !important;     /* ينزل لسطر جديد إذا ضاق المكان */
+        justify-content: center !important; /* التوسيط هو الأهم هنا */
+        align-items: center !important;
+        gap: 20px !important;
+        position: relative !important;
+        inset: 0 !important; /* يصفر كل الإزاحات (Top/Left/etc) */
+        transform: none !important;
+        animation: none !important;
+    }
+
+    /* 3. إجبار الكواكب على ترك أماكنها القديمة */
+    .orbit-planet {
+        position: relative !important; /* يجعلها تتبع نظام الـ Flex الجديد */
+        inset: auto !important;        /* يلغي Top و Left القديمة */
+        transform: none !important;    /* يلغي الدوران */
+        width: 80px !important;        /* حجم ثابت ومناسب للجوال */
+        height: 80px !important;
+        margin: 10px !important;
+        display: flex !important;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* 4. تصغير الكوكب نفسه */
     .planet-body {
-        transform: scale(0.85);
-        transform-origin: center;
+        zoom: 0.75;
+        position: relative !important;
+        inset: 0 !important;
+        transform: none !important;
     }
 
-    /* تحسين إضافي: جعل أسماء الكواكب مقروءة أكثر بعد التصغير */
-    .planet-label {
-        font-size: 14px !important; /* تثبيت حجم الخط لكي لا يصغر جداً */
-        margin-top: 5px;
+    /* 5. إلغاء أي دوران للجافاسكربت في الجوال */
+    .planets-orbit-ring * {
+        animation: none !important;
+        transform: none !important;
     }
 }
