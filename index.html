@@ -17,7 +17,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
 
 </head>
+
 <body ontouchstart="">
+    <div id="global-sky"></div>
 
     <div class="hero-section">
 
@@ -903,7 +905,7 @@ window.onload = loadTools;
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const container = document.querySelector('.hero-section');
+        const container = document.getElementById('global-sky');
         
         // زدنا العدد من 50 إلى 80
         const meteorCount = 80; 
@@ -912,8 +914,17 @@ window.onload = loadTools;
             const meteor = document.createElement('div');
             meteor.classList.add('meteor');
             
-            if (Math.random() > 0.5) {
+            // توليد رقم عشوائي لتحديد اللون
+            const colorRandom = Math.random();
+
+            if (colorRandom < 0.33) {
+                // (33%) يبقى أزرق (الافتراضي)
+            } else if (colorRandom < 0.66) {
+                // (33%) يصبح بنفسجي
                 meteor.classList.add('purple');
+            } else {
+                // (33%) يصبح تركواز (الجديد)
+                meteor.classList.add('turquoise');
             }
 
             // التوزيع المتوازن (من -40% يساراً إلى 100% يميناً)
@@ -980,4 +991,5 @@ meteor.style.animationDuration = duration + 's';
 </script>
 
 </body>
+
 </html>
