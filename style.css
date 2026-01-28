@@ -2201,14 +2201,6 @@ body.rtl-mode #send-btn {
     margin: 0 auto !important;   /* 👈 الإجبار على المنتصف */
     padding: 0 !important;       /* 👈 إزالة أي إزاحة داخلية */
     overflow: visible !important; 
-    /* 👇 أضف هذا لتفعيل مؤشر اليد */
-    cursor: grab; 
-    user-select: none;
-    touch-action: none; /* يمنع تحرك الصفحة عند اللمس ليكون التحكم بالسحب فقط */
-}
-/* شكل اليد وهي ممسكة (عند الضغط) */
-.solar-system-container:active {
-    cursor: grabbing;
 }
 
 /* 2. الشمس */
@@ -2666,12 +2658,4 @@ body.rtl-mode #send-btn {
 .transform-container .planet-body:hover {
     transform: scale(1.15) translateY(-5px);
     box-shadow: inset -5px -5px 20px rgba(0, 0, 0, 0.9), 0 0 50px rgba(0, 206, 209, 0.9), 0 0 20px rgba(0, 206, 209, 1) !important;
-}
-/* تنسيق الغلاف الداخلي الجديد */
-.planet-inner {
-    display: flex;
-    flex-direction: column; /* يرتب الكرة وفوقها النص عمودياً */
-    align-items: center;    /* يوسطهم */
-    justify-content: center;
-    transition: transform 0.1s linear; /* نعومة بسيطة للحركة */
 }

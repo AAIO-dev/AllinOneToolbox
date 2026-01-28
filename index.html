@@ -854,135 +854,48 @@ async function loadTools() {
                     // =========================================================
 
                     const planetHTML = `
-    <div class="orbit-planet" style="--i:${index}; --total:${totalPlanets};">
-        
-        <div class="planet-inner">
+                    <div class="orbit-planet" style="--i:${index}; --total:${totalPlanets};">
+                        <div class="planet-body">
+                            <img src="${iconUrl}" class="planet-icon" alt="${cleanTitle}">
+                            <div class="planet-label">${cleanTitle}</div>
+                            
+                            <div class="hidden-moons">
+                                <div class="moon-split-container">
+                                    
+                                    <div class="moon-col">
+                                        ${mainFree ? `<a href="${mainFree.url}" target="_blank" class="moon-action free">${mainFree ? mainFree.name : 'Free'}</a>` : '<span class="empty-slot">-</span>'}
+                                        <div class="separator-label free-text">Free</div>
+                                        ${extraFree.length > 0 ? `
+                                        <div class="more-trigger">
+                                            + More
+                                            <div class="mini-dropdown free-list">
+                                                ${extraFree.map(l => `<a href="${l.url}" target="_blank">${l.name}</a>`).join('')}
+                                            </div>
+                                        </div>` : ''}
+                                    </div>
 
-            <div class="planet-body">
-                <img src="${iconUrl}" class="planet-icon" alt="${cleanTitle}">
-                <div class="planet-label">${cleanTitle}</div>
-                
-                <div class="hidden-moons">
-                    <div class="moon-split-container">
-                        
-                        <div class="moon-col">
-                            ${mainFree ? `<a href="${mainFree.url}" target="_blank" class="moon-action free">${mainFree ? mainFree.name : 'Free'}</a>` : '<span class="empty-slot">-</span>'}
-                            <div class="separator-label free-text">Free</div>
-                            ${extraFree.length > 0 ? `
-                            <div class="more-trigger">
-                                + More
-                                <div class="mini-dropdown free-list">
-                                    ${extraFree.map(l => `<a href="${l.url}" target="_blank">${l.name}</a>`).join('')}
+                                    <div class="moon-col">
+                                        ${mainPrem ? `<a href="${mainPrem.url}" target="_blank" rel="nofollow" class="moon-action prem">${mainPrem ? mainPrem.name : 'Pro'}</a>` : '<span class="empty-slot">-</span>'}
+                                        <div class="separator-label prem-text">Prem</div>
+                                        ${extraPrem.length > 0 ? `
+                                        <div class="more-trigger">
+                                            + More
+                                            <div class="mini-dropdown pro-list">
+                                                ${extraPrem.map(l => `<a href="${l.url}" target="_blank" rel="nofollow">${l.name}</a>`).join('')}
+                                            </div>
+                                        </div>` : ''}
+                                    </div>
+
                                 </div>
-                            </div>` : ''}
+                            </div>
                         </div>
-
-                        <div class="moon-col">
-                            ${mainPrem ? `<a href="${mainPrem.url}" target="_blank" rel="nofollow" class="moon-action prem">${mainPrem ? mainPrem.name : 'Pro'}</a>` : '<span class="empty-slot">-</span>'}
-                            <div class="separator-label prem-text">Prem</div>
-                            ${extraPrem.length > 0 ? `
-                            <div class="more-trigger">
-                                + More
-                                <div class="mini-dropdown pro-list">
-                                    ${extraPrem.map(l => `<a href="${l.url}" target="_blank" rel="nofollow">${l.name}</a>`).join('')}
-                                </div>
-                            </div>` : ''}
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-    </div>`;
+                    </div>`;
                     
                     planetsRing.insertAdjacentHTML('beforeend', planetHTML);
                 });
             }
         }
-   } catch (error) { console.error("Error:", error); }
-    
-    // 👇 1. أضفنا هذا السطر هنا: تشغيل وظيفة الدوران بعد انتهاء التحميل مباشرة
-    initRotationControl();
-}
-
-// دالة التحكم الذكي بالكواكب (نظام العجلة)
-function initRotationControl() {
-    // 1. الإعدادات (يمكنك تغيير رقم 260 لتكبير أو تصغير دائرة المدار)
-    const orbitRadius = 260; 
-    
-    const container = document.querySelector('.solar-system-container');
-    // نجمع كل الكواكب (الأغلفة الخارجية)
-    const planets = document.querySelectorAll('.orbit-planet');
-
-    if (!container || planets.length === 0) return;
-
-    let currentRotation = 0; // زاوية الدوران العامة
-    let autoSpeed = 0.2;     // السرعة التلقائية
-    let dragSpeed = 0;
-    let isDown = false;
-    let startX, lastX;
-
-    // دالة الرسم (المحرك)
-    function animate() {
-        // نزيد الزاوية (تلقائي + سحب)
-        currentRotation += autoSpeed + dragSpeed;
-
-        planets.forEach(planet => {
-            // نقرأ ترتيب الكوكب ومجموع الكواكب من الستايل الموجود فيها
-            // إذا لم يجد قيماً، نستخدم قيماً افتراضية (0 و 1) لتجنب الخطأ
-            let i = parseFloat(getComputedStyle(planet).getPropertyValue('--i')) || 0;
-            let total = parseFloat(getComputedStyle(planet).getPropertyValue('--total')) || 8;
-
-            // معادلة توزيع الكواكب في دائرة (360 درجة / العدد)
-            let offsetAngle = (360 / total) * i;
-            
-            // الزاوية النهائية = زاوية الكوكب الأصلية + دوران النظام كله
-            let finalAngle = offsetAngle + currentRotation;
-
-            // ✨ السحر هنا ✨
-            // 1. rotate(${finalAngle}deg): يلف الدائرة ليصل لمكان الكوكب
-            // 2. translate(${orbitRadius}px): يبعد الكوكب عن المركز (نصف القطر)
-            // 3. rotate(-${finalAngle}deg): يعيد تدوير الكوكب عكسياً ليصبح واقفاً (Ferris Wheel)
-            planet.style.transform = `
-                rotate(${finalAngle}deg) 
-                translate(${orbitRadius}px) 
-                rotate(${-finalAngle}deg)
-            `;
-        });
-
-        // تقليل سرعة السحب تدريجياً (Inertia)
-        dragSpeed *= 0.95;
-        requestAnimationFrame(animate);
-    }
-
-    animate();
-
-    // --- التحكم بالماوس ---
-    container.addEventListener('mousedown', (e) => {
-        isDown = true;
-        startX = e.pageX;
-        lastX = startX;
-        container.style.cursor = 'grabbing';
-    });
-
-    const stopDragging = () => {
-        isDown = false;
-        container.style.cursor = 'grab';
-    };
-
-    container.addEventListener('mouseleave', stopDragging);
-    container.addEventListener('mouseup', stopDragging);
-
-    container.addEventListener('mousemove', (e) => {
-        if (!isDown) return;
-        e.preventDefault();
-        const x = e.pageX;
-        const delta = x - lastX;
-        dragSpeed = delta * 0.15; // حساسية الماوس
-        lastX = x;
-    });
+    } catch (error) { console.error("Error:", error); }
 }
 
 window.onload = loadTools;
