@@ -895,7 +895,57 @@ async function loadTools() {
                 });
             }
         }
-    } catch (error) { console.error("Error:", error); }
+   } catch (error) { console.error("Error:", error); }
+    
+    // 👇 1. أضفنا هذا السطر هنا: تشغيل وظيفة الدوران بعد انتهاء التحميل مباشرة
+    initRotationControl();
+}
+
+// 👇 2. أضفنا دالة الدوران الجديدة هنا (خارج دالة loadTools)
+function initRotationControl() {
+    const containers = document.querySelectorAll('.solar-system-container');
+
+    containers.forEach(container => {
+        let isDown = false;
+        let startX;
+        let currentRotation = 0; // لحفظ زاوية الدوران الحالية
+
+        // عند ضغط الماوس (إمساك الكوكب)
+        container.addEventListener('mousedown', (e) => {
+            isDown = true;
+            startX = e.pageX;
+            container.style.cursor = 'grabbing';
+            container.style.transition = 'none'; // إيقاف النعومة لجعل الاستجابة فورية
+        });
+
+        // عند ترك الماوس
+        const stopDragging = () => {
+            if (!isDown) return;
+            isDown = false;
+            container.style.cursor = 'grab';
+            container.style.transition = 'transform 0.5s ease-out'; // إعادة النعومة عند التوقف
+        };
+
+        container.addEventListener('mouseleave', stopDragging);
+        container.addEventListener('mouseup', (e) => {
+            if(isDown) {
+                // حفظ الزاوية الجديدة كي لا يعود للصفر عند السحب القادم
+                const x = e.pageX;
+                const walk = (x - startX) * 0.5;
+                currentRotation += walk;
+                stopDragging();
+            }
+        });
+
+        // عند التحريك
+        container.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX;
+            const walk = (x - startX) * 0.5; // سرعة الدوران
+            container.style.transform = `rotate(${currentRotation + walk}deg)`;
+        });
+    });
 }
 
 window.onload = loadTools;

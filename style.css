@@ -2203,6 +2203,7 @@ body.rtl-mode #send-btn {
     overflow: visible !important; 
     /* 👇 أضف هذا لتفعيل مؤشر اليد */
     cursor: grab; 
+    user-select: none;
     touch-action: none; /* يمنع تحرك الصفحة عند اللمس ليكون التحكم بالسحب فقط */
 }
 /* شكل اليد وهي ممسكة (عند الضغط) */
