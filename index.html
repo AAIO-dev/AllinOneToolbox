@@ -909,68 +909,67 @@ async function loadTools() {
 
 // دالة التحكم الذكي بالكواكب (نظام العجلة)
 function initRotationControl() {
-    // 1. نبحث عن أي كوكب موجود في الصفحة
-    const samplePlanet = document.querySelector('.orbit-planet');
+    // 1. الإعدادات (يمكنك تغيير رقم 260 لتكبير أو تصغير دائرة المدار)
+    const orbitRadius = 260; 
     
-    // إذا لم نجد كواكب، نوقف الدالة فوراً لتجنب الأخطاء
-    if (!samplePlanet) return; 
+    const container = document.querySelector('.solar-system-container');
+    // نجمع كل الكواكب (الأغلفة الخارجية)
+    const planets = document.querySelectorAll('.orbit-planet');
 
-    // 2. نمسك بـ "الحلقة" (وهي العنصر الأب للكواكب)
-    const ring = samplePlanet.parentElement;
-    
-    // 3. نمسك بالحاوية الكبيرة (للتحكم بالماوس)
-    const container = ring.parentElement;
+    if (!container || planets.length === 0) return;
 
-    // 4. نحدد الغلاف الداخلي للكواكب (لتثبيت اتجاهها)
-    const planetsInner = document.querySelectorAll('.planet-inner');
-
-    // --- إعدادات الحركة ---
-    // نوقف أنيميشن CSS فوراً لنسيطر نحن بالجافاسكربت
-    ring.style.animation = 'none'; 
-    
-    let currentAngle = 0;
-    let autoSpeed = 0.2; // سرعة الدوران التلقائي
+    let currentRotation = 0; // زاوية الدوران العامة
+    let autoSpeed = 0.2;     // السرعة التلقائية
     let dragSpeed = 0;
     let isDown = false;
-    let startX;
-    let lastX;
+    let startX, lastX;
 
+    // دالة الرسم (المحرك)
     function animate() {
-        // المعادلة: الزاوية الحالية + السرعة التلقائية + سرعة يدك
-        currentAngle += autoSpeed + dragSpeed;
-        
-        // أ. تدوير الحلقة (الحاوية التي تحمل الكواكب)
-        ring.style.transform = `translate(-50%, -50%) rotate(${currentAngle}deg)`;
+        // نزيد الزاوية (تلقائي + سحب)
+        currentRotation += autoSpeed + dragSpeed;
 
-        // ب. تدوير الكواكب الداخلية "عكس الاتجاه" لتبقى واقفة وثابتة
-        planetsInner.forEach(inner => {
-            inner.style.transform = `rotate(${-currentAngle}deg)`;
+        planets.forEach(planet => {
+            // نقرأ ترتيب الكوكب ومجموع الكواكب من الستايل الموجود فيها
+            // إذا لم يجد قيماً، نستخدم قيماً افتراضية (0 و 1) لتجنب الخطأ
+            let i = parseFloat(getComputedStyle(planet).getPropertyValue('--i')) || 0;
+            let total = parseFloat(getComputedStyle(planet).getPropertyValue('--total')) || 8;
+
+            // معادلة توزيع الكواكب في دائرة (360 درجة / العدد)
+            let offsetAngle = (360 / total) * i;
+            
+            // الزاوية النهائية = زاوية الكوكب الأصلية + دوران النظام كله
+            let finalAngle = offsetAngle + currentRotation;
+
+            // ✨ السحر هنا ✨
+            // 1. rotate(${finalAngle}deg): يلف الدائرة ليصل لمكان الكوكب
+            // 2. translate(${orbitRadius}px): يبعد الكوكب عن المركز (نصف القطر)
+            // 3. rotate(-${finalAngle}deg): يعيد تدوير الكوكب عكسياً ليصبح واقفاً (Ferris Wheel)
+            planet.style.transform = `
+                rotate(${finalAngle}deg) 
+                translate(${orbitRadius}px) 
+                rotate(${-finalAngle}deg)
+            `;
         });
 
-        // تخفيف سرعة السحب تدريجياً (Inertia)
-        dragSpeed *= 0.95; 
-        
+        // تقليل سرعة السحب تدريجياً (Inertia)
+        dragSpeed *= 0.95;
         requestAnimationFrame(animate);
     }
-    
-    // تشغيل المحرك
+
     animate();
 
-    // --- أحداث الماوس (على الحاوية الكبيرة) ---
+    // --- التحكم بالماوس ---
     container.addEventListener('mousedown', (e) => {
         isDown = true;
         startX = e.pageX;
         lastX = startX;
         container.style.cursor = 'grabbing';
-        
-        // (اختياري) إيقاف السرعة التلقائية مؤقتاً أثناء السحب للتحكم الدقيق
-        // autoSpeed = 0; 
     });
 
     const stopDragging = () => {
         isDown = false;
         container.style.cursor = 'grab';
-        // autoSpeed = 0.2; // إعادة السرعة التلقائية
     };
 
     container.addEventListener('mouseleave', stopDragging);
@@ -979,13 +978,9 @@ function initRotationControl() {
     container.addEventListener('mousemove', (e) => {
         if (!isDown) return;
         e.preventDefault();
-        
         const x = e.pageX;
         const delta = x - lastX;
-        
-        // معادلة السرعة: الفرق في المسافة * الحساسية
-        dragSpeed = delta * 0.15; 
-        
+        dragSpeed = delta * 0.15; // حساسية الماوس
         lastX = x;
     });
 }
