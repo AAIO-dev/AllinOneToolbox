@@ -2097,10 +2097,11 @@ body.rtl-mode #send-btn {
     border: none !important;
     box-shadow: none !important;
     
-    /* توحيد اللون: فضي لامع */
-    filter: grayscale(100%) brightness(300%) drop-shadow(0 0 5px rgba(255,255,255,0.5)) !important;
-    opacity: 0.9;
-    transition: transform 5s linear; /* دوران بطيء */
+   /* 👇 التعديل هنا: تفتيح قوي + لمعة بيضاء مشعة 👇 */
+    filter: grayscale(100%) brightness(200%) drop-shadow(0 0 8px rgba(255,255,255,0.8)) !important;
+    
+    opacity: 0.95; /* زيادة الشفافية قليلاً لتبرز */
+    transition: transform 5s linear, filter 0.3s ease !important;
 }
 
 /* 6. اسم الكوكب */
@@ -2329,14 +2330,6 @@ body.rtl-mode #send-btn {
     pointer-events: none;
 }
 
-.planet-icon {
-    width: 40px; height: 40px;
-    object-fit: contain;
-    filter: grayscale(100%) brightness(150%);
-    margin-bottom: 5px;
-    transition: 0.3s;
-}
-
 .planet-label {
     font-size: 0.7rem;
     color: #ccc;
@@ -2355,7 +2348,12 @@ body.rtl-mode #send-btn {
         0 0 30px rgba(138, 43, 226, 0.5); /* توهج خارجي */
     z-index: 100;
 }
-.planet-body:hover .planet-icon { filter: none; transform: scale(1.1); }
+/* تأثير إضافي عند التحويم (زيادة اللمعان) */
+.planet-body:hover .planet-icon {
+    /* عند المرور، تصبح بيضاء تماماً ومشرقة جداً */
+    filter: grayscale(0%) brightness(250%) drop-shadow(0 0 12px rgba(255,255,255,1)) !important;
+    transform: scale(1.1);
+}
 
 /* إيقاف الدوران عند اللمس */
 .solar-system-container:hover .planets-orbit-ring,
