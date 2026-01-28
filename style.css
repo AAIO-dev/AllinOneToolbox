@@ -2201,6 +2201,13 @@ body.rtl-mode #send-btn {
     margin: 0 auto !important;   /* 👈 الإجبار على المنتصف */
     padding: 0 !important;       /* 👈 إزالة أي إزاحة داخلية */
     overflow: visible !important; 
+    /* 👇 أضف هذا لتفعيل مؤشر اليد */
+    cursor: grab; 
+    touch-action: none; /* يمنع تحرك الصفحة عند اللمس ليكون التحكم بالسحب فقط */
+}
+/* شكل اليد وهي ممسكة (عند الضغط) */
+.solar-system-container:active {
+    cursor: grabbing;
 }
 
 /* 2. الشمس */
