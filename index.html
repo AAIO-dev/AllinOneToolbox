@@ -60,7 +60,7 @@
                     <span class="icon moon">🌙</span>
                 </div>
             </label>
-            <span class="mode-text">Light Mode</span>
+            <!--<span class="mode-text">Light Mode</span>-->
         </div>
 
         <div class="hero-content">
@@ -82,9 +82,7 @@
 
     </div>
     <div class="main-container">
-        <div style="position: fixed; top: 0; left: 0; width: 100%; background: #e67e22; color: white; text-align: center; padding: 12px; font-family: sans-serif; font-weight: bold; z-index: 999999999; box-shadow: 0 2px 10px rgba(0,0,0,0.3);">
-    🚧 Under Maintenance: We are upgrading the layout. Some elements might look off.
-</div>
+        
 
         <div class="column" id="creative-container">
         <h2 id="title-creative" class="column-title" data-key="creative" style="color: #6f42c1; border-color: #6f42c1;">Creative & Tech Tools</h2>
@@ -817,9 +815,13 @@ async function loadTools() {
 
                 // 3. رسم الشمس مع كلاس الوهج الخاص بها
                 targetContainer.insertAdjacentHTML('beforeend', `
-                <div class="sun-star ${glowClass}">
-                    <div class="sun-content"><h2>${sectionName.replace('Tools', '')}</h2></div>
-                </div>`);
+    <div class="sun-star ${glowClass}">
+        <div class="sun-content">
+            <h2 data-key="${sectionName.replace('Tools', '').trim()}" data-original="${sectionName.replace('Tools', '').trim()}">
+                ${sectionName.replace('Tools', '')}
+            </h2>
+        </div>
+    </div>`);
 
                 const planetsRing = document.createElement('div');
                 planetsRing.className = 'planets-orbit-ring';
@@ -859,7 +861,7 @@ async function loadTools() {
                     <div class="orbit-planet" style="--i:${index}; --total:${totalPlanets};">
                         <div class="planet-body">
                             <img src="${iconUrl}" class="planet-icon" alt="${cleanTitle}">
-                            <div class="planet-label">${cleanTitle}</div>
+                            <div class="planet-label" data-key="${cleanTitle}" data-original="${cleanTitle}">${cleanTitle}</div>
                             
                             <div class="hidden-moons">
                                 <div class="moon-split-container">
