@@ -854,42 +854,48 @@ async function loadTools() {
                     // =========================================================
 
                     const planetHTML = `
-                    <div class="orbit-planet" style="--i:${index}; --total:${totalPlanets};">
-                        <div class="planet-body">
-                            <img src="${iconUrl}" class="planet-icon" alt="${cleanTitle}">
-                            <div class="planet-label">${cleanTitle}</div>
-                            
-                            <div class="hidden-moons">
-                                <div class="moon-split-container">
-                                    
-                                    <div class="moon-col">
-                                        ${mainFree ? `<a href="${mainFree.url}" target="_blank" class="moon-action free">${mainFree ? mainFree.name : 'Free'}</a>` : '<span class="empty-slot">-</span>'}
-                                        <div class="separator-label free-text">Free</div>
-                                        ${extraFree.length > 0 ? `
-                                        <div class="more-trigger">
-                                            + More
-                                            <div class="mini-dropdown free-list">
-                                                ${extraFree.map(l => `<a href="${l.url}" target="_blank">${l.name}</a>`).join('')}
-                                            </div>
-                                        </div>` : ''}
-                                    </div>
+    <div class="orbit-planet" style="--i:${index}; --total:${totalPlanets};">
+        
+        <div class="planet-inner">
 
-                                    <div class="moon-col">
-                                        ${mainPrem ? `<a href="${mainPrem.url}" target="_blank" rel="nofollow" class="moon-action prem">${mainPrem ? mainPrem.name : 'Pro'}</a>` : '<span class="empty-slot">-</span>'}
-                                        <div class="separator-label prem-text">Prem</div>
-                                        ${extraPrem.length > 0 ? `
-                                        <div class="more-trigger">
-                                            + More
-                                            <div class="mini-dropdown pro-list">
-                                                ${extraPrem.map(l => `<a href="${l.url}" target="_blank" rel="nofollow">${l.name}</a>`).join('')}
-                                            </div>
-                                        </div>` : ''}
-                                    </div>
-
+            <div class="planet-body">
+                <img src="${iconUrl}" class="planet-icon" alt="${cleanTitle}">
+                <div class="planet-label">${cleanTitle}</div>
+                
+                <div class="hidden-moons">
+                    <div class="moon-split-container">
+                        
+                        <div class="moon-col">
+                            ${mainFree ? `<a href="${mainFree.url}" target="_blank" class="moon-action free">${mainFree ? mainFree.name : 'Free'}</a>` : '<span class="empty-slot">-</span>'}
+                            <div class="separator-label free-text">Free</div>
+                            ${extraFree.length > 0 ? `
+                            <div class="more-trigger">
+                                + More
+                                <div class="mini-dropdown free-list">
+                                    ${extraFree.map(l => `<a href="${l.url}" target="_blank">${l.name}</a>`).join('')}
                                 </div>
-                            </div>
+                            </div>` : ''}
                         </div>
-                    </div>`;
+
+                        <div class="moon-col">
+                            ${mainPrem ? `<a href="${mainPrem.url}" target="_blank" rel="nofollow" class="moon-action prem">${mainPrem ? mainPrem.name : 'Pro'}</a>` : '<span class="empty-slot">-</span>'}
+                            <div class="separator-label prem-text">Prem</div>
+                            ${extraPrem.length > 0 ? `
+                            <div class="more-trigger">
+                                + More
+                                <div class="mini-dropdown pro-list">
+                                    ${extraPrem.map(l => `<a href="${l.url}" target="_blank" rel="nofollow">${l.name}</a>`).join('')}
+                                </div>
+                            </div>` : ''}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>`;
                     
                     planetsRing.insertAdjacentHTML('beforeend', planetHTML);
                 });
@@ -907,51 +913,37 @@ function initRotationControl() {
 
     systems.forEach(container => {
         const ring = container.querySelector('.planets-ring');
-        // نجمع كل الكواكب الموجودة داخل الحلقة
-        const planets = ring.querySelectorAll('.planet-item'); 
         
-        // 1. نلغي الأنيميشن التلقائي من الـ CSS لنسيطر عليه بالجافاسكربت
+        // 👇 التغيير هنا: نستهدف الغلاف الداخلي الجديد
+        const planetsInner = ring.querySelectorAll('.planet-inner'); 
+
         ring.style.animation = 'none';
 
-        // المتغيرات
-        let currentAngle = 0;       // الزاوية الحالية
-        let autoSpeed = 0.2;        // سرعة الدوران التلقائي الأساسية
-        let dragSpeed = 0;          // السرعة الإضافية عند السحب
+        let currentAngle = 0;
+        let autoSpeed = 0.2; // السرعة التلقائية
+        let dragSpeed = 0;
         let isDown = false;
         let startX;
         let lastX;
 
-        // حلقة التحريك المستمر (Game Loop)
         function animate() {
-            // المعادلة: الزاوية = القديمة + السرعة التلقائية + سرعة السحب
             currentAngle += autoSpeed + dragSpeed;
             
-            // 1. تدوير الحلقة (المسار)
+            // 1. تدوير الحلقة الكبيرة
             ring.style.transform = `translate(-50%, -50%) rotate(${currentAngle}deg)`;
 
-            // 2. تدوير الكواكب "عكس الاتجاه" لتبقى ثابتة ومقروءة
-            planets.forEach(planet => {
-                // نحافظ على أبعاد الكوكب ونقوم بتدويره عكس الحلقة
-                // ملاحظة: نستخدم المتغير الموجود في الستايل لحساب مكان الكوكب إذا وجد
-                const planetIndex = getComputedStyle(planet).getPropertyValue('--i') || 0;
-                
-                // هنا السر: تدوير معاكس (-currentAngle)
+            // 2. تدوير الكواكب "الداخلية" عكس الاتجاه لتبقى واقفة
+            planetsInner.forEach(planet => {
                 planet.style.transform = `rotate(${-currentAngle}deg)`;
-                
-                // *توضيح:* الكواكب موزعة بـ left/top لذا التدوير في مكانها يكفي لتصحيح النص
             });
 
-            // تقليل سرعة السحب تدريجياً (Inertia) لتعود للسرعة الطبيعية
             dragSpeed *= 0.95; 
-
             requestAnimationFrame(animate);
         }
         
-        // تشغيل المحرك
         animate();
 
-        // --- أحداث الماوس (التحكم) ---
-
+        // --- التحكم بالماوس ---
         container.addEventListener('mousedown', (e) => {
             isDown = true;
             startX = e.pageX;
@@ -970,14 +962,9 @@ function initRotationControl() {
         container.addEventListener('mousemove', (e) => {
             if (!isDown) return;
             e.preventDefault();
-            
             const x = e.pageX;
-            const delta = x - lastX; // الفرق بين الحركة الحالية والسابقة
-            
-            // تحديد سرعة واتجاه الدوران بناء على حركة الماوس
-            // الرقم 0.1 يتحكم بحساسية الماوس
-            dragSpeed = delta * 0.1; 
-            
+            const delta = x - lastX;
+            dragSpeed = delta * 0.1; // حساسية السحب
             lastX = x;
         });
     });
