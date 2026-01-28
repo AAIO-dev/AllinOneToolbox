@@ -786,16 +786,33 @@ async function loadTools() {
             }
         });
 
-        // الرسم
         for (const [sectionName, subCategories] of Object.entries(organizedData)) {
             const targetContainer = containers[sectionName];
             
             if (targetContainer) {
-                targetContainer.innerHTML = '';
-                targetContainer.className = 'solar-system-container';
+                // 1. تحديد كلاس الوهج + كلاس الحاوية بناءً على اسم القسم
+                let glowClass = '';
+                let containerClass = '';
 
+                if (sectionName === 'Creative & Tech Tools') {
+                    glowClass = 'creative-glow';
+                    containerClass = 'creative-container';
+                } else if (sectionName === 'Professional Office Tools') {
+                    glowClass = 'office-glow';
+                    containerClass = 'office-container';
+                } else if (sectionName === 'Media Transform Tools') {
+                    glowClass = 'media-glow';
+                    containerClass = 'transform-container';
+                }
+
+                targetContainer.innerHTML = '';
+                
+                // 2. إضافة كلاس الحاوية (مهم عشان توهج الكواكب عند الماوس)
+                targetContainer.className = `solar-system-container ${containerClass}`;
+
+                // 3. رسم الشمس مع كلاس الوهج الخاص بها
                 targetContainer.insertAdjacentHTML('beforeend', `
-                <div class="sun-star">
+                <div class="sun-star ${glowClass}">
                     <div class="sun-content"><h2>${sectionName.replace('Tools', '')}</h2></div>
                 </div>`);
 
@@ -810,7 +827,6 @@ async function loadTools() {
                     const categoryTools = subCategories[categoryName];
                     const cleanTitle = categoryName.replace(/\bAI\b/g, '').replace('PDF Magic', 'PDF Editor').replace('Resume Builder', 'CV Builder').trim();
                     const iconUrl = toolIcons[categoryName] || 'https://cdn-icons-png.flaticon.com/512/4645/4645286.png';
-
                     // =========================================================
                     // 🩸 المعادلة الذهبية (دمج منطقك مع التصميم)
                     // =========================================================
