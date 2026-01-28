@@ -2203,6 +2203,7 @@ body.rtl-mode #send-btn {
 }
 
 /* 2. الشمس */
+/* 2. الشمس (كرة كريستالية ملتهبة) */
 .sun-star {
     position: absolute;
     top: 50%;
@@ -2211,13 +2212,36 @@ body.rtl-mode #send-btn {
     width: 220px;
     height: 220px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(120, 50, 220, 0.15) 0%, rgba(0,0,0,0) 70%);
-    box-shadow: 0 0 100px rgba(138, 43, 226, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    z-index: 10;
+    
+    /* --- النفخ والتجسيم 3D --- */
+    /* تدرج لوني عميق */
+    background: radial-gradient(circle at 30% 30%, #4c1a57, #000000);
+    
+    /* ظلال معقدة: ظل داخلي للعمق + توهج خارجي */
+    box-shadow: 
+        inset -10px -10px 30px rgba(0, 0, 0, 0.9), /* ظل داخلي سفلي */
+        inset 5px 5px 20px rgba(255, 255, 255, 0.2), /* لمعة علوية */
+        0 0 60px rgba(138, 43, 226, 0.4), /* هالة بنفسجية واسعة */
+        0 0 20px rgba(138, 43, 226, 0.8); /* هالة مركزة */
+        
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 10;
+    overflow: hidden; /* لضمان عدم خروج اللمعة */
+}
+
+/* لمعة الزجاج العلوية (Glare) */
+.sun-star::after {
+    content: '';
+    position: absolute;
+    top: 10%; left: 15%;
+    width: 40%; height: 30%;
+    background: radial-gradient(ellipse at center, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 70%);
+    transform: rotate(-45deg);
+    pointer-events: none;
 }
 
 .sun-content h2 {
@@ -2267,21 +2291,42 @@ body.rtl-mode #send-btn {
 }
 
 /* جسم الكوكب */
+/* جسم الكوكب (كرة زجاجية 3D) */
 .planet-body {
     width: 95px;
     height: 95px;
     border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1), rgba(10,10,25,0.95));
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    
+    /* خلفية زجاجية داكنة */
+    background: radial-gradient(circle at 30% 30%, #3e3e50, #0a0a10);
+    
+    /* تأثيرات التجسيم */
+    box-shadow: 
+        inset -5px -5px 15px rgba(0, 0, 0, 0.9), /* ظل العمق */
+        inset 2px 2px 10px rgba(255, 255, 255, 0.2), /* لمعة الحافة */
+        0 10px 20px rgba(0, 0, 0, 0.4); /* ظل السقوط */
+        
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     position: relative;
-    transition: 0.3s;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 5;
+}
+
+/* لمعة الكوكب */
+.planet-body::after {
+    content: '';
+    position: absolute;
+    top: 10%; left: 15%;
+    width: 40%; height: 30%;
+    background: radial-gradient(ellipse at center, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+    transform: rotate(-45deg);
+    pointer-events: none;
 }
 
 .planet-icon {
@@ -2301,13 +2346,14 @@ body.rtl-mode #send-btn {
     text-shadow: 0 2px 4px #000;
 }
 
-/* التفاعل */
+/* التفاعل عند التحويم (يكبر ويضيء) */
 .planet-body:hover {
-    background: rgba(40, 40, 60, 0.95);
-    border-color: #a29bfe;
-    box-shadow: 0 0 30px rgba(138, 43, 226, 0.4);
+    transform: scale(1.15) translateY(-5px);
+    background: radial-gradient(circle at 30% 30%, #5a5a70, #1a1a25);
+    box-shadow: 
+        inset -5px -5px 20px rgba(0, 0, 0, 0.9),
+        0 0 30px rgba(138, 43, 226, 0.5); /* توهج خارجي */
     z-index: 100;
-    transform: scale(1.1); 
 }
 .planet-body:hover .planet-icon { filter: none; transform: scale(1.1); }
 
