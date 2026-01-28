@@ -2238,13 +2238,28 @@ body.rtl-mode #send-btn {
     overflow: hidden;
     animation: sun-float 8s linear infinite;
 }
-/* تعريف حركة الطفو الدائري (Floating Orbit) */
+/* حركة الطفو + التفاف الرأس ثلاثي الأبعاد */
 @keyframes sun-float {
-    0% { transform: translate(-50%, -50%) translate(0px, 5px); }    /* أسفل */
-    25% { transform: translate(-50%, -50%) translate(5px, 0px); }   /* يمين */
-    50% { transform: translate(-50%, -50%) translate(0px, -5px); }  /* أعلى */
-    75% { transform: translate(-50%, -50%) translate(-5px, 0px); }  /* يسار */
-    100% { transform: translate(-50%, -50%) translate(0px, 5px); }  /* عودة للبداية */
+    0% { 
+        /* البداية: مركز */
+        transform: translate(-50%, -50%) perspective(600px) rotateY(0deg) rotateX(0deg); 
+    }
+    25% { 
+        /* يتحرك لليمين + يلتفت بوجهه لليمين */
+        transform: translate(-50%, -50%) translate(10px, 0px) perspective(600px) rotateY(10deg) rotateX(0deg); 
+    }
+    50% { 
+        /* يتحرك للأعلى + يرفع رأسه للأعلى */
+        transform: translate(-50%, -50%) translate(0px, -10px) perspective(600px) rotateY(0deg) rotateX(10deg); 
+    }
+    75% { 
+        /* يتحرك لليسار + يلتفت بوجهه لليسار */
+        transform: translate(-50%, -50%) translate(-10px, 0px) perspective(600px) rotateY(-10deg) rotateX(0deg); 
+    }
+    100% { 
+        /* العودة للمركز */
+        transform: translate(-50%, -50%) perspective(600px) rotateY(0deg) rotateX(0deg); 
+    }
 }
 
 /* لمعة الانعكاس الزجاجي (Glare) - أكثر حدة */
