@@ -2734,61 +2734,152 @@ html, body {
    
 @media screen and (max-width: 768px) {
 
-    
+    /* 1. الحاوية الأم */
+    #creative-container,
+    #office-container,
+    #transform-container,
+    .solar-system-container {
+        display: block !important;
+        height: auto !important;
+        min-height: auto !important;
+        overflow: visible !important;
+        padding-top: 90px !important;   
+        padding-bottom: 10px !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+    }
+
+    #creative-container { 
+        margin-bottom: 50px !important;
+        position: relative !important;
+        z-index: 30 !important; 
+    }
+
+    #office-container { 
+        margin-bottom: 50px !important;
+        margin-top: -10px !important;
+        position: relative !important;
+        z-index: 20 !important; 
+    }
+
+    #transform-container { 
+        padding-bottom: 250px !important;
+        margin-top: -10px !important;
+        position: relative !important;
+        z-index: 10 !important; 
+     }
+
+    /* 2. الشمس */
     .sun-star {
         zoom: 0.70;
-        margin: 40px auto 30px auto !important;
+        margin: 0 auto 0 auto !important;
         display: flex !important;
         position: relative !important;
-        left: 0 !important;
-        right: 0 !important;
+        left: auto !important;
+        right: auto !important;
+        flex-shrink: 0 !important;
     }
 
-    
+    /* 3. الحلبة */
     .planets-orbit-ring {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        align-items: center !important;
         width: 100% !important;
         height: auto !important;
-        min-height: 100px;
-        border: none !important;
-        display: flex !important;
-        flex-direction: row !important; 
-        flex-wrap: wrap !important;    
-        justify-content: center !important; 
-        align-items: center !important;
-        gap: 20px !important;
-        position: relative !important;
-        inset: 0 !important; 
+        gap: 1px !important;
+        margin-top: -100px !important; 
+        padding: 0 10px !important;
+        padding-right: 40px !important;
+        padding-left: 0 !important;
         transform: none !important;
-        animation: none !important;
+        inset: auto !important;
+        position: relative !important; /* <--- هنا أصلحت الخطأ (أضفت الفاصلة المنقوطة) */
     }
 
-   
+    /* 4. الكواكب */
     .orbit-planet {
-        position: relative !important; 
-        inset: auto !important;        
-        transform: none !important;    
-        width: 80px !important;        
+        position: static !important; 
+        inset: auto !important;
+        overflow: visible !important;
+        width: 80px !important;
         height: 80px !important;
-        margin: 10px !important;
+        min-width: 80px !important;
+        min-height: 80px !important;
+        margin: -1px !important;
         display: flex !important;
         justify-content: center;
         align-items: center;
+        border-radius: 50% !important;
+        transform: none !important;
+        z-index: 10 !important;
     }
-
     
-    .planet-body {
-        zoom: 0.75;
-        position: relative !important;
-        inset: 0 !important;
+    .orbit-planet:hover,
+    .orbit-planet:focus-within,
+    .orbit-planet:active {
+        z-index: 9999 !important;
+    }
+
+    /* 5. القوائم المنسدلة (قيمك الأصلية) */
+    .orbit-planet ul,
+    .orbit-planet .dropdown-menu {
+        position: absolute !important;
+        top: auto !important;
+        left: 5vw !important; /* القيمة القديمة احتياطاً */
+        right: auto !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        transform: none !important;
+        z-index: 999999 !important;
+        width: 90vw !important; /* القيمة التي تريدها أنت */
+        max-width: none !important;
+        margin-top: 10px !important;
+        max-height: 50vh !important;
+        overflow-y: auto !important;
+    }
+
+    .hidden-moons {
+        left: 10% !important; /* تعديلك المهم للمنتصف */
+    }
+
+    /* === استثناءات الأطراف (قيمك) === */
+    .planets-orbit-ring > .orbit-planet:nth-child(1) .hidden-moons,
+    .planets-orbit-ring > .orbit-planet:nth-child(2) .hidden-moons {
+        left: 0 !important;
+        right: auto !important;
         transform: none !important;
     }
 
-        .planets-orbit-ring * {
-        animation: none !important;
+    .planets-orbit-ring > .orbit-planet:last-child .hidden-moons,
+    .planets-orbit-ring > .orbit-planet:nth-last-child(2) .hidden-moons {
+        left: auto !important;
+        right: 0 !important;
         transform: none !important;
+    }
+
+    /* 6. المحتوى الداخلي */
+    .planet-body {
+        zoom: 0.80;
+        width: 100% !important;
+        height: 100% !important;
+        border-radius: 50% !important;
+    }
+
+    /* إيقاف الحركة */
+    .planets-orbit-ring * {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    footer, .footer {
+        position: relative !important;
+        z-index: 1 !important;
     }
 }
-
 
 
 
