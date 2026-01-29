@@ -2802,7 +2802,7 @@ html, body {
 
     /* 4. الكواكب */
     .orbit-planet {
-        position: static !important; 
+        position: relative !important; 
         inset: auto !important;
         overflow: visible !important;
         width: 80px !important;
@@ -2821,7 +2821,7 @@ html, body {
     .orbit-planet:hover,
     .orbit-planet:focus-within,
     .orbit-planet:active {
-        z-index: 9999 !important;
+        z-index: 10 !important;
     }
 
     /* 5. القوائم المنسدلة (قيمك الأصلية) */
@@ -2834,7 +2834,7 @@ html, body {
         margin-left: 0 !important;
         margin-right: 0 !important;
         transform: none !important;
-        z-index: 999999 !important;
+        z-index: 10 !important;
         width: 90vw !important; /* القيمة التي تريدها أنت */
         max-width: none !important;
         margin-top: 10px !important;
@@ -2863,6 +2863,14 @@ html, body {
 
     /* 6. المحتوى الداخلي */
     .planet-body {
+        /* نستخدم فليكس عمودي لرص الأيقونة فوق النص */
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important; /* توسيط عمودي */
+    align-items: center !important;     /* توسيط أفقي */
+    
+    /* إضافة حشوة داخلية صغيرة لضمان عدم التصاق المحتوى بالحواف */
+    padding: 4px !important;
         zoom: 0.80;
         width: 100% !important;
         height: 100% !important;
@@ -2872,13 +2880,66 @@ html, body {
     /* إيقاف الحركة */
     .planets-orbit-ring * {
         animation: none !important;
-        transition: none !important;
     }
 
     footer, .footer {
         position: relative !important;
         z-index: 1 !important;
     }
+    /* تحسين خطوط أسماء الكواكب */
+.planet-label {
+    /* 1. تكبير الخط وتعريضه */
+    font-size: 17px !important; /* جرب 12px أو 14px حسب ذوقك */
+    font-weight: 800 !important; /* خط عريض وواضح */
+    
+    /* 2. حيلة ذكية: السماح للنص بأن يكون أعرض من الكوكب نفسه */
+    width: 100% !important;      
+    margin-left: -15% !important; /* نسحبه لليسار ليتوسط الكوكب مجدداً */
+    margin-top: 2px !important;
+    letter-spacing: 0.5px !important;
+    line-height: 1.2 !important;
+    /* 3. تنسيقات الجمالية */
+    text-align: center !important;
+    white-space: normal !important;
+
+    overflow: visible !important;   /* يسمح للنص بالظهور حتى لو خرج عن الحدود */
+    
+    text-shadow: 
+       -1px -1px 0 #000,  
+        1px -1px 0 #000,
+       -1px  1px 0 #000,
+        1px  1px 0 #000,
+        0px 4px 8px rgba(0,0,0,1.0) !important; /* زيادة السواد والعمق هنا */
+    
+    transform: none !important;
+}
+/* 2. تلوين قسم الإبداع (Creative) - بنفسجي مضيء */
+#creative-container .planet-label {
+    color: #c084fc !important;
+}
+
+/* 3. تلوين قسم المكتب (Office) - أزرق سماوي */
+#office-container .planet-label {
+    color: #93c5fd !important; /* أزرق فاتح جداً */
+}
+
+/* 4. تلوين قسم الميديا (Media) - تركواز/سيان */
+#transform-container .planet-label {
+    color: #67e8f9 !important; /* سيان مشع */
+}
+/* --- 2. تصغير الأيقونة لإفساح المجال --- */
+.planet-icon {
+    /* حجم صغير وثابت */
+    width: 32px !important;  
+    height: 32px !important;
+    
+    /* إلغاء أي هوامش قديمة */
+    margin: 0 !important;
+    /* مسافة صغيرة جداً تحت الأيقونة وفوق النص */
+    margin-bottom: 2px !important; 
+    
+    flex-shrink: 0 !important; /* منع الأيقونة من الانكماش أكثر */
+}
 }
 
 
