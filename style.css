@@ -2841,6 +2841,10 @@ html, body {
         max-height: 50vh !important;
         overflow-y: auto !important;
     }
+    /* الكوكب الذي ألمسه أو ألمس قائمته يقفز للأعلى فوراً */
+.orbit-planet:focus-within {
+    z-index: 9999 !important;
+}
     
 
     .hidden-moons {
