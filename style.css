@@ -2841,6 +2841,7 @@ html, body {
         max-height: 50vh !important;
         overflow-y: auto !important;
     }
+    
 
     .hidden-moons {
         left: 10% !important; /* تعديلك المهم للمنتصف */
