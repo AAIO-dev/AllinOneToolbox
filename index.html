@@ -676,6 +676,65 @@
             if (!el.getAttribute('data-original')) el.setAttribute('data-original', el.innerText);
             const originalText = el.getAttribute('data-original').replace('+', '').trim();
 
+            /* ========================================================
+               🛑 بداية الكود الجديد: قاموس المصطلحات الثابتة (للحماية من جوجل)
+               ======================================================== */
+            const uiDictionary = {
+            // العربية
+            'ar': { 'Free': 'مجاني', 'Premium': 'مميز', '+ More': '+ المزيد' },
+            // الفارسية
+            'fa': { 'Free': 'رایگان', 'Premium': 'ویژه', '+ More': '+ بیشتر' },
+            // الإسبانية
+            'es': { 'Free': 'Gratis', 'Premium': 'Premium', '+ More': '+ Más' },
+            // البرتغالية
+            'pt': { 'Free': 'Grátis', 'Premium': 'Premium', '+ More': '+ Mais' },
+            // الفرنسية
+            'fr': { 'Free': 'Gratuit', 'Premium': 'Premium', '+ More': '+ Plus' },
+            // الألمانية
+            'de': { 'Free': 'Gratis', 'Premium': 'Premium', '+ More': '+ Mehr' },
+            // الإيطالية
+            'it': { 'Free': 'Gratis', 'Premium': 'Premium', '+ More': '+ Altro' },
+            // الروسية
+            'ru': { 'Free': 'Бесплатно', 'Premium': 'Премиум', '+ More': '+ Ещё' },
+            // اليونانية
+            'el': { 'Free': 'Δωρεάν', 'Premium': 'Premium', '+ More': '+ Περισσότερα' },
+            // الهولندية
+            'nl': { 'Free': 'Gratis', 'Premium': 'Premium', '+ More': '+ Meer' },
+            // البولندية
+            'pl': { 'Free': 'Darmowe', 'Premium': 'Premium', '+ More': '+ Więcej' },
+            // السويدية
+            'sv': { 'Free': 'Gratis', 'Premium': 'Premium', '+ More': '+ Mer' },
+            // الصينية
+            'zh': { 'Free': '免费', 'Premium': '高级', '+ More': '+ 更多' },
+            // اليابانية
+            'ja': { 'Free': '無料', 'Premium': '有料', '+ More': '+ もっと見る' },
+            // الكورية
+            'ko': { 'Free': '무료', 'Premium': '프리미엄', '+ More': '+ 더보기' },
+            // الهندية
+            'hi': { 'Free': 'मुफ़्त', 'Premium': 'प्रीमियम', '+ More': '+ और देखें' },
+            // التركية
+            'tr': { 'Free': 'Ücretsiz', 'Premium': 'Premium', '+ More': '+ Daha Fazla' },
+            // الإندونيسية
+            'id': { 'Free': 'Gratis', 'Premium': 'Premium', '+ More': '+ Lainnya' },
+            // الفيتنامية
+            'vi': { 'Free': 'Miễn phí', 'Premium': 'Cao cấp', '+ More': '+ Thêm' },
+            // السواحلية
+            'sw': { 'Free': 'Bure', 'Premium': 'Premium', '+ More': '+ Zaidi' },
+            // الأمهرية
+            'am': { 'Free': 'ነጻ', 'Premium': 'ፕሪሚየም', '+ More': '+ ተጨማሪ' },
+            // الزولو
+            'zu': { 'Free': 'Mahhala', 'Premium': 'Premium', '+ More': '+ Okuningi' },
+            // الهوسا
+            'ha': { 'Free': 'Kyauta', 'Premium': 'Biyan Kuɗi', '+ More': '+ Kara' }
+        };
+
+            // فحص القاموس: هل الكلمة واللغة موجودتان؟
+            if (uiDictionary[lang] && uiDictionary[lang][originalText]) {
+                const prefix = el.getAttribute('data-original').includes('+') ? '+ ' : '';
+                el.innerText = prefix + uiDictionary[lang][originalText];
+                return; // 🛑 توقف هنا! لا ترسل هذه الكلمة لجوجل
+            }
+
 // --- الخطوة الجديدة: إضافة الفلتر الذكي هنا ---
 // 1. تحديد المصطلحات التي لا تلمسها الترجمة نهائياً
 const protectedTerms = {
@@ -868,10 +927,10 @@ async function loadTools() {
                                     
                                     <div class="moon-col">
                                         ${mainFree ? `<a href="${mainFree.url}" target="_blank" class="moon-action free">${mainFree ? mainFree.name : 'Free'}</a>` : '<span class="empty-slot">-</span>'}
-                                        <div class="separator-label free-text">Free</div>
+                                        <div class="separator-label free-text" data-key="txt_free" data-original="Free">Free</div>
                                         ${extraFree.length > 0 ? `
                                         <div class="more-trigger">
-                                            + More
+                                           <span data-key="btn_more" data-original="+ More">+ More</span>
                                             <div class="mini-dropdown free-list">
                                                 ${extraFree.map(l => `<a href="${l.url}" target="_blank">${l.name}</a>`).join('')}
                                             </div>
@@ -880,10 +939,10 @@ async function loadTools() {
 
                                     <div class="moon-col">
                                         ${mainPrem ? `<a href="${mainPrem.url}" target="_blank" rel="nofollow" class="moon-action prem">${mainPrem ? mainPrem.name : 'Pro'}</a>` : '<span class="empty-slot">-</span>'}
-                                        <div class="separator-label prem-text">Prem</div>
+                                        <div class="separator-label prem-text" data-key="txt_prem" data-original="Premium">Premium</div>
                                         ${extraPrem.length > 0 ? `
                                         <div class="more-trigger">
-                                            + More
+                                            <span data-key="btn_more" data-original="+ More">+ More</span>
                                             <div class="mini-dropdown pro-list">
                                                 ${extraPrem.map(l => `<a href="${l.url}" target="_blank" rel="nofollow">${l.name}</a>`).join('')}
                                             </div>

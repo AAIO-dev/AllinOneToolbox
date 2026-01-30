@@ -2568,7 +2568,7 @@ body.rtl-mode #send-btn {
     border: 1px solid #333;
     border-radius: 8px;
     padding: 5px;
-    width: 130px; /* عرض مناسب للاسم */
+    width: 200px !important;
     z-index: 300;
     box-shadow: 0 5px 15px rgba(0,0,0,0.5);
     max-height: 150px;
@@ -2635,9 +2635,9 @@ body.rtl-mode #send-btn {
 .office-glow {
     box-shadow: 
         inset -10px -10px 30px rgba(0, 0, 0, 0.8), 
-        inset 5px 5px 20px rgba(255, 255, 255, 0.6),
-        0 0 50px rgba(70, 130, 180, 0.7), 
-        0 0 20px rgba(70, 130, 180, 1) !important;
+        inset 5px 5px 20px rgba(255, 255, 255, 0.8),
+        0 0 80px rgba(70, 130, 180, 0.7), 
+        0 0 30px rgba(70, 130, 180, 1) !important;
     border-color: rgba(70, 130, 180, 1) !important;
 }
 
@@ -2648,7 +2648,7 @@ body.rtl-mode #send-btn {
         inset 5px 5px 20px rgba(255, 255, 255, 0.6),
         0 0 50px rgba(0, 206, 209, 0.7), 
         0 0 20px rgba(0, 206, 209, 1) !important;
-    border-color: rgba(0, 206, 209, 1) !important;
+        border-color: #00a0ff !important;
 }
 
 
@@ -2669,9 +2669,9 @@ body.rtl-mode #send-btn {
     box-shadow: 
         inset -5px -5px 15px rgba(0, 0, 0, 0.8),
         inset 2px 2px 10px rgba(255, 255, 255, 0.5),
-        0 0 30px rgba(70, 130, 180, 0.6), /* إضافة هالة زرقاء */
-        0 0 10px rgba(70, 130, 180, 0.9) !important;
-    border-color: rgba(70, 130, 180, 0.7) !important;
+        0 0 40px rgba(70, 130, 180, 0.6), /* إضافة هالة زرقاء */
+        0 0 15px rgba(70, 130, 180, 0.9) !important;
+        border-color: rgba(0, 160, 255, 0.8) !important;
 }
 
 /* أيقونات قسم الميديا (تركواز) */
@@ -2873,7 +2873,7 @@ html, body {
     /* === استثناءات الأطراف (قيمك) === */
     .planets-orbit-ring > .orbit-planet:nth-child(1) .hidden-moons,
     .planets-orbit-ring > .orbit-planet:nth-child(2) .hidden-moons {
-        left: 0 !important;
+        left: 35px !important;
         right: auto !important;
         transform: none !important;
     }
@@ -2997,7 +2997,48 @@ html, body {
 #office-container h2 { color: #93c5fd !important; }
 #transform-container h2 { color: #67e8f9 !important; }
 }
+/* ================================================= */
+/* 🌍 إعدادات خاصة باللغة العربية فقط (RTL Mobile) 🌍 */
+/* ================================================= */
 
+@media screen and (max-width: 768px) {
+
+    /* 1. الكواكب الأولى (التي تظهر يمين الشاشة في العربية) */
+    /* نحتاج لدفع القائمة "يساراً" لتدخل للشاشة */
+    html[dir="rtl"] body .planets-orbit-ring > .orbit-planet:nth-child(1) .hidden-moons,
+    html[dir="rtl"] body .planets-orbit-ring > .orbit-planet:nth-child(2) .hidden-moons {
+        left: auto !important;  /* نلغي إعدادات الإنجليزية */
+        right: 35px !important; /* ندفعها من اليمين للداخل */
+        transform: none !important;
+    }
+
+    /* 2. الكواكب الأخيرة (التي تظهر يسار الشاشة في العربية) */
+    /* نحتاج لدفع القائمة "يميناً" لتدخل للشاشة */
+    html[dir="rtl"] body .planets-orbit-ring > .orbit-planet:last-child .hidden-moons,
+    html[dir="rtl"] body .planets-orbit-ring > .orbit-planet:nth-last-child(2) .hidden-moons {
+        right: auto !important; /* نلغي إعدادات الإنجليزية */
+        left: 35px !important;  /* ندفعها من اليسار للداخل */
+        transform: none !important;
+    }
+}
+/* --- إزاحة النظام الشمسي لليمين (للعربية فقط) --- */
+@media screen and (max-width: 768px) {
+    
+    html[dir="rtl"] .solar-system-container,
+    html[dir="rtl"] #creative-container, 
+    html[dir="rtl"] #office-container, 
+    html[dir="rtl"] #transform-container {
+        
+        /* إلغاء المحاولة السابقة */
+        padding-left: 0 !important; 
+        
+        /* 💡 الحل البديل: الإزاحة بالموقع */
+        position: relative !important; /* لضمان استجابته للتحريك */
+        left: 50px !important; /* تحريك 50 بكسل من اليسار نحو اليمين */
+        
+        /* ملاحظة: إذا أردت إزاحة أكبر، زد هذا الرقم */
+    }
+}
 
 
 
