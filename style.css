@@ -3141,7 +3141,80 @@ body.mono-mode .hero-logo {
     margin: 0 auto 25px auto !important;
     animation: floatUpDn 6s ease-in-out infinite !important;
 }
+/* ================================================= */
+/* 📢 تنبيهات زر المود (النبض + الفقاعة الذكية) */
+/* ================================================= */
 
+/* 1. تأثير النبض المستمر */
+.theme-switch .slider {
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    animation: btn-pulse 2s infinite;
+}
+
+@keyframes btn-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+}
+
+/* 2. الفقاعة الترحيبية (الإعدادات العامة) */
+.theme-switch::before {
+    /* النص الافتراضي (للغة الإنجليزية) */
+    content: "Try Dark Mode 🌑"; 
+    
+    position: absolute;
+    top: 45px; /* أنزلناها قليلاً لتكون أوضح */
+    right: -10px; /* محاذاة لليمين */
+    background: #ffffff;
+    color: #000000;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: bold;
+    white-space: nowrap;
+    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    
+    /* الأنيميشن: يظهر، يثبت، ثم يختفي */
+    opacity: 0;
+    animation: show-hint-bubble 7s forwards ease-in-out;
+    pointer-events: none; /* لكي لا تعيق الضغط على الزر */
+}
+
+/* 3. تغيير النص تلقائياً إذا كانت الصفحة عربية */
+html[dir="rtl"] .theme-switch::before {
+    content: "جرب الوضع الليلي 🌑" !important;
+    right: auto; 
+    left: -10px; /* عكس الاتجاه في العربية إذا لزم الأمر */
+}
+
+/* 4. السهم الصغير فوق الفقاعة */
+.theme-switch::after {
+    content: "";
+    position: absolute;
+    top: 39px; 
+    right: 15px; /* مكان السهم في الإنجليزية */
+    border-width: 6px;
+    border-style: solid;
+    border-color: transparent transparent #ffffff transparent;
+    
+    opacity: 0;
+    animation: show-hint-bubble 7s forwards ease-in-out;
+}
+
+/* ضبط مكان السهم في العربية */
+html[dir="rtl"] .theme-switch::after {
+    right: auto;
+    left: 15px;
+}
+
+/* حركة الظهور والاختفاء */
+@keyframes show-hint-bubble {
+    0% { opacity: 0; transform: translateY(-10px); }
+    15% { opacity: 1; transform: translateY(0); }
+    85% { opacity: 1; }
+    100% { opacity: 0; transform: translateY(5px); visibility: hidden; }
+}
 
 
 
