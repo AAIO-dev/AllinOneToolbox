@@ -2545,7 +2545,7 @@ body.rtl-mode #send-btn {
 
 /* زر المزيد (+ More) */
 .more-trigger {
-    font-size: 0.65rem;
+   font-size: 14px !important;
     color: #aaa;
     cursor: pointer;
     position: relative; /* مهم جداً لتظهر القائمة تحته */
@@ -2582,8 +2582,8 @@ body.rtl-mode #send-btn {
     display: block;
     color: #ddd !important;
     text-decoration: none !important;
-    font-size: 0.7rem;
-    padding: 5px;
+    font-size: 16px !important;
+    padding: 10px !important;
     text-align: left;
     border-bottom: 1px solid rgba(255,255,255,0.05);
 }
@@ -2998,32 +2998,7 @@ html, body {
 #transform-container h2 { color: #67e8f9 !important; }
 }
 
-/* --- المحاولة النهائية: استهداف القوائم "الهاربة" إلى الـ Body --- */
 
-/* نستخدم body لضمان الوصول للقائمة أينما ذهبت */
-@media screen and (max-width: 768px) {
-    
-    body .dropdown-menu .dropdown-item,
-    body .dropdown-menu a,
-    body .dropdown-menu button,
-    body .dropdown-menu li {
-        /* تكبير إجباري */
-        font-size: 19px !important; 
-        font-weight: 700 !important;
-        
-        /* تباعد مريح للأصبع */
-        padding-top: 15px !important;
-        padding-bottom: 15px !important;
-        
-        /* لون اختبار (أحمر) - إذا ظهر يعني نجحنا */
-        color: red !important; 
-    }
-
-    /* تكبير العرض ليحتوي النص الكبير */
-    body .dropdown-menu {
-        min-width: 250px !important;
-    }
-}
 
 
 
