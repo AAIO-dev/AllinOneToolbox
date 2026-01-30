@@ -2780,7 +2780,26 @@ html, body {
         left: auto !important;
         right: auto !important;
         flex-shrink: 0 !important;
+       animation: sunSwayCombined 6s ease-in-out infinite alternate !important;
     }
+    /* 2. الحركة المدمجة (الجديدة + القديمة) */
+@keyframes sunSwayCombined {
+    0% {
+        /* أقصى اليسار (من الجديدة) + التفاتة بوجهه لليمين (من القديمة) */
+        /* ملاحظة: أزلت translate(-50%, -50%) لأنك في الجوال تستخدم margin: auto للتوسط */
+        transform: translateX(-45px) perspective(200px) rotateY(45deg) rotateX(0deg);
+        animation-timing-function: ease-in;
+    }
+    50% {
+        /* في المنتصف + يرفع رأسه للأعلى قليلاً (حركة القديمة المميزة) */
+        transform: translateX(0px) translateY(-10px) perspective(200px) rotateY(0deg) rotateX(25deg);
+        animation-timing-function: ease-out;
+    }
+    100% {
+        /* أقصى اليمين (من الجديدة) + التفاتة بوجهه لليسار (من القديمة) */
+        transform: translateX(45px) perspective(200px) rotateY(-45deg) rotateX(0deg);
+    }
+}
 
     /* 3. الحلبة */
     .planets-orbit-ring {
@@ -2791,7 +2810,7 @@ html, body {
         width: 100% !important;
         height: auto !important;
         gap: 1px !important;
-        margin-top: -100px !important; 
+        margin-top: -50px !important; 
         padding: 0 10px !important;
         padding-right: 40px !important;
         padding-left: 0 !important;
@@ -2945,6 +2964,65 @@ html, body {
     
     flex-shrink: 0 !important; /* منع الأيقونة من الانكماش أكثر */
 }
+/* --- توضيح العناوين الرئيسية (الشموس) بتأثير الحفر العميق --- */
+
+/* استهداف العناوين (h2) داخل الأقسام الثلاثة */
+#creative-container h2,
+#office-container h2,
+#transform-container h2 {
+    
+    /* 1. السحر الأسود (تأثير الحفر والوضوح) */
+    text-shadow: 
+       /* حدود حادة من كل الجهات لتوضيح الرسمة */
+       -1px -1px 0 #000,  
+        1px -1px 0 #000,
+       -1px  1px 0 #000,
+        1px  1px 0 #000,
+        
+       /* الظل السفلي الصلب (بدون ضبابية) يعطي إحساس الحفر */
+       0px 3px 0px #000,
+       
+       /* ظل خفيف جداً وراءهم لدمج الحواف */
+       0px 4px 5px rgba(0,0,0,0.5) !important;
+
+    /* 2. تحسينات الخط */
+    font-weight: 800 !important; /* سميك جداً */
+    letter-spacing: 1px !important; /* تباعد بسيط للفخامة */
+    text-transform: uppercase !important; /* حروف كبيرة (اختياري حسب رغبتك) */
+    opacity: 1 !important; /* ضمان عدم الشفافية */
+}
+
+/* (اختياري) ضمان أن الألوان زاهية كما طلبنا سابقاً */
+#creative-container h2 { color: #c084fc !important; }
+#office-container h2 { color: #93c5fd !important; }
+#transform-container h2 { color: #67e8f9 !important; }
+}
+
+/* --- المحاولة النهائية: استهداف القوائم "الهاربة" إلى الـ Body --- */
+
+/* نستخدم body لضمان الوصول للقائمة أينما ذهبت */
+@media screen and (max-width: 768px) {
+    
+    body .dropdown-menu .dropdown-item,
+    body .dropdown-menu a,
+    body .dropdown-menu button,
+    body .dropdown-menu li {
+        /* تكبير إجباري */
+        font-size: 19px !important; 
+        font-weight: 700 !important;
+        
+        /* تباعد مريح للأصبع */
+        padding-top: 15px !important;
+        padding-bottom: 15px !important;
+        
+        /* لون اختبار (أحمر) - إذا ظهر يعني نجحنا */
+        color: red !important; 
+    }
+
+    /* تكبير العرض ليحتوي النص الكبير */
+    body .dropdown-menu {
+        min-width: 250px !important;
+    }
 }
 
 
