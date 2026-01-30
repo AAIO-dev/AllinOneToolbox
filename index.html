@@ -1049,6 +1049,29 @@ meteor.style.animationDuration = duration + 's';
             });
         });
     });
+    /* ================================================= */
+/* 🌑 تفعيل زر وضع الفخامة (Obsidian Mode Toggle) */
+/* ================================================= */
+
+// 👇 غيرنا الاسم هنا من toggleSwitch إلى obsidianSwitch
+const obsidianSwitch = document.getElementById('checkbox');
+
+// التأكد من أن الزر موجود قبل تشغيل الكود
+if (obsidianSwitch) {
+    obsidianSwitch.addEventListener('change', function(e) {
+        if (e.target.checked) {
+            // 1. تفعيل الوضع الزجاجي الأسود
+            document.body.classList.add('mono-mode');
+            
+            // 🛡️ خطوة أمان: إيقاف كود اللايت مود القديم
+            document.documentElement.setAttribute('data-theme', 'dark'); 
+        } else {
+            // 2. العودة للوضع الملون الأصلي
+            document.body.classList.remove('mono-mode');
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+    });
+}
 </script>
 
 </body>
