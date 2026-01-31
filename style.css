@@ -3037,109 +3037,94 @@ html, body {
 }
 
 /* ================================================= */
-/* 🌑 وضع الفخامة (Obsidian Mode) - التصحيح النهائي */
+/* 🌑 وضع الفخامة (Obsidian Mode) - النسخة الخفيفة (Lag-Free) */
 /* ================================================= */
 
-/* 1. تبييض كل النصوص والأزرار */
-body.mono-mode,
-body.mono-mode * {
+/* 1. إعداد المتغيرات الأساسية (يرثها الجميع تلقائياً دون إجبار) */
+body.mono-mode {
+    --bg-color: #000000 !important;
+    --text-color: #ffffff !important;
+    background-color: #000000 !important;
     color: #ffffff !important;
-    text-shadow: none !important; /* هذا يزيل الخط الأسود العريض فوراً */
+}
+
+/* 2. تلوين النصوص والروابط (بدون استخدام النجمة الثقيلة *) */
+body.mono-mode h1, 
+body.mono-mode h2, 
+body.mono-mode h3, 
+body.mono-mode p, 
+body.mono-mode a, 
+body.mono-mode span,
+body.mono-mode .planet-label,
+body.mono-mode .moon-action {
+    color: #ffffff !important;
+    text-shadow: none !important; /* إلغاء ظلال النصوص الثقيلة */
     -webkit-text-fill-color: #ffffff !important;
 }
 
-/* إصلاح الشموس: نفس سواد "الكود النووي" لكن زجاجي شفاف */
-body.mono-mode .sun-star {
-    /* استخدمنا هنا نفس درجة (1a1a1a) التي تعادل (26, 26, 26)
-       مع شفافية 0.6 لتبقى غامقة وفخمة
-    */
-    background: radial-gradient(circle at 30% 30%, rgba(40, 40, 40, 0.4), rgba(0, 0, 0, 0.9)) !important;
-    
-    /* تمويه الخلفية لتعزيز شعور الزجاج */
-    backdrop-filter: blur(3px) !important;
-    
-    /* نفس الوهج الأبيض الناعم */
-    box-shadow: 
-        inset -5px -5px 15px rgba(0,0,0,0.8),
-        inset 3px 3px 8px rgba(255,255,255,0.1), /* لمعة خافتة جداً */
-        0 0 35px rgba(255, 255, 255, 0.2) !important;
-
-    border: 1px solid rgba(255,255,255,0.15) !important;
-    animation: none !important;
-}
-
-/* النص يبقى أبيض ناصع */
-body.mono-mode .sun-star h2 {
-    color: #ffffff !important;
-    text-shadow: 0 0 10px rgba(0,0,0,1) !important;
-    background: none !important;
-    -webkit-text-fill-color: #ffffff !important;
-}
-
-/* 3. تحويل الكواكب للأسود الزجاجي (كما نجحت معك) */
+/* 3. الشموس + الكواكب (كرات سوداء مصقولة - بدون فلاتر ثقيلة) */
 body.mono-mode .planet-body,
-body.mono-mode .planet-core {
-    background: linear-gradient(145deg, #000000, #1a1a1a) !important;
-    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+body.mono-mode .sun-star {
+    /* تدرج لوني يعطي إيحاء الزجاج دون استهلاك المعالج */
+    background: radial-gradient(circle at 30% 30%, rgba(60,60,60,0.4), #000000) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    
+    /* ظل واحد خفيف (Lightweight Shadow) */
     box-shadow: 
-        inset 0 0 20px rgba(255, 255, 255, 0.1), 
-        0 0 20px rgba(255, 255, 255, 0.2) !important;
+        inset 0 0 15px rgba(255, 255, 255, 0.05), /* لمعة داخلية خفيفة */
+        0 0 20px rgba(255, 255, 255, 0.15) !important; /* وهج خارجي بسيط */
+        
+    /* إزالة الصور والألوان القديمة */
+    background-image: none !important;
+    backdrop-filter: none !important; /* 🚫 إلغاء هذا لأنه سبب التعليق في الآيفون */
 }
 
-/* 4. تبييض الأيقونات داخل الكواكب */
-body.mono-mode .planet-icon, 
-body.mono-mode img {
+/* 4. إزالة الخط الأسود العريض في العناوين (الشموس) */
+body.mono-mode .sun-star h2 {
+    background: none !important;
+    border: none !important;
+    -webkit-text-stroke: 0 !important;
+}
+
+/* 5. تبييض الأيقونات (باستخدام الفلتر على الصور فقط - خفيف) */
+body.mono-mode .planet-icon,
+body.mono-mode img:not(.hero-logo) { /* استثناء الشعار */
     filter: grayscale(100%) brightness(0) invert(100%) !important;
+    opacity: 0.9 !important;
 }
 
-/* 5. 👇 الحل الجذري للشهب (Meteors) */
+/* 6. إصلاح الشهب (Meteors) - جعلها بيضاء */
 body.mono-mode .meteor {
-    /* إجبار الخلفية على التدرج الأبيض فقط مهما كان لونها الأصلي */
     background: linear-gradient(to bottom, transparent, #ffffff) !important;
-    /* جعل الوهج أبيض */
-    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.8)) !important;
-    opacity: 0.8 !important;
+    filter: drop-shadow(0 0 2px #ffffff) !important; /* تقليل حدة الظل للسرعة */
 }
 
-/* 6. إخفاء أي ألوان دخيلة في الخلفيات */
-body.mono-mode div[class*="glow"] {
+/* 7. الشعار (الأبيض) */
+body.mono-mode .hero-logo {
+    content: url('logo-white.png') !important;
+    background: none !important;
     box-shadow: none !important;
-}
-body.mono-mode .orbit-planet::before, 
-body.mono-mode .orbit-planet::after {
-    border-color: rgba(255, 255, 255, 0.1) !important;
+    border: none !important;
+    filter: drop-shadow(0 0 5px rgba(255,255,255,0.4)) !important;
 }
 
-/* 7. شريط البحث والقوائم */
+/* 8. تنظيف العناصر الدخيلة والخلفيات الملونة */
+body.mono-mode .creative-glow, 
+body.mono-mode .office-glow, 
+body.mono-mode .transform-glow,
+body.mono-mode .orbit-planet::before,
+body.mono-mode .orbit-planet::after {
+    box-shadow: none !important; /* إخفاء الوهج الملون الثقيل */
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    background: transparent !important;
+}
+
+/* 9. شريط البحث والقوائم */
 body.mono-mode input,
 body.mono-mode .mini-dropdown {
-    background: #000 !important;
+    background: #111 !important;
     border: 1px solid #333 !important;
     color: #fff !important;
-}
-/* ================================================= */
-/* 🦅 إصلاح الشعار في وضع الفخامة (Obsidian Mode) */
-/* ================================================= */
-
-body.mono-mode .hero-logo {
-    /* 1. استبدال الشعار الملون بالشعار الأبيض الجديد */
-    content: url('logo-white.png') !important;
-    
-    /* 2. إلغاء "المستطيل الأبيض" وضمان الشفافية */
-    background: transparent !important;
-    background-color: transparent !important;
-    border: none !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    
-    /* 3. إضافة وهج أبيض خفيف حول الشعار ليتناسب مع النجوم */
-    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6)) !important;
-    
-    /* 4. الحفاظ على الأبعاد والحركة */
-    width: 320px !important; /* نفس عرض شعارك الأصلي تقريباً */
-    height: auto !important;
-    margin: 0 auto 25px auto !important;
-    animation: floatUpDn 6s ease-in-out infinite !important;
 }
 /* ================================================= */
 /* 📢 تنبيهات زر المود (النبض + الفقاعة الذكية) */
