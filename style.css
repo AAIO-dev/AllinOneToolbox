@@ -3095,8 +3095,9 @@ body.mono-mode img:not(.hero-logo) { /* استثناء الشعار */
 
 /* 6. إصلاح الشهب (Meteors) - جعلها بيضاء */
 body.mono-mode .meteor {
-    background: linear-gradient(to bottom, transparent, #ffffff) !important;
+    background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.1)) !important;
     filter: drop-shadow(0 0 2px #ffffff) !important; /* تقليل حدة الظل للسرعة */
+    opacity: 0.9 !important;
 }
 
 /* 7. الشعار (الأبيض) */
