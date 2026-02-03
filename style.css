@@ -3235,9 +3235,27 @@ html[dir="rtl"] .theme-switch::after {
     }
 }*/
 
-/* إصلاح تلاصق الكلمات عند التمييز */
-#chat-window strong, #chat-window b {
+/* ================================================= */
+/* 🔧 إصلاح تلاصق الكلمات (شامل للعريض، الكود، والرياضيات) */
+/* ================================================= */
+
+/* 1. إضافة مسافة أمان إجبارية حول أي كلمة مميزة */
+#chat-window strong, 
+#chat-window b, 
+#chat-window code, 
+#chat-window .katex { 
+    margin: 0 4px !important; /* مسافة يمين ويسار لمنع الالتصاق */
+    display: inline-block !important; /* لضمان احترام المسافة */
+    direction: ltr !important; /* لضمان عدم انعكاس الحروف الإنجليزية */
+}
+
+/* 2. توحيد الخط للعريض والكود (نستثني الرياضيات للحفاظ على الرموز) */
+#chat-window strong, 
+#chat-window b,
+#chat-window code {
     font-family: 'Cairo', sans-serif !important;
     letter-spacing: normal !important;
-    margin: 0 2px !important; /* مسافة أمان صغيرة جداً يمين ويسار الكلمة */
+    background: rgba(255, 255, 255, 0.05); /* خلفية خفيفة جداً لتمييز الكود */
+    border-radius: 4px; /* تدوير حواف خفيف */
+    padding: 0 2px; /* مسافة داخلية جمالية */
 }
