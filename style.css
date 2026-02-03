@@ -3240,6 +3240,8 @@ html[dir="rtl"] .theme-switch::after {
 /* ================================================= */
 
 /* 1. إضافة مسافة أمان إجبارية حول أي كلمة مميزة */
+#chat-window em,   /* 👈 إضافة 1: الخط المائل */
+#chat-window i,    /* 👈 إضافة 2: الخط المائل */
 #chat-window strong, 
 #chat-window b, 
 #chat-window code, 
@@ -3250,6 +3252,8 @@ html[dir="rtl"] .theme-switch::after {
 }
 
 /* 2. توحيد الخط للعريض والكود (نستثني الرياضيات للحفاظ على الرموز) */
+#chat-window em,   /* 👈 إضافة 1: الخط المائل */
+#chat-window i,    /* 👈 إضافة 2: الخط المائل */
 #chat-window strong, 
 #chat-window b,
 #chat-window code {
