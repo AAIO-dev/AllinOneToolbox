@@ -3234,3 +3234,10 @@ html[dir="rtl"] .theme-switch::after {
         transform: translateY(15px) !important;
     }
 }*/
+
+/* إصلاح تلاصق الكلمات عند التمييز */
+#chat-window strong, #chat-window b {
+    font-family: 'Cairo', sans-serif !important;
+    letter-spacing: normal !important;
+    margin: 0 2px !important; /* مسافة أمان صغيرة جداً يمين ويسار الكلمة */
+}
