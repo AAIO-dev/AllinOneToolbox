@@ -26,21 +26,31 @@ app.use(express.json());
 // 3. الملفات الثابتة
 app.use(express.static(__dirname));
 
-// 👇 (3) التعديل الجديد المتوافق مع Express 5
-app.use(express.static(path.join(__dirname, 'dist')));
+// ---------------------------------------------------------
+// 4. توجيه الروابط (التعديل النهائي الشامل)
+// ---------------------------------------------------------
 
-// أ) توجيه خاص للمجلس (أي رابط يبدأ بـ /council)
-app.get(/\/council\/.*/, (req, res) => {
+// أ) ربط مجلد التصميم (dist) بالرابط /council
+// هذا السطر يجعل ملفات الستايل والصور تعمل بشكل صحيح
+app.use('/council', express.static(path.join(__dirname, 'dist')));
+
+// ب) إذا طلب الزائر /council فقط (بدون زيادات)، أعطه الصفحة الرئيسية للمجلس
+app.get('/council', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
-// ب) توجيه عام لباقي الروابط (نستخدم /.*/ بدلاً من النجمة)
-app.get(/.*/, (req, res, next) => {
-    // استثناء الروابط الهامة (API والمجلس)
+// ج) إذا طلب أي صفحة داخلية في المجلس (مثل /council/settings)
+app.get('/council/*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
+
+// د) أي رابط آخر؟ أرسله للصفحة الرئيسية القديمة (الأدوات)
+app.get('*', (req, res, next) => {
+    // استثناء طلبات الـ API والمجلس لكي لا تتعطل
     if (req.path.startsWith('/api')) return next();
     if (req.path.startsWith('/council')) return next();
     
-    // إرسال الصفحة الرئيسية القديمة (الأدوات)
+    // إرسال صفحة الأدوات القديمة
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
