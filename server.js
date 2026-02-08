@@ -3,6 +3,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const axios = require('axios');
 const { MongoClient } = require('mongodb');
+const path = require('path');
 
 dotenv.config();
 
@@ -10,7 +11,7 @@ const app = express();
 
 // 1. إعداد الـ CORS بشكل صحيح وشامل (يجب أن يكون أول شيء)
 const corsOptions = {
-    origin: ['https://ai-allin-one.com', 'https://allinonetoolbox.onrender.com'],
+    origin: ['https://ai-allin-one.com', 'https://allinonetoolbox.onrender.com', 'http://localhost:5173', 'http://localhost:4173'],
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
@@ -24,6 +25,19 @@ app.use(express.json());
 
 // 3. الملفات الثابتة
 app.use(express.static(__dirname));
+
+// 👇 (3) أضف هذه الأسطر الجديدة لخدمة التصميم الجديد
+app.use(express.static(path.join(__dirname, 'dist')));
+
+// أي طلب لا يبدأ بـ /api ولا يوجد له ملف قديم، حوّله للموقع الجديد (React)
+app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api')) return next(); // لا تقاطع طلبات الذكاء
+    
+    // حاول إرسال ملف الاندكس الجديد
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'), (err) => {
+        if (err) next(); // إذا حدث خطأ، أكمل الطريق للملفات القديمة
+    });
+});
 
 // --- إعدادات قاعدة البيانات ---
 const uri = process.env.MONGODB_URI;
