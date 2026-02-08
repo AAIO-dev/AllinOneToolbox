@@ -26,31 +26,21 @@ app.use(express.json());
 // 3. الملفات الثابتة
 app.use(express.static(__dirname));
 
-// ---------------------------------------------------------
-// 4. توجيه الروابط (التعديل النهائي الشامل)
-// ---------------------------------------------------------
-
-// أ) ربط مجلد التصميم (dist) بالرابط /council
-// هذا السطر يجعل ملفات الستايل والصور تعمل بشكل صحيح
+// أ) ربط ملفات التصميم
 app.use('/council', express.static(path.join(__dirname, 'dist')));
 
-// ب) إذا طلب الزائر /council فقط (بدون زيادات)، أعطه الصفحة الرئيسية للمجلس
+// ب) توجيه صفحة المجلس (استخدام Regex بدل النجمة لتفادي المشاكل)
+app.get(/\/council\/.*/, (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
+
 app.get('/council', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
-// ج) إذا طلب أي صفحة داخلية في المجلس (مثل /council/settings)
-app.get('/council/*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-});
-
-// د) أي رابط آخر؟ أرسله للصفحة الرئيسية القديمة (الأدوات)
-app.get('*', (req, res, next) => {
-    // استثناء طلبات الـ API والمجلس لكي لا تتعطل
-    if (req.path.startsWith('/api')) return next();
-    if (req.path.startsWith('/council')) return next();
-    
-    // إرسال صفحة الأدوات القديمة
+// ج) توجيه باقي الموقع (للأدوات القديمة)
+app.get(/.*/, (req, res, next) => {
+    if (req.path.startsWith('/api') || req.path.startsWith('/council')) return next();
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
