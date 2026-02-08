@@ -26,17 +26,22 @@ app.use(express.json());
 // 3. الملفات الثابتة
 app.use(express.static(__dirname));
 
-// 👇 (3) أضف هذه الأسطر الجديدة لخدمة التصميم الجديد
+// 👇 (3) التعديل الجديد المتوافق مع Express 5
 app.use(express.static(path.join(__dirname, 'dist')));
 
-// أي طلب لا يبدأ بـ /api ولا يوجد له ملف قديم، حوّله للموقع الجديد (React)
-app.get('*', (req, res, next) => {
-    if (req.path.startsWith('/api')) return next(); // لا تقاطع طلبات الذكاء
+// أ) توجيه خاص للمجلس (أي رابط يبدأ بـ /council)
+app.get(/\/council\/.*/, (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
+
+// ب) توجيه عام لباقي الروابط (نستخدم /.*/ بدلاً من النجمة)
+app.get(/.*/, (req, res, next) => {
+    // استثناء الروابط الهامة (API والمجلس)
+    if (req.path.startsWith('/api')) return next();
+    if (req.path.startsWith('/council')) return next();
     
-    // حاول إرسال ملف الاندكس الجديد
-    res.sendFile(path.join(__dirname, 'dist', 'index.html'), (err) => {
-        if (err) next(); // إذا حدث خطأ، أكمل الطريق للملفات القديمة
-    });
+    // إرسال الصفحة الرئيسية القديمة (الأدوات)
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // --- إعدادات قاعدة البيانات ---
