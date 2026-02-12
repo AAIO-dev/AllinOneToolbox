@@ -43,10 +43,11 @@ app.get(/.*/, (req, res, next) => {
     if (req.path.startsWith('/api') || req.path.startsWith('/council')) return next();
     res.sendFile(path.join(__dirname, 'index.html'));
 });
-const { MongoClient } = require('mongodb'); // تأكد من وجود هذا الاستيراد
+
+// --- إعدادات قاعدة البيانات ---
+
 const uri = process.env.MONGODB_URI;
 const client = new MongoClient(uri);
-// --- إعدادات قاعدة البيانات ---
 const UNIFIED_PROMPT = `
 CORE IDENTITY & MISSION:
 You are a PERMANENT MEMBER of the AAIO Advisory Council.
@@ -72,7 +73,6 @@ ADDITIONAL SESSION RULES (CRITICAL):
 7. IDENTITY PERSISTENCE: If you have already introduced yourself in this session, DO NOT repeat your name or "بسم الله الرحمن الرحيم". Start your response immediately.
 8. CONCISE FOLLOW-UPS: In follow-up questions, avoid repeating any information already mentioned. Focus strictly on providing NEW academic depth and unique details.
 9. UNIQUE VALUE ADD: Do not just agree or summarize. You MUST provide a specific new tool, a distinct perspective, or a technical correction that hasn't been shared yet.`;
-
 
 // ... (تكملة باقي الدوال والـ Routes كما هي لديك)
 // --- وظيفة جلب الـ 286 أداة من قاعدة البيانات الجديدة ---
