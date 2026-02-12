@@ -43,7 +43,9 @@ app.get(/.*/, (req, res, next) => {
     if (req.path.startsWith('/api') || req.path.startsWith('/council')) return next();
     res.sendFile(path.join(__dirname, 'index.html'));
 });
-
+const { MongoClient } = require('mongodb'); // تأكد من وجود هذا الاستيراد
+const uri = process.env.MONGODB_URI;
+const client = new MongoClient(uri);
 // --- إعدادات قاعدة البيانات ---
 const UNIFIED_PROMPT = `
 CORE IDENTITY & MISSION:
