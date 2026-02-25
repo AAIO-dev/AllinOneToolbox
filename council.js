@@ -39,7 +39,7 @@ async function startCouncilDiscussion() {
         <div style="width: 32px; height: 32px; border-radius: 50%; background: hsla(210, 100%, 60%, 0.2); display: flex; align-items: center; justify-content: center; margin-top: 4px;">
             <i class="fas fa-user" style="color: #60a5fa; font-size: 14px;"></i>
         </div>
-        <div style="min-width: 0; overflow: hidden;">
+        <div class="council-message-content" style="min-width: 0; overflow: hidden;">
             <span class="bot-name" style="color: #60a5fa;">أنت (You)</span>
             <div class="message-text">${userInput}</div>
         </div>
@@ -74,7 +74,7 @@ async function startCouncilDiscussion() {
     <div style="padding-top: 4px;">
         <img src="${member.logo}" class="council-logo" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid hsla(0, 0%, 100%, 0.2);">
     </div>
-    <div style="min-width: 0; overflow: hidden;">
+    <div class="council-message-content" style="min-width: 0; overflow: hidden;">
         <span class="bot-name">${member.name}</span>
         <div class="message-text">${marked.parse(responseText)}</div>
     </div>
