@@ -109,8 +109,8 @@ async function getRecentHistory(sessionId) {
 }
 
 // --- توجيه طلبات الذكاء الاصطناعي إلى ملف المستشارين المستقل ---
-//const advisorsRouter = require('./routes/advisors')(client, getRecentHistory, UNIFIED_PROMPT);
-//app.use('/api', advisorsRouter);
+const advisorsRouter = require('./advisors')(client, getRecentHistory, UNIFIED_PROMPT);
+app.use('/api', advisorsRouter);
 
 const PORT = process.env.PORT || 3000;
 

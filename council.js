@@ -141,7 +141,7 @@ async function callMistral(prompt) { return await sendToServer('ask-mistral', pr
 
 // 1. الدالة المساعدة للاتصال بالسيرفر (سنحتاجها غداً بقوة)
 async function sendToServer(endpoint, prompt, name) {
-    const SERVER_BASE_URL = "https://aiallinonetoolbox.onrender.com"; 
+    const SERVER_BASE_URL = "https://aiallinone.ai"; 
 
     try {
     const response = await fetch(`${SERVER_BASE_URL}/api/${endpoint}`, {
