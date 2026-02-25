@@ -290,7 +290,55 @@ body.council-body {
     border-color: hsla(210, 100%, 60%, 0.5);
     transform: translateY(-2px);
 }
+/* 1. الحالة الافتراضية (الصندوق الصغير - 4 أسطر تقريباً) */
+.council-message {
+    max-height: 120px; /* تقييد الارتفاع المبدئي */
+    overflow-y: auto; /* تفعيل السكرول الداخلي دائماً كما طلبت */
+    cursor: pointer; /* تحويل الماوس ليد ليعرف المستخدم أنه قابل للنقر */
+    transition: max-height 0.4s ease-in-out; /* حركة توسيع ناعمة */
+    position: relative;
+}
 
+/* 2. الحالة الموسعة (الحد الأقصى - 9 أسطر تقريباً) */
+.council-message.expanded {
+    max-height: 400px !important; 
+    padding: 25px 20px !important;
+    /* ملاحظة: أزلنا height: auto لكي تعمل الحركة الناعمة (transition) بنجاح */
+}
+
+/* 3. إضافة علامة الزائد (+) في الزاوية */
+.council-message::after {
+    content: '+' !important;
+    position: sticky !important; 
+    top: 5px !important;
+    left: 10px !important;
+    float: left !important; 
+    font-size: 22px !important; /* كبرناها قليلاً لتكون أوضح */
+    color: rgba(255, 255, 255, 0.5) !important;
+    z-index: 10 !important;
+    margin-right: 10px !important;
+    line-height: 1 !important;
+}
+
+/* 4. تغيير العلامة إلى ناقص (−) عند التوسيع */
+.council-message.expanded::after {
+    content: '−' !important;
+}
+
+/* 5. شريط التمرير (Scrollbar) الأنيق */
+.council-message::-webkit-scrollbar {
+    width: 6px;
+}
+.council-message::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+}
+
+/* 6. تصغير العناوين داخل الفقاعات لتناسب الحجم */
+.council-message h1, .council-message h2 {
+    font-size: 1.3rem !important;
+    margin: 5px 0 !important;
+}
 /* =============================================
    STEP 5: MOBILE RESPONSIVE & RTL OVERRIDES
    ============================================= */
