@@ -1,0 +1,346 @@
+/* =============================================
+   STEP 1: ROOT VARIABLES, BACKGROUND & SCROLLBAR (LOVABLE OBSIDIAN)
+   ============================================= */
+
+:root {
+    /* ألوان الأوبسيديان الأساسية (Glassmorphism & Glow) */
+    --glass-bg: hsla(0, 0%, 100%, 0.03);
+    --glass-border: hsla(0, 0%, 100%, 0.08);
+    --glass-highlight: hsla(0, 0%, 100%, 0.12);
+    
+    --glow-primary: hsla(210, 100%, 60%, 0.3);
+    --glow-soft: hsla(210, 100%, 60%, 0.1);
+    --primary: hsl(210, 100%, 60%);
+
+    /* ألوان المستشارين الدقيقة (Agent Colors HSL) */
+    --agent-gemini: hsl(270, 75%, 53%);
+    --agent-chatgpt: hsl(161, 82%, 35%);
+    --agent-claude: hsl(16, 66%, 59%);
+    --agent-deepseek: hsl(231, 95%, 64%);
+    --agent-perplexity: hsl(0, 0%, 69%);
+    --agent-llama: hsl(187, 92%, 43%);
+    --agent-mistral: hsl(38, 91%, 50%);
+}
+
+/* --- الخلفية المحيطية (Ambient Background) --- */
+body.council-body {
+    background: 
+      radial-gradient(ellipse 80% 50% at 20% 40%, hsla(217, 91%, 60%, 0.08), transparent),
+      radial-gradient(ellipse 60% 40% at 80% 60%, hsla(262, 83%, 58%, 0.06), transparent),
+      radial-gradient(ellipse 50% 30% at 50% 80%, hsla(174, 72%, 46%, 0.04), transparent),
+      hsl(0, 0%, 2%) !important;
+    background-attachment: fixed !important;
+    color: hsl(0, 0%, 95%) !important;
+    font-family: 'Inter', sans-serif !important;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* --- تخصيص شريط التمرير (Glass Scrollbar) --- */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(168, 85, 247, 0.2); 
+    border-radius: 20px;
+    transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(168, 85, 247, 0.5); 
+}
+
+/* وهج الكتابة والتحديد */
+::selection {
+    background-color: #a855f7;
+    color: white;
+}
+
+*:focus-visible {
+    outline-color: rgba(233, 213, 255, 0.6) !important; 
+    outline-width: 1px !important;
+    outline-offset: 2px !important;
+}
+/* =============================================
+   STEP 2: CHAT WINDOW (GLASS PANEL)
+   ============================================= */
+
+#chat-window {
+    /* تأثير الزجاج المطفأ من Lovable */
+    background: hsla(0, 0%, 100%, 0.03) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid hsla(0, 0%, 100%, 0.08) !important;
+    box-shadow: 0 4px 24px -8px rgba(0, 0, 0, 0.5), inset 0 1px 0 hsla(0, 0%, 100%, 0.12) !important;
+    
+    border-radius: 20px !important;
+    height: 72vh !important; 
+    width: 94% !important;
+    margin: 10px auto 5px auto !important;
+    padding: 35px !important;
+    padding-bottom: 150px !important; 
+    overflow-y: auto !important;
+    display: block !important;
+}
+
+.council-title {
+    font-family: 'Orbitron', sans-serif !important;
+    font-size: clamp(28px, 5vw, 42px) !important;
+    font-weight: 800 !important;
+    text-align: center !important;
+    margin-bottom: 10px !important;
+    /* تدرج لوني معدني من Lovable */
+    background: linear-gradient(135deg, hsl(0, 0%, 100%), hsl(0, 0%, 70%)) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
+/* =============================================
+   STEP 3: MESSAGE BUBBLES & AGENT COLORS (LOVABLE)
+   ============================================= */
+
+.council-message {
+    display: flex !important;
+    gap: 15px !important;
+    width: fit-content !important; 
+    max-width: 85% !important;
+    min-width: 250px;
+    margin-right: auto !important; 
+    margin-left: 0 !important;
+    margin-bottom: 20px !important;
+    padding: 15px 20px !important;
+    
+    /* سحر الزجاج لفقاعات المستشارين */
+    background: hsla(0, 0%, 100%, 0.05) !important;
+    backdrop-filter: blur(30px) !important;
+    -webkit-backdrop-filter: blur(30px) !important;
+    border: 1px solid hsla(0, 0%, 100%, 0.08) !important;
+    box-shadow: 0 4px 24px -8px rgba(0, 0, 0, 0.5), inset 0 1px 0 hsla(0, 0%, 100%, 0.12) !important;
+    border-radius: 20px 20px 20px 0 !important;
+
+    direction: ltr;
+    text-align: left;
+    word-wrap: break-word !important; 
+    overflow-wrap: break-word !important;
+    transition: all 0.4s ease !important;
+}
+
+.council-message:hover {
+    border-color: hsla(0, 0%, 100%, 0.15) !important;
+    transform: translateY(-2px) !important;
+}
+
+.council-logo {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    border-radius: 50% !important;
+    background-color: hsla(0, 0%, 100%, 0.1) !important;
+    backdrop-filter: blur(10px) !important;
+    padding: 5px !important;
+    border: 1px solid hsla(0, 0%, 100%, 0.2) !important;
+    object-fit: contain !important;
+    flex-shrink: 0 !important;
+    position: sticky !important;
+    top: 0 !important;
+}
+
+.bot-name {
+    font-weight: 700 !important;
+    font-size: 0.9em !important;
+    margin-bottom: 5px !important;
+    display: block !important;
+    color: hsl(0, 0%, 95%) !important;
+    letter-spacing: 0.5px !important;
+}
+
+/* ألوان المستشارين الحقيقية (Agent HSL Colors) */
+.gemini-msg { border-left: 3px solid var(--agent-gemini) !important; background: linear-gradient(90deg, hsla(270, 75%, 53%, 0.08), transparent) !important; }
+.chatgpt-msg { border-left: 3px solid var(--agent-chatgpt) !important; background: linear-gradient(90deg, hsla(161, 82%, 35%, 0.08), transparent) !important; }
+.claude-msg { border-left: 3px solid var(--agent-claude) !important; background: linear-gradient(90deg, hsla(16, 66%, 59%, 0.08), transparent) !important; }
+.deepseek-msg { border-left: 3px solid var(--agent-deepseek) !important; background: linear-gradient(90deg, hsla(231, 95%, 64%, 0.08), transparent) !important; }
+.perplexity-msg { border-left: 3px solid var(--agent-perplexity) !important; background: linear-gradient(90deg, hsla(0, 0%, 69%, 0.08), transparent) !important; }
+.llama-msg { border-left: 3px solid var(--agent-llama) !important; background: linear-gradient(90deg, hsla(187, 92%, 43%, 0.08), transparent) !important; }
+.mistral-msg { border-left: 3px solid var(--agent-mistral) !important; background: linear-gradient(90deg, hsla(38, 91%, 50%, 0.08), transparent) !important; }
+/* =============================================
+   STEP 4: INPUT AREA, BUTTONS (GLOW & GLASS)
+   ============================================= */
+
+.user-msg {
+    text-align: center !important; 
+    font-size: 20px !important; 
+    font-weight: 600 !important;
+    color: hsl(210, 100%, 80%) !important; 
+    text-shadow: 0 0 10px hsla(210, 100%, 60%, 0.5) !important; 
+    margin: 20px auto 40px auto !important;
+    padding: 15px !important;
+    max-width: 90%;
+    line-height: 1.5;
+    display: block !important;
+    font-family: 'Inter', sans-serif !important;
+}
+
+.input-area {
+    position: fixed !important;
+    bottom: 20px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 90% !important;
+    max-width: 1400px !important;
+    display: flex !important;
+    gap: 15px !important;
+    align-items: center !important;
+    z-index: 9999 !important;
+    
+    /* تأثير الزجاج القوي لمنطقة الإدخال */
+    background: hsla(0, 0%, 5%, 0.8) !important; 
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    padding: 15px !important;
+    border-radius: 20px !important;
+    border: 1px solid hsla(0, 0%, 100%, 0.1) !important;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5) !important;
+}
+
+#user-input {
+    flex-grow: 1 !important; 
+    width: 100% !important;
+    min-height: 45px !important; 
+    max-height: 150px !important;
+    
+    /* التوهج الداخلي من Lovable */
+    background: hsla(0, 0%, 100%, 0.03) !important;
+    border: 1px solid hsla(0, 0%, 100%, 0.1) !important;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.5), 0 0 20px -5px hsla(210, 100%, 60%, 0.1) !important;
+    color: hsl(0, 0%, 95%) !important; 
+    font-size: 16px !important; 
+    border-radius: 12px !important;
+    padding: 12px 15px !important;
+    resize: none !important;
+    outline: none !important;
+    transition: all 0.3s ease !important;
+    direction: ltr !important;
+    text-align: left !important;
+    font-family: 'Cairo', 'Inter', sans-serif !important;
+}
+
+#user-input:focus {
+    border-color: hsla(210, 100%, 60%, 0.5) !important;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.5), 0 0 30px hsla(210, 100%, 60%, 0.2) !important;
+    background: hsla(0, 0%, 100%, 0.05) !important;
+}
+
+#send-btn {
+    /* زر الإرسال بتدرج Lovable */
+    background: linear-gradient(135deg, hsl(210, 100%, 60%), hsl(262, 83%, 58%)) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 14px !important;
+    min-width: 55px !important;  
+    height: 55px !important;     
+    font-size: 20px !important;  
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 20px -4px hsla(210, 100%, 60%, 0.5) !important;
+    flex-shrink: 0 !important;
+}
+
+#send-btn:hover {
+    transform: translateY(-2px) scale(1.05) !important; 
+    box-shadow: 0 8px 30px -4px hsla(210, 100%, 60%, 0.6) !important;
+}
+
+.export-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0 5px; 
+}
+
+.export-btn {
+    background: hsla(0, 0%, 100%, 0.05); 
+    border: 1px solid hsla(0, 0%, 100%, 0.1); 
+    color: hsl(210, 100%, 80%); 
+    border-radius: 10px;
+    padding: 8px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+}
+
+.export-btn:hover {
+    background: hsla(210, 100%, 60%, 0.2);
+    border-color: hsla(210, 100%, 60%, 0.5);
+    transform: translateY(-2px);
+}
+
+/* =============================================
+   STEP 5: MOBILE RESPONSIVE & RTL OVERRIDES
+   ============================================= */
+@media screen and (max-width: 768px) {
+    #chat-window {
+        padding: 15px !important;
+        padding-bottom: 120px !important;
+        width: 95% !important;
+        height: 75vh !important;
+    }
+    .council-message {
+        max-width: 95% !important;
+        padding: 12px 15px !important;
+    }
+    .input-area {
+        width: 95% !important;
+        bottom: 10px !important;
+        padding: 10px !important;
+        gap: 10px !important;
+    }
+    #send-btn {
+        min-width: 45px !important;
+        height: 45px !important;
+    }
+    .export-btn {
+        width: 35px;
+        height: 35px;
+    }
+}
+
+body.rtl-mode .council-message {
+    margin-left: auto !important;
+    margin-right: 0 !important; 
+    border-radius: 20px 20px 0 20px !important; 
+    direction: rtl !important;
+    text-align: right !important;
+    border-left: none !important; 
+    border-right-width: 3px !important;
+    border-right-style: solid !important;
+}
+
+body.rtl-mode .gemini-msg { border-right-color: var(--agent-gemini) !important; background: linear-gradient(-90deg, hsla(270, 75%, 53%, 0.08), transparent) !important;}
+body.rtl-mode .chatgpt-msg { border-right-color: var(--agent-chatgpt) !important; background: linear-gradient(-90deg, hsla(161, 82%, 35%, 0.08), transparent) !important;}
+body.rtl-mode .claude-msg { border-right-color: var(--agent-claude) !important; background: linear-gradient(-90deg, hsla(16, 66%, 59%, 0.08), transparent) !important;}
+body.rtl-mode .deepseek-msg { border-right-color: var(--agent-deepseek) !important; background: linear-gradient(-90deg, hsla(231, 95%, 64%, 0.08), transparent) !important;}
+body.rtl-mode .perplexity-msg { border-right-color: var(--agent-perplexity) !important; background: linear-gradient(-90deg, hsla(0, 0%, 69%, 0.08), transparent) !important;}
+body.rtl-mode .llama-msg { border-right-color: var(--agent-llama) !important; background: linear-gradient(-90deg, hsla(187, 92%, 43%, 0.08), transparent) !important;}
+body.rtl-mode .mistral-msg { border-right-color: var(--agent-mistral) !important; background: linear-gradient(-90deg, hsla(38, 91%, 50%, 0.08), transparent) !important;}
+
+body.rtl-mode #user-input {
+    text-align: right !important;
+    direction: rtl !important;
+}

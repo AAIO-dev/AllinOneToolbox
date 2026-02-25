@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>All in one Toolbox</title>
+    <link rel="icon" type="image/png" href="logo1.png">
+    <link rel="stylesheet" href="style.css?v=1.1">
+    <link rel="manifest" href="manifest.json">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <meta name="theme-color" content="#6f42c1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icon-512.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+</head>
+
+<body ontouchstart="">
+    <div id="global-sky"></div>
+
+    <div class="hero-section">
+
+        <div class="theme-switch-wrapper">
+            <div class="language-picker-container">
+                <select id="language-picker">
+                    <option value="en">English</option>
+                    <option value="ar">العربية</option>
+                    <option value="es">Español</option>
+                    <option value="pt">Português</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                    <option value="it">Italiano</option>
+                    <option value="ru">Русский</option>
+                    <option value="el">Ελληνικά</option>
+                    <option value="nl">Nederlands</option>
+                    <option value="pl">Polski</option>
+                    <option value="sv">Svenska</option>
+                    <option value="zh">中文</option>
+                    <option value="ja">日本語</option>
+                    <option value="ko">한국어</option>
+                    <option value="hi">हिन्दी (Hindi)</option>
+                    <option value="tr">Türkçe</option>
+                    <option value="fa">فارسی</option>
+                    <option value="id">Bahasa Indonesia</option>
+                    <option value="vi">Tiếng Việt</option>
+                    <option value="sw">Kiswahili</option>
+                    <option value="am">አማርኛ (Amharic)</option>
+                    <option value="zu">isiZulu</option>
+                    <option value="ha">Hausa</option>
+                </select>
+            </div>
+
+            <label class="theme-switch" for="checkbox">
+                <input type="checkbox" id="checkbox" />
+                <div class="slider round">
+                    <span class="icon sun">☀️</span>
+                    <span class="icon moon">🌙</span>
+                </div>
+            </label>
+            </div>
+
+        <div class="hero-content">
+            <img src="logo1.png" alt="AAIO Logo" class="hero-logo">
+            
+            <h1 class="main-title">AI All in One <span class="highlight">Toolbox</span></h1>
+            <p class="hero-subtitle" data-key="hero_subtitle">The ultimate directory for AI tools to boost your productivity</p>
+            
+            <div class="search-container">
+                <input type="text" id="toolSearch" placeholder="Search for tools (e.g., Logo, Writing, Video)..." onkeyup="filterTools()">
+                <div class="search-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    </div> <div id="search-results" class="search-results-dropdown"></div>
+    <div class="main-container">
+        
+        <div class="column" id="creative-container">
+            <h2 id="title-creative" class="column-title" data-key="creative" style="color: #6f42c1; border-color: #6f42c1;">Creative & Tech Tools</h2>
+        </div>
+
+        <div class="column" id="office-container">
+            <h2 id="title-office" class="column-title" data-key="office" style="color: #4682b4; border-color: #4682b4;">Professional Office Tools</h2>
+        </div>
+
+        <div class="column" id="transform-container">
+            <h2 id="title-media" class="column-title" data-key="transform" style="color: #00ced1; border-color: #00ced1;">Media Transform Tools</h2>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2025 <strong>All in One Toolbox</strong>. </p>
+        <p>All logos and external tool rights belong to their respective owners.</p>
+        <p>We provide links to these services for educational and productivity purposes.</p>
+        <a href="mailto:admin@aiallinone.ai" style="color: #00aaff; text-decoration: none;">admin@aiallinone.ai</a>
+    </footer>
+    <footer style="text-align: center; padding: 5px; background-color: #2c3e50; color: white; margin-top: 15px;">
+        <p>&copy; 2025 AAIO - AI All in One Toolbox</p>
+        <p>
+            <a href="terms.html" target="_blank" rel="noopener" style="color: #00aaff; text-decoration: none;">Terms of Service</a> | 
+            <a href="privacy.html" target="_blank" rel="noopener" style="color: #00aaff; text-decoration: none;">Privacy Policy</a>
+        </p>
+    </footer>
+
+   <script>
+    // 1. وظيفة فتح القوائم (المفتاح العمومي - الحل المنقذ لـ 26 بطاقة)
+    function toggleBox(label, element) {
+    if (element) {
+        const box = element.nextElementSibling;
+        
+        if (box) {
+            document.querySelectorAll('.dropdown-content').forEach(d => {
+                if (d !== box) d.style.display = "none";
+            });
+
+            const isDisplayed = window.getComputedStyle(box).display === "block";
+            box.style.display = isDisplayed ? "none" : "block";
+        }
+    }
+}
+
+    // 2. كود تبديل الوضع (Dark/Light Mode)
+    const toggleSwitch = document.querySelector('#checkbox');
+    const currentTheme = localStorage.getItem('theme');
+    if (currentTheme) {
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        if (currentTheme === 'light') toggleSwitch.checked = true;
+    }
+    toggleSwitch.addEventListener('change', (e) => {
+        const theme = e.target.checked ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+    });
+
+    // 3. كود الأكورديون للجوال (التحكم في الأعمدة)
+    function initMobileFeatures() {
+    document.querySelectorAll('.column h2').forEach(title => {
+        title.onclick = () => {
+            if (window.innerWidth <= 768) {
+                const column = title.parentElement;
+                document.querySelectorAll('.column').forEach(col => {
+                    if (col !== column) col.classList.remove('active');
+                });
+                column.classList.toggle('active');
+            }
+        };
+    });
+    document.querySelectorAll('.tool-card').forEach(card => {
+        card.addEventListener('touchstart', function() { this.classList.add('card-active'); }, {passive: true});
+        card.addEventListener('touchend', function() { setTimeout(() => this.classList.remove('card-active'), 150); }, {passive: true});
+    });
+}
+
+    // 4. كود الترجمة الاحترافي (مع حفظ الأصول)
+    const langPicker = document.getElementById('language-picker');
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedLang = localStorage.getItem('selectedLanguage');
+        if (savedLang && savedLang !== 'en') {
+            if (langPicker) langPicker.value = savedLang;
+            updateContent(savedLang);
+        }
+    });
+
+    if (langPicker) {
+        langPicker.addEventListener('change', function() {
+            const selectedLang = this.value;
+            localStorage.setItem('selectedLanguage', selectedLang); 
+            updateContent(selectedLang);
+        });
+    }
+
+    async function updateContent(lang) {
+        const rtlLanguages = ['ar', 'fa']; 
+        document.documentElement.dir = rtlLanguages.includes(lang) ? 'rtl' : 'ltr';
+        document.documentElement.lang = lang;
+        const elements = document.querySelectorAll('[data-key]');
+        if (lang === 'en') {
+            elements.forEach(el => {
+                if (el.getAttribute('data-original')) el.innerText = el.getAttribute('data-original');
+            });
+            return;
+        }
+        const promises = Array.from(elements).map(async (el) => {
+            if (!el.getAttribute('data-original')) el.setAttribute('data-original', el.innerText);
+            const originalText = el.getAttribute('data-original').replace('+', '').trim();
+
+            const uiDictionary = {
+                'ar': { 'Free': 'مجاني', 'Premium': 'مميز', '+ More': '+ المزيد' },
+                'fa': { 'Free': 'رایگان', 'Premium': 'ویژه', '+ More': '+ بیشتر' },
+                'es': { 'Free': 'Gratis', 'Premium': 'Premium', '+ More': '+ Más' },
+                'pt': { 'Free': 'Grátis', 'Premium': 'Premium', '+ More': '+ Mais' },
+                'fr': { 'Free': 'Gratuit', 'Premium': 'Premium', '+ More': '+ Plus' },
+                'de': { 'Free': 'Gratis', 'Premium': 'Premium', '+ More': '+ Mehr' },
+                'it': { 'Free': 'Gratis', 'Premium': 'Premium', '+ More': '+ Altro' },
+                'ru': { 'Free': 'Бесплатно', 'Premium': 'Премиум', '+ More': '+ Ещё' },
+                'el': { 'Free': 'Δωρεάν', 'Premium': 'Premium', '+ More': '+ Περισσότερα' },
+                'nl': { 'Free': 'Gratis', 'Premium': 'Premium', '+ More': '+ Meer' },
+                'pl': { 'Free': 'Darmowe', 'Premium': 'Premium', '+ More': '+ Więcej' },
+                'sv': { 'Free': 'Gratis', 'Premium': 'Premium', '+ More': '+ Mer' },
+                'zh': { 'Free': '免费', 'Premium': '高级', '+ More': '+ 更多' },
+                'ja': { 'Free': '無料', 'Premium': '有料', '+ More': '+ もっと見る' },
+                'ko': { 'Free': '무료', 'Premium': '프리미엄', '+ More': '+ 더보기' },
+                'hi': { 'Free': 'मुफ़्त', 'Premium': 'प्रीमियम', '+ More': '+ और देखें' },
+                'tr': { 'Free': 'Ücretsiz', 'Premium': 'Premium', '+ More': '+ Daha Fazla' },
+                'id': { 'Free': 'Gratis', 'Premium': 'Premium', '+ More': '+ Lainnya' },
+                'vi': { 'Free': 'Miễn phí', 'Premium': 'Cao cấp', '+ More': '+ Thêm' },
+                'sw': { 'Free': 'Bure', 'Premium': 'Premium', '+ More': '+ Zaidi' },
+                'am': { 'Free': 'ነጻ', 'Premium': 'ፕሪሚየም', '+ More': '+ ተጨማሪ' },
+                'zu': { 'Free': 'Mahhala', 'Premium': 'Premium', '+ More': '+ Okuningi' },
+                'ha': { 'Free': 'Kyauta', 'Premium': 'Biyan Kuɗi', '+ More': '+ Kara' }
+            };
+
+            if (uiDictionary[lang] && uiDictionary[lang][originalText]) {
+                const prefix = el.getAttribute('data-original').includes('+') ? '+ ' : '';
+                el.innerText = prefix + uiDictionary[lang][originalText];
+                return; 
+            }
+
+            const protectedTerms = {
+                'PDF': '[[1]]',
+                'GIF': '[[2]]'
+            };
+
+            let textToTranslate = originalText;
+
+            Object.keys(protectedTerms).forEach(term => {
+                const regex = new RegExp(`\\b${term}\\b`, 'gi');
+                textToTranslate = textToTranslate.replace(regex, protectedTerms[term]);
+            });
+            const response = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${lang}&dt=t&q=${encodeURIComponent(textToTranslate)}`);
+            const result = await response.json();
+           if (result?.[0]?.[0]?.[0]) {
+                let translatedText = result[0][0][0];
+
+                Object.keys(protectedTerms).forEach(term => {
+                    const placeholder = protectedTerms[term];
+                    translatedText = translatedText.split(placeholder).join(term);
+                });
+
+                const prefix = el.getAttribute('data-original').includes('+') ? '+ ' : '';
+                el.innerText = prefix + translatedText;
+            }
+        });
+        await Promise.all(promises);
+    }
+
+let allAAIOTools = []; 
+
+async function loadTools() {
+    try {
+        const response = await fetch('/api/tools');
+        const tools = await response.json();
+
+        allAAIOTools = tools; 
+       
+        const containers = {
+            'Creative & Tech Tools': document.getElementById('creative-container'),
+            'Professional Office Tools': document.getElementById('office-container'),
+            'Media Transform Tools': document.getElementById('transform-container')
+        };
+
+       const toolIcons = {
+            'AI Video Creator': 'icons/video create.png',
+            'AI Background Remover': 'icons/remove.png',
+            'AI Voice Generator': 'icons/voice.png',
+            'AI Code Assistant': 'icons/code.png',
+            'Presentation Maker': 'icons/presentation-maker.png',
+            'Chat with PDF': 'icons/chat-with-pdf.png',
+            'AI Resume Builder': 'icons/cv.png', 
+            'AI Text Summarizer': 'icons/summariz.png',
+            'AI Email Writer': 'icons/mail.png',
+            'PDF Magic': 'icons/edit-pdf.png', 
+            'Text to Professional Voice': 'icons/text-to-speech.png',
+            'Text to AI Video': 'icons/text-to-video.png',
+            'Video to GIF': 'icons/gif.png',
+            'Image Enhancer': 'https://cdn-icons-png.flaticon.com/512/3342/3342137.png',
+            'Text to AI Image': 'https://cdn-icons-png.flaticon.com/512/8369/8369490.png',
+            'AI Translator Pro': 'https://cdn-icons-png.flaticon.com/512/484/484633.png',
+        };
+
+        const categoryToContainer = {
+            'Image Enhancer': 'Creative & Tech Tools',
+            'AI Background Remover': 'Creative & Tech Tools',
+            'AI Video Creator': 'Creative & Tech Tools',
+            'AI Voice Generator': 'Creative & Tech Tools',
+            'AI Code Assistant': 'Creative & Tech Tools',
+            'Text to AI Image': 'Creative & Tech Tools',
+            'AI Resume Builder': 'Professional Office Tools',
+            'AI Email Writer': 'Professional Office Tools',
+            'AI Translator Pro': 'Professional Office Tools',
+            'AI Text Summarizer': 'Professional Office Tools',
+            'Presentation Maker': 'Professional Office Tools',
+            'PDF Magic': 'Media Transform Tools',
+            'Video to GIF': 'Media Transform Tools',
+            'Text to Professional Voice': 'Media Transform Tools',
+            'Text to AI Video': 'Media Transform Tools',
+            'Chat with PDF': 'Media Transform Tools'
+        };
+
+        const organizedData = {
+            'Creative & Tech Tools': {},
+            'Professional Office Tools': {},
+            'Media Transform Tools': {}
+        };
+
+        tools.forEach(tool => {
+            const mainSection = categoryToContainer[tool.category];
+            if (mainSection && organizedData[mainSection]) {
+                if (!organizedData[mainSection][tool.category]) {
+                    organizedData[mainSection][tool.category] = [];
+                }
+                organizedData[mainSection][tool.category].push(tool);
+            }
+        });
+
+        for (const [sectionName, subCategories] of Object.entries(organizedData)) {
+            const targetContainer = containers[sectionName];
+            
+            if (targetContainer) {
+                let glowClass = '';
+                let containerClass = '';
+
+                if (sectionName === 'Creative & Tech Tools') {
+                    glowClass = 'creative-glow';
+                    containerClass = 'creative-container';
+                } else if (sectionName === 'Professional Office Tools') {
+                    glowClass = 'office-glow';
+                    containerClass = 'office-container';
+                } else if (sectionName === 'Media Transform Tools') {
+                    glowClass = 'media-glow';
+                    containerClass = 'transform-container';
+                }
+
+                targetContainer.innerHTML = '';
+                targetContainer.className = `solar-system-container ${containerClass}`;
+
+                targetContainer.insertAdjacentHTML('beforeend', `
+    <div class="sun-star ${glowClass}">
+        <div class="sun-content">
+            <h2 data-key="${sectionName.replace('Tools', '').trim()}" data-original="${sectionName.replace('Tools', '').trim()}">
+                ${sectionName.replace('Tools', '')}
+            </h2>
+        </div>
+    </div>`);
+
+                const planetsRing = document.createElement('div');
+                planetsRing.className = 'planets-orbit-ring';
+                targetContainer.appendChild(planetsRing);
+
+                const planetKeys = Object.keys(subCategories);
+                const totalPlanets = planetKeys.length;
+
+                planetKeys.forEach((categoryName, index) => {
+                    const categoryTools = subCategories[categoryName];
+                    const cleanTitle = categoryName.replace(/\bAI\b/g, '').replace('PDF Magic', 'PDF Editor').replace('Resume Builder', 'CV Builder').replace('Text to Professional Voice', 'Text to Voice').trim();
+                    const iconUrl = toolIcons[categoryName] || 'https://cdn-icons-png.flaticon.com/512/4645/4645286.png';
+                    
+                    const freeTools = categoryTools.filter(t => t.pricing.toLowerCase() === 'free');
+                    const premTools = categoryTools.filter(t => t.pricing.toLowerCase() === 'premium');
+
+                    const mainFree = freeTools[0] || null;
+                    const extraFree = freeTools.slice(1); 
+
+                    const mainPrem = premTools[0] || null;
+                    const extraPrem = premTools.slice(1);
+
+                    const planetHTML = `
+                    <div class="orbit-planet" style="--i:${index}; --total:${totalPlanets};">
+                        <div class="planet-body">
+                            <img src="${iconUrl}" class="planet-icon" alt="${cleanTitle}">
+                            <div class="planet-label" data-key="${cleanTitle}" data-original="${cleanTitle}">${cleanTitle}</div>
+                            
+                            <div class="hidden-moons">
+                                <div class="moon-split-container">
+                                    
+                                    <div class="moon-col">
+                                        ${mainFree ? `<a href="${mainFree.url}" target="_blank" class="moon-action free">${mainFree ? mainFree.name : 'Free'}</a>` : '<span class="empty-slot">-</span>'}
+                                        <div class="separator-label free-text" data-key="txt_free" data-original="Free">Free</div>
+                                        ${extraFree.length > 0 ? `
+                                        <div class="more-trigger">
+                                           <span data-key="btn_more" data-original="+ More">+ More</span>
+                                            <div class="mini-dropdown free-list">
+                                                ${extraFree.map(l => `<a href="${l.url}" target="_blank">${l.name}</a>`).join('')}
+                                            </div>
+                                        </div>` : ''}
+                                    </div>
+
+                                    <div class="moon-col">
+                                        ${mainPrem ? `<a href="${mainPrem.url}" target="_blank" rel="nofollow" class="moon-action prem">${mainPrem ? mainPrem.name : 'Pro'}</a>` : '<span class="empty-slot">-</span>'}
+                                        <div class="separator-label prem-text" data-key="txt_prem" data-original="Premium">Premium</div>
+                                        ${extraPrem.length > 0 ? `
+                                        <div class="more-trigger">
+                                            <span data-key="btn_more" data-original="+ More">+ More</span>
+                                            <div class="mini-dropdown pro-list">
+                                                ${extraPrem.map(l => `<a href="${l.url}" target="_blank" rel="nofollow">${l.name}</a>`).join('')}
+                                            </div>
+                                        </div>` : ''}
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                    
+                    planetsRing.insertAdjacentHTML('beforeend', planetHTML);
+                });
+            }
+        }
+        const savedLang = localStorage.getItem('selectedLanguage');
+        if (savedLang && savedLang !== 'en') {
+            setTimeout(() => {
+                updateContent(savedLang);
+            }, 300); 
+        }
+    } catch (error) { console.error("Error:", error); }
+}
+
+window.onload = loadTools;
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const container = document.getElementById('global-sky');
+        
+        const meteorCount = 80; 
+
+        for (let i = 0; i < meteorCount; i++) {
+            const meteor = document.createElement('div');
+            meteor.classList.add('meteor');
+            
+            const colorRandom = Math.random();
+
+            if (colorRandom < 0.33) {
+            } else if (colorRandom < 0.66) {
+                meteor.classList.add('purple');
+            } else {
+                meteor.classList.add('turquoise');
+            }
+
+            meteor.style.left = (Math.random() * 140 - 40) + '%';
+            
+            const duration = Math.random() * 10 + 12; 
+            meteor.style.animationDuration = duration + 's';
+            
+            const delay = Math.random() * 20;
+            meteor.style.animationDelay = delay + 's';
+
+            if(container) {
+                container.appendChild(meteor);
+            }
+        }
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const systems = document.querySelectorAll('.solar-system-container');
+
+        systems.forEach(container => {
+            let isDown = false;
+            let startX;
+            let currentRotation = 0; 
+            let lastRotation = 0;    
+
+            container.addEventListener('mousedown', (e) => {
+                isDown = true;
+                startX = e.pageX; 
+                container.style.transition = 'none'; 
+            });
+
+            const stopDragging = () => {
+                if (!isDown) return;
+                isDown = false;
+                lastRotation = currentRotation; 
+                container.style.transition = 'transform 0.5s ease-out'; 
+            };
+
+            container.addEventListener('mouseleave', stopDragging);
+            container.addEventListener('mouseup', stopDragging);
+
+            container.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                
+                const x = e.pageX;
+                const walk = (x - startX) * 0.5; 
+                
+                currentRotation = lastRotation + walk;
+                
+                container.style.transform = `rotate(${currentRotation}deg)`;
+            });
+        });
+    });
+    
+const obsidianSwitch = document.getElementById('checkbox');
+
+const currentMode = localStorage.getItem('obsidianMode');
+if (currentMode === 'enabled') {
+    document.body.classList.add('mono-mode');
+    document.documentElement.setAttribute('data-theme', 'dark');
+    if (obsidianSwitch) obsidianSwitch.checked = true;
+}
+
+if (obsidianSwitch) {
+    obsidianSwitch.addEventListener('change', function(e) {
+        if (e.target.checked) {
+            document.body.classList.add('mono-mode');
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('obsidianMode', 'enabled'); 
+        } else {
+            document.body.classList.remove('mono-mode');
+            document.documentElement.setAttribute('data-theme', 'light');
+            localStorage.setItem('obsidianMode', 'disabled'); 
+        }
+    });
+}
+
+    function filterTools() {
+        const input = document.getElementById('toolSearch');
+        const filter = input.value.toLowerCase().trim();
+        const resultsContainer = document.getElementById('search-results');
+        
+        if (!filter) {
+            if (resultsContainer) resultsContainer.style.display = 'none';
+            return;
+        }
+
+        const rect = input.getBoundingClientRect();
+        resultsContainer.style.top = (rect.bottom + window.scrollY + 5) + 'px';
+        resultsContainer.style.left = rect.left + 'px';
+        resultsContainer.style.width = rect.width + 'px';
+
+        const matchedTools = allAAIOTools.filter(tool => 
+            tool.name.toLowerCase().includes(filter) || 
+            tool.category.toLowerCase().includes(filter)
+        );
+
+        let html = '';
+
+        if (matchedTools.length > 0) {
+            const limitedResults = matchedTools.slice(0, 15);
+
+            limitedResults.forEach(tool => {
+                const isFree = tool.pricing.toLowerCase() === 'free';
+                const badgeText = isFree ? 'FREE' : 'PRO';
+                const badgeBg = isFree ? '#28a745' : '#ffc107'; 
+                const badgeColor = isFree ? '#fff' : '#000';
+
+                const relAttr = isFree ? 'rel="noopener noreferrer"' : 'rel="nofollow noopener noreferrer"';
+
+                html += `
+                    <a href="${tool.url}" target="_blank" ${relAttr} class="search-item" style="text-decoration: none; display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                        <div>
+                            <strong style="font-size: 1.1em; color: #fff;">${tool.name}</strong> 
+                            <span style="color: #00aaff; font-size: 0.8em; margin-left: 10px;">[${tool.category.replace('AI', '').trim()}]</span>
+                        </div>
+                        <span style="background-color: ${badgeBg}; color: ${badgeColor}; padding: 2px 8px; border-radius: 4px; font-size: 0.75em; font-weight: bold;">${badgeText}</span>
+                    </a>`;
+            });
+            
+        } else {
+            html = `<div class="search-item" style="justify-content: center; color: #aaa; cursor: default;">No tools found...</div>`;
+        }
+
+        if (resultsContainer) {
+            resultsContainer.innerHTML = html;
+            resultsContainer.style.display = 'block';
+        }
+    }
+
+    document.addEventListener('click', (e) => {
+        const resultsContainer = document.getElementById('search-results');
+        const input = document.getElementById('toolSearch');
+        if (resultsContainer && e.target !== input && !resultsContainer.contains(e.target)) {
+            resultsContainer.style.display = 'none';
+        }
+    });
+
+    window.addEventListener('resize', () => {
+        const resultsContainer = document.getElementById('search-results');
+        if (resultsContainer && resultsContainer.style.display === 'block') {
+            filterTools(); 
+        }
+    });
+</script>
+
+</body>
+
+</html>
