@@ -108,8 +108,11 @@ body.council-body {
    STEP 3: MESSAGE BUBBLES & AGENT COLORS (LOVABLE)
    ============================================= */
 
+/* 1. الصندوق الأساسي (سحر الزجاج + الحجم المضغوط 70px + السكرول) */
 .council-message {
     display: flex !important;
+    flex-direction: row !important;
+    align-items: flex-start !important;
     gap: 15px !important;
     width: fit-content !important; 
     max-width: 85% !important;
@@ -117,9 +120,18 @@ body.council-body {
     margin-right: auto !important; 
     margin-left: 0 !important;
     margin-bottom: 20px !important;
-    padding: 15px 20px !important;
-    
-    /* سحر الزجاج لفقاعات المستشارين */
+    padding: 8px 12px !important;
+    padding-top: 12px !important;
+
+    /* هندسة الارتفاع والسكرول (من كودك القديم) */
+    height: 70px !important; 
+    min-height: 0px !important;
+    overflow-y: auto !important;
+    position: relative !important; 
+    z-index: 10 !important;
+    cursor: pointer !important;
+
+    /* سحر الزجاج (من كودك الجديد) */
     background: hsla(0, 0%, 100%, 0.05) !important;
     backdrop-filter: blur(30px) !important;
     -webkit-backdrop-filter: blur(30px) !important;
@@ -127,16 +139,78 @@ body.council-body {
     box-shadow: 0 4px 24px -8px rgba(0, 0, 0, 0.5), inset 0 1px 0 hsla(0, 0%, 100%, 0.12) !important;
     border-radius: 20px 20px 20px 0 !important;
 
-    direction: ltr;
-    text-align: left;
+    direction: ltr !important;
+    text-align: left !important;
     word-wrap: break-word !important; 
     overflow-wrap: break-word !important;
     transition: all 0.4s ease !important;
 }
 
+/* 2. تأثير التحويم (Hover) */
 .council-message:hover {
     border-color: hsla(0, 0%, 100%, 0.15) !important;
     transform: translateY(-2px) !important;
+}
+
+/* 3. الحالة الموسعة (من كودك القديم) */
+.council-message.expanded {
+    height: auto !important;
+    max-height: 400px !important; 
+    overflow-y: auto !important; 
+    padding: 25px 20px !important;
+}
+
+/* 4. علامة الزائد والناقص (من كودك القديم) */
+.council-message::after {
+    content: '+' !important;
+    position: sticky !important; 
+    top: 5px !important;
+    left: 10px !important;
+    float: left !important; 
+    font-size: 18px !important;
+    color: rgba(255, 255, 255, 0.5) !important;
+    z-index: 10 !important;
+    margin-right: 10px !important;
+}
+.council-message.expanded::after {
+    content: '−' !important;
+}
+
+/* 5. شريط التمرير (من كودك القديم) */
+.council-message::-webkit-scrollbar {
+    width: 6px;
+}
+.council-message::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+}
+
+/* 6. ضبط الأيقونة (من كودك القديم) */
+.council-message .council-logo {
+    width: 28px !important; 
+    height: 28px !important;
+    min-width: 28px !important;
+    position: sticky !important;
+    top: 5px !important; 
+    align-self: flex-start !important; 
+    z-index: 10 !important; 
+    margin-top: 0 !important;
+}
+
+/* 7. تصغير العناوين داخل الفقاعات */
+.council-message h1, .council-message h2 {
+    font-size: 1.3rem !important;
+    margin: 5px 0 !important;
+}
+
+/* 8. ترتيب المحتوى الداخلي (من كودك القديم) */
+.council-message-content {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2px !important;
+    flex: 1 !important; 
+    min-width: 0 !important; 
+    height: auto !important; 
 }
 
 .council-logo {
@@ -290,55 +364,7 @@ body.council-body {
     border-color: hsla(210, 100%, 60%, 0.5);
     transform: translateY(-2px);
 }
-/* 1. الحالة الافتراضية (الصندوق الصغير - 4 أسطر تقريباً) */
-.council-message {
-    max-height: 120px; /* تقييد الارتفاع المبدئي */
-    overflow-y: auto; /* تفعيل السكرول الداخلي دائماً كما طلبت */
-    cursor: pointer; /* تحويل الماوس ليد ليعرف المستخدم أنه قابل للنقر */
-    transition: max-height 0.4s ease-in-out; /* حركة توسيع ناعمة */
-    position: relative;
-}
 
-/* 2. الحالة الموسعة (الحد الأقصى - 9 أسطر تقريباً) */
-.council-message.expanded {
-    max-height: 400px !important; 
-    padding: 25px 20px !important;
-    /* ملاحظة: أزلنا height: auto لكي تعمل الحركة الناعمة (transition) بنجاح */
-}
-
-/* 3. إضافة علامة الزائد (+) في الزاوية */
-.council-message::after {
-    content: '+' !important;
-    position: sticky !important; 
-    top: 5px !important;
-    left: 10px !important;
-    float: left !important; 
-    font-size: 22px !important; /* كبرناها قليلاً لتكون أوضح */
-    color: rgba(255, 255, 255, 0.5) !important;
-    z-index: 10 !important;
-    margin-right: 10px !important;
-    line-height: 1 !important;
-}
-
-/* 4. تغيير العلامة إلى ناقص (−) عند التوسيع */
-.council-message.expanded::after {
-    content: '−' !important;
-}
-
-/* 5. شريط التمرير (Scrollbar) الأنيق */
-.council-message::-webkit-scrollbar {
-    width: 6px;
-}
-.council-message::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-}
-
-/* 6. تصغير العناوين داخل الفقاعات لتناسب الحجم */
-.council-message h1, .council-message h2 {
-    font-size: 1.3rem !important;
-    margin: 5px 0 !important;
-}
 /* =============================================
    STEP 5: MOBILE RESPONSIVE & RTL OVERRIDES
    ============================================= */
