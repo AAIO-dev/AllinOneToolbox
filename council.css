@@ -124,7 +124,7 @@ body.council-body {
     padding-top: 12px !important;
 
     /* هندسة الارتفاع والسكرول (من كودك القديم) */
-    height: 70px !important; 
+    height: 100px !important; 
     min-height: 0px !important;
     overflow-y: auto !important;
     position: relative !important; 
@@ -211,6 +211,13 @@ body.council-body {
     flex: 1 !important; 
     min-width: 0 !important; 
     height: auto !important; 
+}
+/* تثبيت حاوية الشعار عند التمرير داخل الصندوق */
+.council-message > div:first-child {
+    position: sticky !important;
+    top: 5px !important;
+    align-self: flex-start !important;
+    z-index: 10 !important;
 }
 
 .council-logo {
@@ -417,4 +424,12 @@ body.rtl-mode .mistral-msg { border-right-color: var(--agent-mistral) !important
 body.rtl-mode #user-input {
     text-align: right !important;
     direction: rtl !important;
+}
+/* فيتو الخطوط الذكي: منع تشابك الحروف مع استثناء وحماية معادلات KaTeX */
+.council-message em:not(.katex *), 
+.council-message i:not(.katex *), 
+.council-message strong:not(.katex *), 
+.council-message b:not(.katex *) {
+    font-family: 'Cairo', 'Inter', sans-serif !important;
+    letter-spacing: normal !important;
 }
