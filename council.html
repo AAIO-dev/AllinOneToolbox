@@ -38,16 +38,41 @@
 </head>
 <body class="council-body">
     
-    <button id="lang-toggle" class="lang-btn">
-        <i class="fas fa-language"></i> <span>En/ع</span>
-    </button>
+    <div style="position: fixed; top: 20px; right: 30px; z-index: 999999;">
+        <select id="language-picker">
+            <option value="en">English</option>
+            <option value="ar">العربية</option>
+            <option value="es">Español</option>
+            <option value="pt">Português</option>
+            <option value="fr">Français</option>
+            <option value="de">Deutsch</option>
+            <option value="it">Italiano</option>
+            <option value="ru">Русский</option>
+            <option value="el">Ελληνικά</option>
+            <option value="nl">Nederlands</option>
+            <option value="pl">Polski</option>
+            <option value="sv">Svenska</option>
+            <option value="zh">中文</option>
+            <option value="ja">日本語</option>
+            <option value="ko">한국어</option>
+            <option value="hi">हिन्दी (Hindi)</option>
+            <option value="tr">Türkçe</option>
+            <option value="fa">فارسی</option>
+            <option value="id">Bahasa Indonesia</option>
+            <option value="vi">Tiếng Việt</option>
+            <option value="sw">Kiswahili</option>
+            <option value="am">አማርኛ (Amharic)</option>
+            <option value="zu">isiZulu</option>
+            <option value="ha">Hausa</option>
+        </select>
+    </div>
     
     <div id="stars-layer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; overflow: hidden;"></div>
 
     <div class="council-container">
         <header style="text-align: center; padding: 20px;">
             <a href="index.html">
-                <img src="logo1.png" alt="AAIO Logo" class="main-council-logo" style="width: 80px; margin-bottom: 10px;">
+                <img src="logo1.png" alt="AAIO Logo" class="main-council-logo" style="width: 180px; margin-bottom: 10px;">
             </a>
             <h1 class="council-title" style="margin:0; font-family: 'Inter', sans-serif; font-weight: 700;">AI Advisory Council</h1>
             <p class="council-tagline" style="color: #a1a1aa; margin-top: 10px;">
@@ -63,8 +88,11 @@
 
                 <div class="input-area">
                     <div class="export-actions">
-                        <button id="summary-btn" class="export-btn" title="Get the Essence">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
+                        <button id="copy-chat-btn" class="export-btn" title="Copy Chat">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+</svg>
                         </button>
                         <button id="full-export-btn" class="export-btn" title="Keep Every Detail">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
