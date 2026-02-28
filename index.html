@@ -235,19 +235,45 @@
                 const regex = new RegExp(`\\b${term}\\b`, 'gi');
                 textToTranslate = textToTranslate.replace(regex, protectedTerms[term]);
             });
-            const response = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${lang}&dt=t&q=${encodeURIComponent(textToTranslate)}`);
-            const result = await response.json();
-           if (result?.[0]?.[0]?.[0]) {
-                let translatedText = result[0][0][0];
+            // 1. فحص الذاكرة المؤقتة (Cache) أولاً لتوفير المال والوقت
+const cacheKey = `trans_${lang}_${textToTranslate}`;
+const cachedTranslation = localStorage.getItem(cacheKey);
 
-                Object.keys(protectedTerms).forEach(term => {
-                    const placeholder = protectedTerms[term];
-                    translatedText = translatedText.split(placeholder).join(term);
-                });
+if (cachedTranslation) {
+    el.innerText = (el.getAttribute('data-original').includes('+') ? '+ ' : '') + cachedTranslation;
+} else {
+    // 2. إذا لم توجد في الذاكرة، نطلبها من سيرفرنا الآمن
+    try {
+        const response = await fetch('/api/translate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                text: textToTranslate,
+                targetLanguage: lang
+            })
+        });
 
-                const prefix = el.getAttribute('data-original').includes('+') ? '+ ' : '';
-                el.innerText = prefix + translatedText;
-            }
+        const data = await response.json();
+
+        if (data.translation) {
+            let translatedText = data.translation;
+
+            // إعادة المصطلحات المحمية إذا لزم الأمر
+            Object.keys(protectedTerms).forEach(term => {
+                const placeholder = protectedTerms[term];
+                translatedText = translatedText.split(placeholder).join(term);
+            });
+
+            // 3. تخزين النتيجة في الذاكرة المؤقتة للمرة القادمة
+            localStorage.setItem(cacheKey, translatedText);
+
+            const prefix = el.getAttribute('data-original').includes('+') ? '+ ' : '';
+            el.innerText = prefix + translatedText;
+        }
+    } catch (error) {
+        console.error("خطأ في الاتصال بسيرفر الترجمة:", error);
+    }
+}
         });
         await Promise.all(promises);
     }

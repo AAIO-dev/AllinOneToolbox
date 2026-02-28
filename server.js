@@ -125,6 +125,39 @@ async function connectDB() {
 }
 connectDB();
 
+// --- بوابة الترجمة الرسمية لـ AAIO (Google Cloud API) ---
+app.post('/api/translate', async (req, res) => {
+    const { text, targetLanguage } = req.body;
+    const apiKey = process.env.GOOGLE_TRANSLATE_API_KEY;
+
+    if (!apiKey) {
+        return res.status(500).json({ error: "مفتاح الترجمة غير موجود في إعدادات السيرفر" });
+    }
+
+    try {
+        const response = await fetch(`https://translation.googleapis.com/language/translate/v2?key=${apiKey}`, {
+            method: 'POST',
+            body: JSON.stringify({
+                q: text,
+                target: targetLanguage,
+                format: 'html' 
+            }),
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        const data = await response.json();
+        
+        if (data.error) {
+            throw new Error(data.error.message);
+        }
+
+        res.json({ translation: data.data.translations[0].translatedText });
+    } catch (error) {
+        console.error("خطأ فني في ترجمة جوجل:", error);
+        res.status(500).json({ error: "فشلت عملية الترجمة، يرجى المحاولة لاحقاً" });
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`✅ AAIO Server is live and running on port ${PORT}`);
 });
