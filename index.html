@@ -68,7 +68,7 @@
             <p class="hero-subtitle" data-key="hero_subtitle">The ultimate directory for AI tools to boost your productivity</p>
             
             <div class="search-container">
-                <input type="text" id="toolSearch" placeholder="Search for tools (e.g., Logo, Writing, Video)..." onkeyup="filterTools()">
+                <input type="text" id="toolSearch" placeholder="Search for tools" onkeyup="filterTools()">
                 <div class="search-icon">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -240,7 +240,7 @@ const cacheKey = `trans_${lang}_${textToTranslate}`;
 const cachedTranslation = localStorage.getItem(cacheKey);
 
 if (cachedTranslation) {
-    el.innerText = (el.getAttribute('data-original').includes('+') ? '+ ' : '') + cachedTranslation;
+    el.innerHTML = (el.getAttribute('data-original').includes('+') ? '+ ' : '') + cachedTranslation;
 } else {
     // 2. إذا لم توجد في الذاكرة، نطلبها من سيرفرنا الآمن
     try {
@@ -268,7 +268,7 @@ if (cachedTranslation) {
             localStorage.setItem(cacheKey, translatedText);
 
             const prefix = el.getAttribute('data-original').includes('+') ? '+ ' : '';
-            el.innerText = prefix + translatedText;
+            el.innerHTML = prefix + translatedText;
         }
     } catch (error) {
         console.error("خطأ في الاتصال بسيرفر الترجمة:", error);
